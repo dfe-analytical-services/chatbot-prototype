@@ -3,15 +3,9 @@ import pinecone
 import openai
 from tqdm.auto import tqdm
 from time import sleep
-import configparser
+import os
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-pinecone_key = config.get('API_KEYS', 'pinecone_key')
-openai_key = config.get('API_KEYS', 'openai_key')
-embed_model = config.get('API_KEYS', 'embed_model')
-
-document = fitz.open('docs/sample.pdf')
+document = fitz.open('backend/docs/sample.pdf')
 pattern = r'(?<=\s)\\.*?\\(?=\s)'
 
 whole_text = []
@@ -29,11 +23,13 @@ for ind, page in enumerate(whole_text):
     decoded_text['id'].append(str(ind))
     decoded_text['text'].append(page)
 
+pinecone_key = os.environ["PINECONE_API_KEY"]
 pinecone.init(api_key=pinecone_key, environment='eu-west1-gcp')
 
 pinecone_ind = pinecone.Index('edtech')
 
-openai.api_key = openai_key
+openai.api_key = os.environ["OPENAI_API_KEY"]
+embed_model = os.environ["EMBED_MODEL"]
 
 batch_size = 100
 

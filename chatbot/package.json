@@ -1,0 +1,56 @@
+{
+  "name": "chatbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint --ignore-path .gitignore \"**/*.+(ts|js|tsx)\"",
+    "format": "prettier --ignore-path .gitignore \"**/*.+(ts|js|tsx)\" --write"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/parser": "^5.57.1",
+    "autoprefixer": "^10.4.14",
+    "eslint": "^8.37.0",
+    "eslint-config-next": "^13.2.4",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.7",
+    "tailwindcss": "^3.3.1",
+    "tsx": "^3.12.6",
+    "typescript": "^5.0.3"
+  },
+  "dependencies": {
+    "@microsoft/fetch-event-source": "^2.0.1",
+    "@pinecone-database/pinecone": "^0.0.10",
+    "@radix-ui/react-accordion": "^1.1.1",
+    "clsx": "^1.2.1",
+    "dotenv": "^16.0.3",
+    "langchain": "0.0.33",
+    "lucide-react": "^0.125.0",
+    "next": "13.2.3",
+    "pdf-parse": "1.1.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-markdown": "^8.0.5",
+    "tailwind-merge": "^1.10.0"
+  },
+  "keywords": [
+    "next.js",
+    "typescript",
+    "react",
+    "pdf",
+    "openai",
+    "pinecone",
+    "langchain",
+    "gpt-4",
+    "legal"
+  ]
+}

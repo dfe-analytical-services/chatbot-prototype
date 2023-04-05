@@ -1,0 +1,13 @@
+lockfileVersion: '6.0'
+
+dependencies:
+  govuk-frontend:
+    specifier: ^4.5.0
+    version: 4.5.0
+
+packages:
+
+  /govuk-frontend@4.5.0:
+    resolution: {integrity: sha512-gZHDqf5vdlHjmx0NGJiNT12XLyR3d5KCS4AnlC3xTWOObJ0kQROrkIFyp3w4/PY3EQiYdgacVaJ6lizzygnzYw==}
+    engines: {node: '>= 4.2.0'}
+    dev: false
