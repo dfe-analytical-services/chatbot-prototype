@@ -22,4 +22,3 @@ async function initPinecone() {
 }
 
 export const pinecone = await initPinecone();
-
