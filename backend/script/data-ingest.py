@@ -72,12 +72,12 @@ res = openai.Embedding.create(
 )
 
 
-index_name = 'edtech'
+index_name = 'edtech-gpt'
 
 # initialize connection to pinecone
 pinecone.init(
     api_key='',  # app.pinecone.io (console)
-    environment="eu-west1-gcp"  # next to API key in console
+    environment="northamerica-northeast1-gcp"  # next to API key in console
 )
 
 # check if index already exists (it shouldn't if this is first time)

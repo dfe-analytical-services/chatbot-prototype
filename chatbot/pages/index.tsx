@@ -14,6 +14,9 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 
+
+//import {Layout} from 'govuk-frontend';
+
 export default function Home() {
   const [query, setQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,7 +30,7 @@ export default function Home() {
   }>({
     messages: [
       {
-        message: 'Hi, what would you the report?',
+        message: 'Hi, what would you like to know about the report?',
         type: 'apiMessage',
       },
     ],
@@ -161,22 +164,23 @@ export default function Home() {
   }, [chatMessages]);
 
       return (
-        <>
+      <>
           <Layout>
-            <div className="mx-auto flex flex-col gap-4">
-              <h1 className="text-2xl font-bold leading-[1.1] tracking-tighter text-center">
-                Chat With Your Education Documents
-              </h1>
+
+
+            <div>
+
               <main className={styles.main}>
-                <div className={styles.cloud}>
+                <div className={`${styles.cloud} govuk-clearfix`}>
                   <div ref={messageListRef} className={styles.messagelist}>
                     {chatMessages.map((message, index) => {
                       let icon;
                       let className;
-                      if (message.type === 'apiMessage') {
+                     
+                     if (message.type === 'apiMessage') {
                         icon = (
                           <Image
-                            src="/bot-image.png"
+                            src="/govuk-logo.png"
                             alt="AI"
                             width="40"
                             height="40"
@@ -201,8 +205,7 @@ export default function Home() {
                           loading && index === chatMessages.length - 1
                             ? styles.usermessagewaiting
                             : styles.usermessage;
-                      }
-                      return (
+                      }  return (
                         <>
                           <div key={`chatMessage-${index}`} className={className}>
                             {icon}
@@ -314,7 +317,7 @@ export default function Home() {
                   </div>
                 )}
               </main>
-            </div>
+              </div>
           </Layout>
         </>
       );

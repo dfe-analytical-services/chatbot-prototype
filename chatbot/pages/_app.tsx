@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
-//import 'govuk-frontend/govuk/govuk.css'
-//import 'govuk-frontend/govuk/vendor/polyfills/EventSource'
+//import 'govuk-frontend/govuk/govuk.scss';
+import 'govuk-frontend/govuk/all.scss';
 
 
 const inter = Inter({
