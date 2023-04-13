@@ -7,28 +7,36 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from uuid import uuid4
 from tqdm.auto import tqdm
 from time import sleep
+import requests
+from bs4 import BeautifulSoup
 
-document = fitz.open('/Users/joesh/Documents/gpt4-langchain-dfe/backend/docs/sample.pdf')
-pattern = r'(?<=\s)\\.*?\\(?=\s)'
+#document = fitz.open('C:/Users/JSHARRATT/Documents/gpt4-langchain-dfe/backend/docs/sample.pdf')
+#pattern = r'(?<=\s)\\.*?\\(?=\s)'
 
-whole_text = []
-for index, page in enumerate(document):
-    if (index>90 or index < 6):
-        continue
-    text = page.get_text()
-    whole_text.append(text)
+#whole_text = []
+#for index, page in enumerate(document):
+ #   if (index>90 or index < 6):
+ #       continue
+ #   text = page.get_text()
+ #   whole_text.append(text)
 
-#decoded_text = {'id':[], 'text':[]}
-decoded_text = []
-for ind, page in enumerate(whole_text):
-    page = page.replace("\n", ' ')
-    page = page.replace("\\xc2\\xa3", "£")
-    page = page.replace("\\xe2\\x80\\x93", "-")
-    #decoded_text['id'].append(str(ind))
-    #decoded_text['text'].append(page)
-    decoded_text.append(page)
+#decoded_text = []
+#for ind, page in enumerate(whole_text):
+#    page = page.replace("\n", ' ')
+#    page = page.replace("\\xc2\\xa3", "£")
+#    page = page.replace("\\xe2\\x80\\x93", "-")
+###    #decoded_text['id'].append(str(ind))
+###    #decoded_text['text'].append(page)
+#    decoded_text.append(page)
 
+url = "https://explore-education-statistics.service.gov.uk/find-statistics/pupil-attendance-in-schools"
+response = requests.get(url)
 
+if response.status_code == 200:
+    soup = BeautifulSoup(response.text, 'html.parser')
+    text = soup.get_text()
+    text = " ".join(t.strip() for t in soup.stripped_strings)
+    decoded_text = text.replace('\xa0', ' ')
 
 tokenizer = tiktoken.get_encoding('p50k_base')
 
@@ -43,7 +51,8 @@ def tiktoken_len(text):
 
 
 text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=500,
+    #chunk_size=400,
+    chunk_size = 100,
     chunk_overlap=20,
     length_function=tiktoken_len,
     separators=["\n\n", "\n", " ", ""])
@@ -60,7 +69,7 @@ for idx, record in enumerate(tqdm(decoded_text)):
     } for i in range(len(texts))])
 
 
-openai.api_key = ""  #platform.openai.com
+openai.api_key = "" 
 
 embed_model = "text-embedding-ada-002"
 
