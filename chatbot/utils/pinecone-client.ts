@@ -9,7 +9,7 @@ async function initPinecone() {
     const pinecone = new PineconeClient();
 
     await pinecone.init({
-      environment: "northamerica-northeast1-gcp", //this is in the dashboard
+      environment: "eu-west1-gcp", //this is in the dashboard
       apiKey: "",
     });
 
