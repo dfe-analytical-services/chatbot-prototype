@@ -13,9 +13,9 @@ Standalone question:`); */
 const CONDENSE_PROMPT = PromptTemplate.fromTemplate('State only the question I ask, Input: {question}:');
 
 const QA_PROMPT = PromptTemplate.fromTemplate(
-    `You are an AI assistant providing helpful information regarding attendance data. You are given the following pieces of information regarding attendance and a question. Provide a conversational answer based on the context provided.
+    `You are an AI assistant providing helpful information regarding a education report. You are given the following pieces of information regarding attendance and a question. Provide a conversational answer based on the context provided.
   Do not provide any hyperlinks or copy references from the document under any circumstances. Do NOT make up hyperlinks.
-  If the question is not related to the context, you must not answer the question and instead say Sorry this is not related to the question. It is very important 
+  If the question is not related to the context, you must not answer the question and instead say Sorry this is not related to the document. It is very important 
   you only provide information relevant to the report.
   Question: {question}
   =========
@@ -30,12 +30,12 @@ export const makeChain = (
 ) => {
     const question = new LLMChain({
         llm: new OpenAIChat({temperature: 0,
-        openAIApiKey: ''}),
+        openAIApiKey: process.env.OPENAI_API_KEY }),
         prompt: CONDENSE_PROMPT,
     });
     const docChain = loadQAChain(
         new OpenAIChat({
-          openAIApiKey: '',
+          openAIApiKey: process.env.OPENAI_API_KEY ,
             temperature: 0,
       modelName: 'gpt-4', 
       streaming: Boolean(onTokenStream),

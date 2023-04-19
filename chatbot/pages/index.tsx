@@ -30,7 +30,7 @@ export default function Home() {
   }>({
     messages: [
       {
-        message: 'Hi, what would you like to know about the attendance data?',
+        message: 'Hi, what would you like to know about the report?',
         type: 'apiMessage',
       },
     ],
@@ -282,7 +282,7 @@ export default function Home() {
                         placeholder={
                           loading
                             ? 'Waiting for response...'
-                            : 'What is the attendance data about'
+                            : 'What is the report about'
                         }
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
