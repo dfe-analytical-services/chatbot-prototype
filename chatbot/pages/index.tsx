@@ -7,6 +7,7 @@ import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { Document } from 'langchain/document';
+import {v4 as uuidv4} from 'uuid';
 import {
   Accordion,
   AccordionContent,
@@ -21,6 +22,7 @@ export default function Home() {
   const [query, setQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState('');
   const [messageState, setMessageState] = useState<{
     messages: Message[];
     pending?: string;
@@ -40,6 +42,11 @@ export default function Home() {
 
   const messageListRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const id = uuidv4();
+    setSessionId(id)
+  }, []);
 
   useEffect(() => {
     textAreaRef.current?.focus();
@@ -76,11 +83,12 @@ export default function Home() {
       const response = await fetch('http://localhost:8000/api/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           question,
           history,
+          sessionId
         }),
       });
       const data = await response.json();

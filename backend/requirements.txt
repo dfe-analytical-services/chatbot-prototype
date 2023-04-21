@@ -4,3 +4,8 @@ pyyaml
 requests
 django-cors-headers
 pinecone-client
+openai
+langchain = 0.0.136
+elasticsearch
+PyPdf2
+psycopg
