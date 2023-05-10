@@ -8,4 +8,9 @@ openai
 langchain = 0.0.136
 elasticsearch
 PyPdf2
-psycopg
+psycopg2
+dotenv
+fitz
+tiktoken
+
+
