@@ -1,5 +1,5 @@
 from django.db import models
-import uuid
+from doc_parse.models import FileUploadMetaData
 
 # Create your models here.
 class SessionData(models.Model):
@@ -8,3 +8,4 @@ class SessionData(models.Model):
     question = models.TextField()
     answer = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    document_id = models.ForeignKey(FileUploadMetaData, on_delete= models.CASCADE)

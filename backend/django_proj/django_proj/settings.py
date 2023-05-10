@@ -11,6 +11,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+PINECONE_ENV = os.getenv('PINECONE_ENV')
+PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+OPENAI_API_EMBED_MOD = os.getenv('OPENAI_API_EMBED_MOD')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,7 +57,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'api',
     'api.makechain',
-    'api.langchainprompt'
+    'api.langchainprompt',
+    'doc_parse'
 ]
 
 MIDDLEWARE = [
@@ -88,8 +99,12 @@ WSGI_APPLICATION = 'django_proj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'document_database',
+        'USER': 'postgres',
+        'PASSWORD':'albert',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
@@ -134,3 +149,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+

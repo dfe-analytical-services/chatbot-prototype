@@ -1,25 +1,28 @@
 from langchain.llms.openai import OpenAI
 from langchain.vectorstores.pinecone import Pinecone
 from langchain.chains import ConversationalRetrievalChain
-from langchain.embeddings import OpenAIEmbeddings
+#from langchain.embeddings import OpenAIEmbeddings
 from langchain.callbacks import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from api.langchainprompt import CONDENSE_QUESTION_PROMPT, QA_PROMPT
+from .langchainprompt import CONDENSE_QUESTION_PROMPT, QA_PROMPT
 import pinecone
+from django.conf import settings
+
+
+
+
 
 def init_pine():
     try:
-        pinecone.init(api_key='',  # app.pinecone.io (console)
-                      environment="northamerica-northeast1-gcp")
+        pinecone.init(api_key= settings.PINECONE_API_KEY,  # app.pinecone.io (console)
+                      environment=settings.PINECONE_ENV)
         print('Pinecone Initilaised successfully')
     except Exception as e:
         print('Error', e)
 
 def make_chain(vectorStore: Pinecone) -> ConversationalRetrievalChain:
     
-    init_pine()
-    
-    llm = OpenAI(openai_api_key="",
+    llm = OpenAI(openai_api_key=settings.OPENAI_API_KEY,
                    temperature=0,
                    model_name='gpt-4',
                    callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]))
