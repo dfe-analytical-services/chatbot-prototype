@@ -7,6 +7,7 @@ from django.conf import settings
 import tiktoken
 import fitz
 import openai
+import logging
 
 from .serializers import EmbeddingExtractionSerializer
 from .utils.pdf_parse import parse_pdf
@@ -14,10 +15,12 @@ from .utils.html_parse import parse_html
 
 # Create your views here.
 
+logger = logging.getLogger(__name__)
+
 @api_view(['POST'])
 def store_embeddings(request, *args, **kwargs):
     serializer = EmbeddingExtractionSerializer(data = request.data)
-    print(request.data)
+    logger.debug("Data: %s", request.data)
     if serializer.is_valid():
         destination = serializer.validated_data['destination']
         file_type = serializer.validated_data['file_type']

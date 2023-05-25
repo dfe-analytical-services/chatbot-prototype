@@ -89,13 +89,13 @@ const DocumentUpload: React.FC = () => {
           {uploadStatus && (
             <p className="govuk-body govuk-!-mt-r4">{uploadStatus}</p>
           )}
-          {uploadStatus === 'File uploaded successfully.' && (
+          {uploadStatus === 'File uploaded successfully.' || uploadStatus === 'File already exists.' ? (
             <Link href="/chat">
               <div className='govuk-link'>
                 Go to Chat
               </div>
             </Link>
-          )}
+          ): null}
         </div>
       </div>
     </div>

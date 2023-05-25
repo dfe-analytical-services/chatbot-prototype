@@ -35,10 +35,11 @@ pip install -r requirements.txt
 3. After installation change the directory to django_proj and create a `.env` file with the api keys of the strcutre outlined below. You will need to sign up to [openai](https://platform.openai.com) and pinecone and then generate api keys [pinecone](https://app.pinecone.io/) :
 
 ```
-PINECONE_ENV = 
-PINECONE_API_KEY =
-OPENAI_API_KEY= 
-OPENAI_API_EMBED_MOD = 
+PINECONE_ENV = "YOUR PINECONE ENV"
+PINECONE_API_KEY = "YOUR API KEY"
+OPENAI_API_KEY= "YOUR OPEN API KEY"
+OPENAI_API_EMBED_MOD = "text-embedding-ada-002"
+MODEL = "gpt-3-turbo" or whatever model you have access to
 ```
 
 #### NOTE if you do not have access to gpt4 you will need to change the model to gpt3.5-turbo in the `api.makechain.py` folder in the django project

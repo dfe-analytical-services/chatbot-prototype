@@ -42,7 +42,7 @@ def chunking_embed(chunks, batch_size, index, namespace):
                 sleep(5)
                 try:
                     openai.api_key = settings.OPENAI_API_KEY
-                    res = openai.Embedding.create(input=texts, engine=settings.OPENAI__API_EMBED_MOD)
+                    res = openai.Embedding.create(input=texts, engine=settings.OPENAI_API_EMBED_MOD)
                     done = True
                 except:
                     pass

@@ -1,3 +1,4 @@
+import logging
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -12,31 +13,31 @@ from .models import SessionData
 
 from django.conf import settings
 
+logger = logging.getLogger(__name__)
 
 @api_view(['POST'])
 def handler(request, *args, **kwargs):
      
     
     serializer = MySerializer(data = request.data)
+    logger.debug(request.data)
     
     if serializer.is_valid():
         question = serializer.validated_data['question']
         sessionId = serializer.validated_data['sessionId']
         documentId = serializer.validated_data['documentId']
     else:
+        logger.error("Invalid request")
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
     
     stripped_question = question.strip().replace('\n', ' ')
     
-    try:
-        init_pine()
-        vector_store = Pinecone.from_existing_index(index_name='edtech-gpt',
+    init_pine()
+    
+    vector_store = Pinecone.from_existing_index(index_name='edtech-gpt',
                                                     embedding=OpenAIEmbeddings(openai_api_key=settings.OPENAI_API_KEY),
                                                    text_key='text',
-                                                   namespace=documentId)
-    except Exception as e:
-        print('Failed to initialise pinecone', e)
-        
+                                                   namespace=documentId)   
     
     chain = make_chain(vector_store)
     
@@ -48,8 +49,10 @@ def handler(request, *args, **kwargs):
         
         response_data= { 'text': result['answer'], 
                         'sourceDocuments': result['source_documents']}
+        logger.debug("Response data: %s", response_data)
         return Response(response_data, headers={"Content-Type": "application/json"})
-    except:
+    except Exception as e:
+        logger.error("Failed with error %s", e)
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
     

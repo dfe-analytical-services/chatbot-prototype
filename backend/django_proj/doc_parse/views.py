@@ -1,25 +1,26 @@
+import logging
 from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
-
 import requests
 
 from .serializers import FileUploadSerializers
 from .models import FileUploadMetaData
 import os
 
+logger = logging.getLogger(__name__)
 
-ALLOWED_EXTENSIONS = ['pdf', 'html', 'docx']
+ALLOWED_EXTENSIONS = ['pdf']
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
 def document_upload(request, *args, **kwargs):
     serializer = FileUploadSerializers(data = request.POST)
-    
     endpoint = 'http://localhost:8000/text_extraction/'
     
     if serializer.is_valid():
+        logger.debug(serializer.validated_data)
         uploaded_file_name = serializer.validated_data['file_name']
         type_file = uploaded_file_name.split('.')[-1]
         
@@ -46,6 +47,10 @@ def document_upload(request, *args, **kwargs):
                     return Response(data = {'file_id': f'namespace_{file_uploaded.id}'} 
                                     ,status = status.HTTP_201_CREATED)
         else:
-            return Response({'Error': 'Unsupported file type'}, status = status.HTTP_400_BAD_REQUEST)
+            return Response({
+        'Error': 'Unsupported file type.',
+        'Detail': 'The file you uploaded is a PDF. Our system currently supports other file types.',
+        'Solution': 'Please upload a file of a supported type. Supported types include .txt, .docx, etc.'},
+        status = status.HTTP_400_BAD_REQUEST)
     else:
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)

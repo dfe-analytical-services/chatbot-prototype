@@ -1,3 +1,4 @@
+import logging
 from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores.pinecone import Pinecone
 from langchain.chains import ConversationalRetrievalChain
@@ -10,21 +11,21 @@ from django.conf import settings
 
 
 
-
+logger = logging.getLogger(__name__)
 
 def init_pine():
     try:
         pinecone.init(api_key= settings.PINECONE_API_KEY,  # app.pinecone.io (console)
                       environment=settings.PINECONE_ENV)
-        print('Pinecone Initilaised successfully')
+        logger.debug("Pinecone initialised")
     except Exception as e:
-        print('Error', e)
+        logging.error("Failed to initialise pinecone %s", e)
 
 def make_chain(vectorStore: Pinecone) -> ConversationalRetrievalChain:
     
     llm = ChatOpenAI(openai_api_key=settings.OPENAI_API_KEY,
                    temperature=0,
-                   model_name='gpt-4',
+                   model_name=settings.OPENAI_MOD,
                    request_timeout = 120,
                    callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]))
     
