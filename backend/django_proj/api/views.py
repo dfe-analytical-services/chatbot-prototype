@@ -24,8 +24,6 @@ def handler(request, *args, **kwargs):
         sessionId = serializer.validated_data['sessionId']
         documentId = serializer.validated_data['documentId']
     else:
-        
-        print('Hello')
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
     
     stripped_question = question.strip().replace('\n', ' ')

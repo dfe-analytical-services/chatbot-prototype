@@ -1,4 +1,4 @@
-from langchain.llms.openai import OpenAI
+from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores.pinecone import Pinecone
 from langchain.chains import ConversationalRetrievalChain
 #from langchain.embeddings import OpenAIEmbeddings
@@ -22,9 +22,10 @@ def init_pine():
 
 def make_chain(vectorStore: Pinecone) -> ConversationalRetrievalChain:
     
-    llm = OpenAI(openai_api_key=settings.OPENAI_API_KEY,
+    llm = ChatOpenAI(openai_api_key=settings.OPENAI_API_KEY,
                    temperature=0,
                    model_name='gpt-4',
+                   request_timeout = 120,
                    callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]))
     
     chain = ConversationalRetrievalChain.from_llm(
