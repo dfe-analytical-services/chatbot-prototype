@@ -2,7 +2,8 @@
 
 ## Overview
 
-This is a repository for an application that allows users to upload pdf, html or word documents and immeditately chat with the document. The tech stack used on the backend is python, django, djagno-rest framework, langchain, pinecone and openai. Langchain is a framework that allows users to build scalalable AI/LLM apps and chatbots. For more information on langchain visit its documentation [here](https://python.langchain.com/en/latest/index.html). Pinecone is a vector store for storing vector embeddings. The frontend tech stack used is next.js and typescript
+This is a repository for an prototype that allows users to upload pdf, html or word documents and immeditately chat with the document. The tech stack used on the backend is python, django, djagno-rest framework, langchain, pinecone and openai. Langchain is a framework that allows users to build scalalable AI/LLM apps and chatbots. For more information on langchain visit its documentation [here](https://python.langchain.com/en/latest/index.html). Pinecone is a vector store for storing vector embeddings and there are various . The frontend tech stack used is next.js and typescript. I use a django backend. It is important to note that this is just a 
+**proof of concepts** to allow the exploration of how something like this would work. The deployed interface is unlikely a chatbot.
 
 
 ## App structure
@@ -19,14 +20,19 @@ Once redirected to the chat url the client sends the question as a post request 
 git clone [azure devops url]
 ```
 
-2. Make sure python and pip are installed. Navigate to project directory and change the directory to the backend. 
+2. Make sure python and pip are installed. Navigate to the project directory and change the directory to `backend`. From here it is necessary to create and activate a virtual environment to install python dependencids.
 
 ```
 cd backend
+
+python -m venv env
+
+\env\scripts\activate.bat
+
 pip install -r requirements.txt
 ```
 
-3. After installation change the directory to django_proj create a `.env` file with the api keys of the strcutre outlined below. You will need to sign up to [openai](https://platform.openai.com) and pinecone and then generate api keys [pinecone](https://app.pinecone.io/) :
+3. After installation change the directory to django_proj and create a `.env` file with the api keys of the strcutre outlined below. You will need to sign up to [openai](https://platform.openai.com) and pinecone and then generate api keys [pinecone](https://app.pinecone.io/) :
 
 ```
 PINECONE_ENV = 

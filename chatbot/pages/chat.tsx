@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useMemo, useCallback } from 'react';
 import Layout from '@/components/layout';
 import styles from '@/styles/Home.module.css';
+import Link from 'next/link';
 import {Message} from '@/types/chat';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import Image from 'next/image';
@@ -149,6 +150,12 @@ export default function Home() {
               <main className={styles.main}>
                 <div className={`${styles.cloud} govuk-clearfix`}>
                   <div ref={messageListRef} className={styles.messagelist}>
+                   <Link href='/' >
+                    Go back to homepage
+                    <div className='govuk-link'>
+
+                    </div>
+                   </Link>
                     {messages.map((message, index) => {
                       let icon;
                       let className;
@@ -191,7 +198,7 @@ export default function Home() {
                               </ReactMarkdown>
                             </div>
                           </div>
-                          {message.sourceDocs && (
+                        {/* {  message.sourceDocs && (
                             <div className="p-5">
                               <Accordion
                                 type="single"
@@ -206,10 +213,10 @@ export default function Home() {
                                       </AccordionTrigger>
                                       <AccordionContent>
                                         <ReactMarkdown linkTarget="_blank">
-                                        {doc.page_content}
+                                        {doc.pageContent}
                                         </ReactMarkdown>
                                         <p className="mt-2">
-                                          <b>Source:</b> {doc.page_content}
+                                          <b>Source:</b> {doc.pageContent}
                                         </p>
                                       </AccordionContent>
                                     </AccordionItem>
@@ -217,7 +224,7 @@ export default function Home() {
                                 ))}
                               </Accordion>
                             </div>
-                          )}
+                                )} */} 
                         </>
                       );
                     })}
@@ -232,7 +239,7 @@ export default function Home() {
                         ref={textAreaRef}
                         autoFocus={false}
                         rows={1}
-                        maxLength={512}
+                        maxLength={5000}
                         id="userInput"
                         name="userInput"
                         placeholder={
