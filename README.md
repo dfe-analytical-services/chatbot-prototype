@@ -32,7 +32,7 @@ python -m venv env
 pip install -r requirements.txt
 ```
 
-3. After installation change the directory to django_proj and create a `.env` file with the api keys of the strcutre outlined below. You will need to sign up to [openai](https://platform.openai.com) and pinecone and then generate api keys [pinecone](https://app.pinecone.io/) :
+3. After installation change the directory to `django_proj` and create a `.env` file with the api keys of the strcutre outlined below. You will need to sign up to [openai](https://platform.openai.com) and pinecone and then generate api keys [pinecone](https://app.pinecone.io/). Once you have signed up create an index called `edtech-gpt`. If it is not called this then app will not work. :
 
 ```
 PINECONE_ENV = "YOUR PINECONE ENV"
@@ -47,9 +47,8 @@ MODEL = "gpt-3-turbo" or whatever model you have access to
 4. To run the backend navigate to the root of the django project and run the following:
 ``` 
 python manage.py runserver 8000
-```
-
-5. On the frontend navigate to the `chatbot` directory of the project. Once you have installed node.js run `npm install pnpm -g`. This installs pnpm globally. Then run `pnpm install`
+``` 
+5. Open another command prompt window and navigate to the `chatbot` directory of the project. Once you have installed node.js run `npm install pnpm -g`. This installs pnpm globally. Then run `pnpm install`
 
 6. To run the frontend you then run `pnpm run dev`. 
 
