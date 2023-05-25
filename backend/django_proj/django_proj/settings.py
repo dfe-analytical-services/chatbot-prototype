@@ -20,6 +20,7 @@ PINECONE_ENV = os.getenv('PINECONE_ENV')
 PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 OPENAI_API_EMBED_MOD = os.getenv('OPENAI_API_EMBED_MOD')
+OPENAI_MOD = os.getenv("MODEL")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,6 +35,38 @@ SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'debug.log',
+            'formatter': 'verbose',
+        },
+        'file_error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'error.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        '': {  # 'root' logger
+            'handlers': ['file_debug', 'file_error'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 ALLOWED_HOSTS = []
 
@@ -98,14 +131,14 @@ WSGI_APPLICATION = 'django_proj.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 #DATABASES = {
- #   'default': {
+#    'default': {
 #        'ENGINE': 'django.db.backends.postgresql',
- #       'NAME': 'document_database',
- #       'USER': 'postgres',
- #       'PASSWORD':'albert',
- #       'HOST': 'localhost',
- #       'PORT': '5432'
- #   }
+#        'NAME': 'document_database',
+#        'USER': 'postgres',
+#        'PASSWORD':'albert',
+#        'HOST': 'localhost',
+#        'PORT': '5432'
+#    }
 #}
 
 DATABASES = {
