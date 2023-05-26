@@ -8,7 +8,7 @@ This is a repository for an prototype that allows users to upload pdf, html or w
 
 ## App structure
 
-On the frontend a file upload form is created for users to upload documents which currently supports pdf, html and word document uploads. On the backend an api endpoint in the doc_parse app handles a file upload. This application serves two functions: firstly it sends a document identifier to the frontend which is stored in the client's session storage which is used to redirect the client and converse with the specific document. It also sends a post request to the text extraction api endpoint. This endpoint converts the text into vector embeddings. These embeddings are split into chunks and upserted to the vector database, pinecone. 
+On the frontend a file upload form is created for users to upload documents which currently supports pdf and html uploads. On the backend an api endpoint in the doc_parse app handles a file upload. This application serves two functions: firstly it sends a document identifier to the frontend which is stored in the client's session storage which is used to redirect the client and converse with the specific document. It also sends a post request to the text extraction api endpoint. This endpoint converts the text into vector embeddings. These embeddings are split into chunks and upserted to the vector database, pinecone. 
 
 Once redirected to the chat url the client sends the question as a post request to the api endpoint. The 4 most numerically similary chunks to the question are retrieved which are then fed in as context to the Chat GPT 4 api which sends the response a long with the source documents to the client. 
 
@@ -39,7 +39,7 @@ PINECONE_ENV = "YOUR PINECONE ENV"
 PINECONE_API_KEY = "YOUR API KEY"
 OPENAI_API_KEY= "YOUR OPEN API KEY"
 OPENAI_API_EMBED_MOD = "text-embedding-ada-002"
-MODEL = "gpt-3-turbo" or whatever model you have access to
+MODEL = "gpt3-turbo" or whatever model you have access to
 ```
 
 #### NOTE if you do not have access to gpt4 you will need to change the model to gpt3.5-turbo in the `api.makechain.py` folder in the django project
@@ -51,6 +51,44 @@ python manage.py runserver 8000
 5. Open another command prompt window and navigate to the `chatbot` directory of the project. Once you have installed node.js run `npm install pnpm -g`. This installs pnpm globally. Then run `pnpm install`
 
 6. To run the frontend you then run `pnpm run dev`. 
+
+
+# PROMPTING
+
+If you are getting responses from chatbot or demoing to other teams you may want to adjust the prompt. To do this you will have to adjust the `prompt_template` variable in the `langchainprompt.py` file in the project. To navigate to this file from the root of the directly it is `backend/django_proj/api/langchainprompt.py`. Here is an example of how you might change the prompt:
+
+```
+prompt_template = """You are an AI assistant providing helpful information regarding a education report. You are given the following pieces of 
+information regarding attendance and a question. Provide a conversational answer based on the context provided. Do not provide any hyperlinks or copy
+references from the document under any circumstances. Do NOT make up hyperlinks. If the question is not related to the context, you must not answer the 
+question and instead say Sorry this is not related to the document. It is very important you only provide information relevant to the report.
+Question: {question}
+ =========
+{context}
+
+  =========
+
+  Answer in Markdown:
+
+"""
+
+```
+
+If this was for a school meals use case this could be changed to 
+```
+prompt_template = """
+You are an AI assistant working for the Department for Education providing answers to members of the public questions regarding school meals.
+You are given the following pieces of information regarding school meals and a question. Provide a detailed response based on the context provided.
+Do not provide any hyperlinks or copy references from the document under any circumstances. Do NOT tell them to contact the DFE since you work there.
+  If the question is not related to the context, you must not answer the question and instead say Sorry this is not related to the document. It is very important 
+  you only provide information relevant to the report.
+  Question: {question}
+  =========
+  {context}
+  =========
+  Answer in Markdown:
+"""
+```
 
 
 
