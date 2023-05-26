@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Link from 'next/link';
+//import Link from 'next/link';
 import Layout from '@/components/layout';
+import { useRouter } from 'next/router';
 
 const DocumentUpload: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [documentId, setDocumentId] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -38,15 +40,18 @@ const DocumentUpload: React.FC = () => {
         },
       });
 
-      const document = response.data.file_id;
+      //const document = response.data.file_id;
 
-      localStorage.setItem('documentId', document);
+      //localStorage.setItem('documentId', document);
 
       if (response.status === 201) {
-        
-        setUploadStatus('File uploaded successfully.');
+        setUploadStatus('File Uploaded successfully');
+        const document = response.data.file_id;
+        router.push(`/${document}`)
       } else if (response.status === 200) {
         setUploadStatus('File already exists.');
+        const document = response.data.file_id;
+        router.push(`/${document}`);
       }
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
@@ -58,50 +63,38 @@ const DocumentUpload: React.FC = () => {
         setIsLoading(false);
     }
   };
-
   return (
-
     <Layout>
-          
-    <div className="govuk-width-container">
-      <div className="govuk-grid-row">
-        <div className="govuk-grid-column-two-thirds">
-          <h1 className="govuk-heading-l">Document Upload</h1>
-          <form onSubmit={handleSubmit} className="govuk-!-mt-r6">
-            <div className="govuk-form-group">
-              <input
-                className="govuk-file-upload"
-                id="file-upload"
-                name="file-upload"
-                type="file"
-                onChange={handleFileChange}
-              />
-            </div>
-            <button
-              className="govuk-button"
-              data-module="govuk-button"
-              type="submit"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Uploading...' : 'Upload'}
-            </button>
-          </form>
-          {uploadStatus && (
-            <p className="govuk-body govuk-!-mt-r4">{uploadStatus}</p>
-          )}
-          {uploadStatus === 'File uploaded successfully.' || uploadStatus === 'File already exists.' ? (
-            <Link href="/chat">
-              <div className='govuk-link'>
-                Go to Chat
+      <div className="govuk-width-container">
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-two-thirds">
+            <h1 className="govuk-heading-l">Document Upload</h1>
+            <form onSubmit={handleSubmit} className="govuk-!-mt-r6">
+              <div className="govuk-form-group">
+                <input
+                  className="govuk-file-upload"
+                  id="file-upload"
+                  name="file-upload"
+                  type="file"
+                  onChange={handleFileChange}
+                />
               </div>
-            </Link>
-          ): null}
+              <button
+                className="govuk-button"
+                data-module="govuk-button"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Uploading...' : 'Upload'}
+              </button>
+            </form>
+            {uploadStatus && (
+              <p className="govuk-body govuk-!-mt-r4">{uploadStatus}</p>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-
     </Layout>
- 
   );
 };
 
