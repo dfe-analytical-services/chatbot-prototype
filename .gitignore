@@ -1,3 +1,4 @@
-chatbot/.next/server/
-
-backend/django_proj/debug.log
+chatbot/.next/
+chatbot/node_modules
+backend/env/
+backend/django_proj/.env
