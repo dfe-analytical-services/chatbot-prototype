@@ -13,5 +13,6 @@ psycopg2
 python-dotenv
 tiktoken
 beautifulsoup4
+adrf
 
 
