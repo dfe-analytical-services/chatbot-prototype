@@ -91,8 +91,7 @@ INSTALLED_APPS = [
     'adrf',
     'api',
     'api.makechain',
-    'api.langchainprompt',
-    'doc_parse'
+    'api.langchainprompt'
 ]
 
 MIDDLEWARE = [

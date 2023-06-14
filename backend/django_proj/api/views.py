@@ -22,7 +22,6 @@ async def handler(request, *args, **kwargs):
     
     if serializer.is_valid():
         question = serializer.validated_data['question']
-        documentId = serializer.validated_data['documentId']
     else:
         logger.error("Invalid request")
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
@@ -31,10 +30,11 @@ async def handler(request, *args, **kwargs):
     
     vector_store = Pinecone.from_existing_index(index_name='edtech-gpt',
                                                     embedding=OpenAIEmbeddings(openai_api_key=settings.OPENAI_API_KEY),
-                                                   text_key='text',
-                                                   namespace=documentId)   
+                                                   text_key='text')
+                                                   #namespace=documentId)   
     
     similar_docs = vector_store.similarity_search(query = stripped_question, int = 4)
+    logger.debug(similar_docs)
     
     chain = make_chain()
     
