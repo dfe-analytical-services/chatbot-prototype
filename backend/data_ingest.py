@@ -11,8 +11,6 @@ import openai
 import os
 from time import sleep
 
-
-
 import os
 import requests
 import json
@@ -30,6 +28,7 @@ logging.basicConfig(level = logging.INFO)
 PUBS_ENDPOINT = "https://content.explore-education-statistics.service.gov.uk/api/publications?page=1&pageSize=9999&sort=published&order=asc"
 RELEASE_ENDPOINT = "https://content.explore-education-statistics.service.gov.uk/api/publications/{}/releases/latest"
 BATCH_SIZE = 100
+INDEX_NAME = 'ees'
 
 # Function to make API calls
 def fetch_data(endpoint):
@@ -49,7 +48,7 @@ logging.info(slugs)
 
 # Fetch and parse publication content
 publications_text = []
-for slug in slugs:
+for slug in slugs[:2]:
     data = ''
     logging.info(RELEASE_ENDPOINT.format(slug))
     res = requests.get(RELEASE_ENDPOINT.format(slug))
@@ -83,7 +82,9 @@ for record in tqdm(publications_text):
 
 # Initialize Pinecone
 pinecone.init(api_key=os.getenv('PINECONE_API_KEY'), environment=os.getenv('PINECONE_ENV'))
-index = pinecone.Index('ees')
+print(os.getenv('PINECONE_ENV'))
+print(os.getenv('PINECONE_API_KEY'))
+index = pinecone.Index(INDEX_NAME)
 
 # Process and upload chunks
 for i in tqdm(range(0, len(chunks), BATCH_SIZE)):
