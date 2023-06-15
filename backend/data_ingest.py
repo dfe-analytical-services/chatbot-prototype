@@ -48,7 +48,7 @@ logging.info(slugs)
 
 # Fetch and parse publication content
 publications_text = []
-for slug in slugs[:2]:
+for slug in slugs:
     data = ''
     logging.info(RELEASE_ENDPOINT.format(slug))
     res = requests.get(RELEASE_ENDPOINT.format(slug))

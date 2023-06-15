@@ -19,23 +19,24 @@ logger = logging.getLogger(__name__)
 async def handler(request, *args, **kwargs):
     start_time = time.time()
     serializer = MySerializer(data = request.data)
-    logger.debug(request.data)
     
     if serializer.is_valid():
         question = serializer.validated_data['question']
     else:
-        logger.error("Invalid request")
+        logger.error("Validation Error: question is not a string")
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
     
     stripped_question = question.strip().replace('\n', ' ')
     
-    vector_store = Pinecone.from_existing_index(index_name='ees',
+    try:
+        vector_store = Pinecone.from_existing_index(index_name='ees',
                                                     embedding=OpenAIEmbeddings(openai_api_key=settings.OPENAI_API_KEY),
                                                    text_key='text')
-                                                   #namespace=documentId)   
+    except TypeError as error:
+        logger.error('Vector store failed to initialise:', error)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
     
     similar_docs = vector_store.similarity_search(query = stripped_question, k = 4)
-    logger.debug(similar_docs)
     
     chain = make_chain()
     
