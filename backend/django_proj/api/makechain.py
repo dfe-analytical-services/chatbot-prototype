@@ -1,8 +1,8 @@
 import logging
 from langchain.chat_models import ChatOpenAI
 from langchain.chains.question_answering import load_qa_chain
-#from langchain.callbacks import CallbackManager
-#from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.callbacks.base import BaseCallbackManager
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import pinecone
 from django.conf import settings
 
@@ -22,8 +22,8 @@ def make_chain() -> load_qa_chain:
     llm = ChatOpenAI(openai_api_key=settings.OPENAI_API_KEY,
                    temperature=0,
                    model_name=settings.OPENAI_MOD,
-                   request_timeout = 120)#,
-                   #callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]))
+                   request_timeout = 120,
+                   callbacks= [StreamingStdOutCallbackHandler()])
     
     chain = load_qa_chain(llm = llm, chain_type='stuff', prompt= QA_PROMPT)
     return chain

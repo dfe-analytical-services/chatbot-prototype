@@ -36,6 +36,8 @@ async def handler(request, *args, **kwargs):
         logger.error('Vector store failed to initialise:', error)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
     
+    
+    
     similar_docs = vector_store.similarity_search(query = stripped_question, k = 4)
     
     chain = make_chain()
@@ -47,7 +49,7 @@ async def handler(request, *args, **kwargs):
     try:
         result = await async_generate(chain, similar_docs, stripped_question)
         
-        response_data= { 'text': result}
+        response_data= { 'text': result, 'sourceDocuments': similar_docs}
         end_time = time.time()
         elapsed_time = end_time - start_time
         logger.debug("Time taken to process the request: %s seconds", elapsed_time)
