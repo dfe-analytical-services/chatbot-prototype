@@ -2,3 +2,4 @@ chatbot/.next/
 chatbot/node_modules
 backend/env/
 backend/django_proj/.env
+backend/fastapi/.env
