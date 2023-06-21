@@ -2,10 +2,9 @@ import os
 from typing import Awaitable, AsyncIterable
 import asyncio
 import pinecone
-import logging
 import json
 from bs4 import BeautifulSoup
-
+import logging
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
@@ -22,6 +21,7 @@ from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 
 pinecone.init(api_key=os.getenv('PINECONE_API_KEY'), environment=os.getenv('PINECONE_ENV'))
+logging.debug(os.getenv('PINECONE_API_KEY'))
 
 app = FastAPI()
 
