@@ -35,7 +35,7 @@ interface LayoutProps {
             </div>
             <div className="govuk-header__content">
               <a href="#" className="govuk-header__link govuk-header__service-name">
-                      Education documents: Virtual assistant
+                      EES: Virtual assistant
                     </a>
               
             </div>
