@@ -9,12 +9,12 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from langchain.callbacks.streaming_aiter import AsyncIteratorCallbackHandler
-from langchain.vectorstores import Pinecone
-from langchain.embeddings import OpenAIEmbeddings
+from langchain.docstore.document import Document
 from pydantic import BaseModel
-
+import openai
 from dotenv import load_dotenv
-
+from qdrant_client import QdrantClient
+from qdrant_client.models import models
 from utils import makechain
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -41,6 +41,8 @@ app.add_middleware(
 
 async def send_message(message: str) -> AsyncIterable[str]:
     callback = AsyncIteratorCallbackHandler()
+    client = QdrantClient('localhost', port = 6333)
+    embeds = openai.Embedding.create(input = message, engine = 'text-embedding-ada-002')
     
     chain = makechain(callback)
 
@@ -55,25 +57,23 @@ async def send_message(message: str) -> AsyncIterable[str]:
             # Signal the aiter to stop.
             event.set()
     
-    vector_store = Pinecone.from_existing_index(index_name='ees', 
-                                                embedding=OpenAIEmbeddings(openai_api_key=os.getenv('OPENAI_API_KEY')),
-                                                text_key='text')
+    resp = client.search(collection_name = 'ees', query_vector = embeds['data'][0]['embedding'],
+                         limit = 6,
+                         collection_name = 'ees')
+    
 
-    similar_docs = vector_store.similarity_search(query= message, k = 4)
-
+    documents = [Document(page_content = resp[i].payload['text']) for i in range(resp)]
+    list_urls = list(set(resp[i].payload['url'] for i in range(len(resp))))
     
     task = asyncio.create_task(wrap_done(
-        chain.arun(input_documents = similar_docs, question = message),
+        chain.arun(input_documents = documents, question = message, links = str(list_urls)),
         callback.done),
     )
-
-    list_docs = [BeautifulSoup(doc.page_content, 'html.parser').contents for doc in similar_docs]
-    print(list_docs)
-
+    
     async for token in callback.aiter():
         yield f'{token}'
 
-    yield json.dumps({'sourceDocuments': list_docs})
+    yield json.dumps({'sourceDocuments': list_urls})
 
     await task
 

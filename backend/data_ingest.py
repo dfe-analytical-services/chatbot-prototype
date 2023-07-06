@@ -6,27 +6,18 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from tqdm.auto import tqdm
 import tiktoken
 from uuid import uuid4
-import pinecone
+from qdrant_client import QdrantClient
+import qdrant_client.models as models
 import openai
 import os
-from time import sleep
 
-import os
-import requests
-import json
-from bs4 import BeautifulSoup
-import tiktoken
-from uuid import uuid4
-import pinecone
-import openai
-from time import sleep
-from tqdm import tqdm
 
 logging.basicConfig(level = logging.INFO)
 
 # Constants
 PUBS_ENDPOINT = "https://content.explore-education-statistics.service.gov.uk/api/publications?page=1&pageSize=9999&sort=published&order=asc"
 RELEASE_ENDPOINT = "https://content.explore-education-statistics.service.gov.uk/api/publications/{}/releases/latest"
+LINK_ENDPOINT = 'https://explore-education-statistics.service.gov.uk/find-statistics/{}'
 BATCH_SIZE = 100
 INDEX_NAME = 'ees'
 
@@ -49,21 +40,23 @@ logging.info(slugs)
 # Fetch and parse publication content
 publications_text = []
 for slug in slugs:
-    data = ''
+    dictionary_data = {}
+    dictionary_data['url'] = LINK_ENDPOINT.format(slug)
+    dictionary_data['data'] = ''
     logging.info(RELEASE_ENDPOINT.format(slug))
     res = requests.get(RELEASE_ENDPOINT.format(slug))
     logging.info(res.status_code)
     text = json.loads(res.text)
     try:
-        data += BeautifulSoup(text['headlinesSection']['content'][0]['body'], 'html.parser').get_text()
+        dictionary_data['data'] += BeautifulSoup(text['headlinesSection']['content'][0]['body'], 'html.parser').get_text()
     except:
         logging.info(f'For {slug} the headlines section doesnt exist')
     for i in range(len(text['content'])):
         try:
-            data += BeautifulSoup(text['content'][i]['content'][0]['body'], 'html.parser').get_text()
+            dictionary_data['data'] += BeautifulSoup(text['content'][i]['content'][0]['body'], 'html.parser').get_text()
         except KeyError:
             logging.debug(f"Key does not exist for {slug} at {i}")
-    publications_text.append(data)
+    publications_text.append(dictionary_data)
     
 logging.info(publications_text)
 
@@ -72,39 +65,46 @@ tokenizer = tiktoken.get_encoding('p50k_base')
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=700, chunk_overlap=100, separators=["\n\n", "\n", " ", ""])
 
 chunks = []
-for record in tqdm(publications_text):
-    text_temp = text_splitter.split_text(record)
+for record in publications_text:
+    text_temp = text_splitter.split_text(record['data'])
     chunks.extend([{
         'id':str(uuid4()),
+        'url': record['url'],
        'text': text_temp[i],
         'chunk':i} for i in range(len(text_temp))])
 
-
 # Initialize Pinecone
-pinecone.init(api_key=os.getenv('PINECONE_API_KEY'), environment=os.getenv('PINECONE_ENV'))
-print(os.getenv('PINECONE_ENV'))
-print(os.getenv('PINECONE_API_KEY'))
-index = pinecone.Index(INDEX_NAME)
+client = QdrantClient("localhost", port = 6333)
+collection_names = []
+for i in range(len(client.get_collections().collections)):
+    collection_names.append(client.get_collections().collections[i].name)
+    
+if 'ees' in collection_names:
+    collection_info = client.get_collection(collection_name = 'ees')
+else:
+    collection_info = client.create_collection(collection_name = 'ees', vectors_config = models.VectorParams(distance = models.Distance.COSINE,
+                                                                                                         size = 1536))
 
 # Process and upload chunks
-for i in tqdm(range(0, len(chunks), BATCH_SIZE)):
-    batch_end = min(len(chunks), i + BATCH_SIZE)
-    meta_batch = chunks[i:batch_end]
-    ids_batch = [x['id'] for x in meta_batch]
-    texts = [x['text'] for x in meta_batch]
-    embeds = None
+for i, observation in enumerate(chunks):
+    id = i 
+    text = observation['text']
+    
     try:
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-        logging.info(openai.api_key)
-        res = openai.Embedding.create(input=texts, engine="text-embedding-ada-002")
+        openai.api_key = os.getenv('OPENAI_API_KEY')
+        res = openai.Embedding.create(input = text, engine = 'text-embedding-ada-002')
     except Exception as e:
-            logging.error(f"An error occurred: {e}.")
-            break
-            
-    embeds = [record['embedding'] for record in res['data']]
-    meta_batch = [{'text': x['text'], 'chunk': x['chunk']} for x in meta_batch]
-    to_upsert = list(zip(ids_batch, embeds, meta_batch))
-
-    # Upsert to Pinecone
-    index.upsert(vectors=to_upsert)
-    logging.info(f"Embeddings upserted ")
+        logging.error(f'The following exception has occured. Could not embed texts: {e}')
+        
+    client.upsert(collection_name='ees',
+                  points = [models.PointStruct(
+                      id = i, 
+                      payload = {
+                          'text': text,
+                          'url': observation['url']
+                      },
+                      vector = res['data'][0]['embedding']
+                  )])
+    logging.info("Text uploaded")
+    
+logging.info('Embeddings upserted')

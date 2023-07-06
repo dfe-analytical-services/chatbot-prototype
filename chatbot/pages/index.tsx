@@ -113,7 +113,7 @@ export default function Home() {
         if (chunkValue.startsWith('{"sourceDocuments":')){
           setMessageState((state) => {
             let messages = state.messages;
-            messages[messages.length - 1].sourceDocs = JSON.parse(chunkValue).sourceDocuments
+            messages[messages.length - 1].links = JSON.parse(chunkValue).sourceDocuments
             return {...state, messages: [...messages]};
           })
         } else{
@@ -203,22 +203,23 @@ export default function Home() {
                               </ReactMarkdown>
                             </div>
                           </div>
-                        { message.sourceDocs && (
+                      
+                        { /*{ message.links && (
                             <div className="p-5">
                               <Accordion
                                 type="single"
                                 collapsible
                                 className="flex-col"
                               >
-                                {message.sourceDocs.map((doc, index) => (
-                                  <div key={`messageSourceDocs-${index}`}>
+                                {message.links.map((doc, index) => (
+                                  <div key={`messagelinks-${index}`}>
                                     <AccordionItem value={`item-${index}`}>
                                       <AccordionTrigger>
-                                        <h3>Source {index + 1}</h3>
+                                        <h3>Related publication {index + 1}</h3>
                                       </AccordionTrigger>
                                       <AccordionContent>
                                         <p className="mt-2">
-                                          <b>Source:</b> {doc}
+                                        <a href={doc}>{doc}</a>
                                         </p>
                                       </AccordionContent>
                                     </AccordionItem>
@@ -226,7 +227,7 @@ export default function Home() {
                                 ))}
                               </Accordion>
                             </div>
-                                )}  
+                                )} */ }
                         </>
                       );
                     })}
@@ -247,7 +248,7 @@ export default function Home() {
                         placeholder={
                           loading
                             ? 'Waiting for response...'
-                            : 'What is the report about'
+                            : 'Ask a question here'
                         }
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
