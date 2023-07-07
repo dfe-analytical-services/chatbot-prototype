@@ -164,7 +164,7 @@ for i, observation in enumerate(key_stats_chunks):
     
     try:
         openai.api_key = os.getenv('OPENAI_API_KEY')
-        res = openai.Embedding.create(input = text, engine = 'text-embedding-ada-002')
+        embedding = openai.Embedding.create(input = text, engine = 'text-embedding-ada-002')
     except Exception as e:
         logging.error(f'The following exception has occured. Could not embed texts: {e}')
         
@@ -175,7 +175,7 @@ for i, observation in enumerate(key_stats_chunks):
                           'text': text,
                           'url': observation['url']
                       },
-                      vector = res['data'][0]['embedding']
+                      vector = embedding['data'][0]['embedding']
                   )])
     logging.info("Text uploaded")
     

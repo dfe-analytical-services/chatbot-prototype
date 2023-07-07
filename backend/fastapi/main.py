@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 from qdrant_client import QdrantClient
 from utils import makechain
 from fastapi.middleware.cors import CORSMiddleware
+import logging
 
 load_dotenv()
 
@@ -52,9 +53,9 @@ async def send_message(message: str) -> AsyncIterable[str]:
     
     resp = client.search(collection_name = 'ees', query_vector = embeds['data'][0]['embedding'],
                          limit = 6)
-    
+    logging.info(resp)
 
-    documents = [Document(page_content = resp[i].payload['text']) for i in range(resp)]
+    documents = [Document(page_content = resp[i].payload['text']) for i in range(len(resp))]
     list_urls = list(set(resp[i].payload['url'] for i in range(len(resp))))
     
     task = asyncio.create_task(wrap_done(
@@ -65,7 +66,7 @@ async def send_message(message: str) -> AsyncIterable[str]:
     async for token in callback.aiter():
         yield f'{token}'
 
-    yield json.dumps({'sourceDocuments': list_urls})
+    #yield json.dumps({'sourceDocuments': list_urls})
 
     await task
 
