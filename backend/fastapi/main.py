@@ -1,10 +1,7 @@
-import os
 from typing import Awaitable, AsyncIterable
 import asyncio
-import pinecone
 import json
 from bs4 import BeautifulSoup
-import logging
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
@@ -14,14 +11,10 @@ from pydantic import BaseModel
 import openai
 from dotenv import load_dotenv
 from qdrant_client import QdrantClient
-from qdrant_client.models import models
 from utils import makechain
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
-
-pinecone.init(api_key=os.getenv('PINECONE_API_KEY'), environment=os.getenv('PINECONE_ENV'))
-logging.debug(os.getenv('PINECONE_API_KEY'))
 
 app = FastAPI()
 
@@ -58,8 +51,7 @@ async def send_message(message: str) -> AsyncIterable[str]:
             event.set()
     
     resp = client.search(collection_name = 'ees', query_vector = embeds['data'][0]['embedding'],
-                         limit = 6,
-                         collection_name = 'ees')
+                         limit = 6)
     
 
     documents = [Document(page_content = resp[i].payload['text']) for i in range(resp)]
