@@ -4,13 +4,14 @@ import json
 from bs4 import BeautifulSoup
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from langchain.callbacks.streaming_aiter import AsyncIteratorCallbackHandler
 from langchain.docstore.document import Document
 from pydantic import BaseModel
 import openai
 from dotenv import load_dotenv
 from qdrant_client import QdrantClient
+from starlette.exceptions import HTTPException 
 from utils import makechain
 from fastapi.middleware.cors import CORSMiddleware
 import logging
@@ -46,13 +47,14 @@ async def send_message(message: str) -> AsyncIterable[str]:
             await fn
         except Exception as e:
             # TODO: handle exception
-            print(f"Caught exception: {e}")
+            logging.error(f"Caught exception: {e}")
         finally:
             # Signal the aiter to stop.
             event.set()
     
     resp = client.search(collection_name = 'ees', query_vector = embeds['data'][0]['embedding'],
                          limit = 6)
+    
     logging.info(resp)
 
     documents = [Document(page_content = resp[i].payload['text']) for i in range(len(resp))]
@@ -69,17 +71,21 @@ async def send_message(message: str) -> AsyncIterable[str]:
     #yield json.dumps({'sourceDocuments': list_urls})
 
     await task
-
+    
+@app.exception_handler(HTTPException)
+async def http_exception_handler(exc: HTTPException):
+    return JSONResponse(status_code=exc.status_code, content={'error': exc.detail}) 
 
 class StreamRequest(BaseModel):
     """Request body for streaming."""
     question: str
 
-
 @app.post("/api")
 def stream(body: StreamRequest):
-    return StreamingResponse(send_message(body.question), media_type="text/event-stream")
-
+    try:
+        return StreamingResponse(send_message(body.question), media_type="text/event-stream")
+    except Exception as e:
+        raise HTTPException(status_code = 500, detail = str(e))
 
 if __name__ == "__main__":
     uvicorn.run(host="0.0.0.0", port=8000, app=app)

@@ -62,6 +62,11 @@ for slug in slugs:
                     label = response_1_json['subjectMeta']['indicators'][0]['label']
                     measure = list(response_1_json['results'][0]['measures'].values())[0]
                     #add something to do with individual units measure
+                    try:
+                        unit = response_1_json['subjectMeta']['indicators'][0]['unit']
+                        measure = f"{measure} {unit}"  # Append the unit to the measure if it exists
+                    except Exception as e:
+                        logging.error('No unit found')
                 except Exception as e:
                     label = statistic['title']
                     measure = statistic['statistic']
