@@ -1,7 +1,6 @@
 from typing import Awaitable, AsyncIterable
 import asyncio
 import json
-from bs4 import BeautifulSoup
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse, JSONResponse
