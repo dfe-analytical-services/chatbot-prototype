@@ -2,16 +2,11 @@
 
 ## Overview
 
-This is a repository for an prototype that allows users to upload pdf, html or word documents and immeditately chat with the document. The tech stack used on the backend is python, django, djagno-rest framework, langchain, pinecone and openai. Langchain is a framework that allows users to build scalalable AI/LLM apps and chatbots. For more information on langchain visit its documentation [here](https://python.langchain.com/en/latest/index.html). Pinecone is a vector store for storing vector embeddings and there are various . The frontend tech stack used is next.js and typescript. I use a django backend. It is important to note that this is just a 
-**proof of concepts** to allow the exploration of how something like this would work. The deployed interface is unlikely a chatbot.
-
+This is a repository for a prototype of a chatbot for the explore-education-statistics service on the government website. The app is powered by embeddings so that when a user inputs a query, the relevant parts of the knowledge base are returned and then the app calls the openai api to answer the question. The tech stack on the backend is the python framework fastapi and the vector database Qdrant.FastApi is a fast, modern framework for building API's in python. For more information about FastApi visit their [documentation](https://fastapi.tiangolo.com/). Langchain is used to query the Qdrant and interact with the openai api. For more information about langchain visit their documentation [here](https://python.langchain.com/en/latest/index.html). The frontend tech stack is next.js and typescript although this is subject to change
 
 ## App structure
 
-On the frontend a file upload form is created for users to upload documents which currently supports pdf and html uploads. On the backend an api endpoint in the doc_parse app handles a file upload. This application serves two functions: firstly it sends a document identifier to the frontend which is stored in the client's session storage which is used to redirect the client and converse with the specific document. It also sends a post request to the text extraction api endpoint. This endpoint converts the text into vector embeddings. These embeddings are split into chunks and upserted to the vector database, pinecone. 
-
-Once redirected to the chat url the client sends the question as a post request to the api endpoint. The 4 most numerically similary chunks to the question are retrieved which are then fed in as context to the Chat GPT 4 api which sends the response a long with the source documents to the client. 
-
+A user's question is sent as a post request to the backend and if it is validated is converted into a vector embedding. Based on the cosine similarity of this embedding with the embeddings in the vector database, the six more relevant chunks of the vector database are returned and then the openai api is used  to answer a user's question about the EES service. How the api responds is governed by the prompt template in **utils.py** on the backend. This prompt template can be used to mitigate the risk of the the ai hallucinating and also governs how the ai responds if the question is not related to the service. 
 
 ## Development
 
@@ -32,63 +27,21 @@ python -m venv env
 pip install -r requirements.txt
 ```
 
-3. After installation change the directory to `django_proj` and create a `.env` file with the api keys of the strcutre outlined below. You will need to sign up to [openai](https://platform.openai.com) and pinecone and then generate api keys [pinecone](https://app.pinecone.io/). Once you have signed up create an index called `edtech-gpt`. If it is not called this then app will not work. :
+3. After installation change the directory to `fastapi` and create a `.env` file with the api keys of the strcutre outlined below. You will need to sign up to [openai](https://platform.openai.com). :
 
 ```
-PINECONE_ENV = "YOUR PINECONE ENV"
-PINECONE_API_KEY = "YOUR API KEY"
 OPENAI_API_KEY= "YOUR OPEN API KEY"
-OPENAI_API_EMBED_MOD = "text-embedding-ada-002"
-MODEL = "gpt3-turbo" or whatever model you have access to
 ```
 
-#### NOTE if you do not have access to gpt4 you will need to change the model to gpt3.5-turbo in the `api.makechain.py` folder in the django project
+#### NOTE if you do not have access to gpt4 you will need to change the model to gpt3.5-turbo in the `utils.py` folder in the fastapi folder
 
 4. To run the backend navigate to the root of the django project and run the following:
 ``` 
-python manage.py runserver 8000
+python -m uvicorn main::app --reload
 ``` 
 5. Open another command prompt window and navigate to the `chatbot` directory of the project. Once you have installed node.js run `npm install pnpm -g`. This installs pnpm globally. Then run `pnpm install`
 
 6. To run the frontend you then run `pnpm run dev`. 
-
-
-# PROMPTING
-
-If you are getting responses from chatbot or demoing to other teams you may want to adjust the prompt. To do this you will have to adjust the `prompt_template` variable in the `langchainprompt.py` file in the project. To navigate to this file from the root of the directly it is `backend/django_proj/api/langchainprompt.py`. Here is an example of how you might change the prompt:
-
-```
-prompt_template = """You are an AI assistant providing helpful information regarding a education report. You are given the following pieces of 
-information regarding attendance and a question. Provide a conversational answer based on the context provided. Do not provide any hyperlinks or copy
-references from the document under any circumstances. Do NOT make up hyperlinks. If the question is not related to the context, you must not answer the 
-question and instead say Sorry this is not related to the document. It is very important you only provide information relevant to the report.
-Question: {question}
- =========
-{context}
-
-  =========
-
-  Answer in Markdown:
-
-"""
-
-```
-
-If this was for a school meals use case this could be changed to 
-```
-prompt_template = """
-You are an AI assistant working for the Department for Education providing answers to members of the public questions regarding school meals.
-You are given the following pieces of information regarding school meals and a question. Provide a detailed response based on the context provided.
-Do not provide any hyperlinks or copy references from the document under any circumstances. Do NOT tell them to contact the DFE since you work there.
-  If the question is not related to the context, you must not answer the question and instead say Sorry this is not related to the document. It is very important 
-  you only provide information relevant to the report.
-  Question: {question}
-  =========
-  {context}
-  =========
-  Answer in Markdown:
-"""
-```
 
 
 

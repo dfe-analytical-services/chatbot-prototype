@@ -34,6 +34,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 async def send_message(message: str) -> AsyncIterable[str]:
     callback = AsyncIteratorCallbackHandler()
     client = QdrantClient('localhost', port = 6333)
@@ -52,6 +53,7 @@ async def send_message(message: str) -> AsyncIterable[str]:
             # Signal the aiter to stop.
             event.set()
     
+    #query the database
     resp = client.search(collection_name = 'ees', query_vector = embeds['data'][0]['embedding'],
                          limit = 6)
     
@@ -65,6 +67,7 @@ async def send_message(message: str) -> AsyncIterable[str]:
         callback.done),
     )
     
+    #Logic to send the response to the frontend as an event stream
     async for token in callback.aiter():
         yield f'{token}'
 
@@ -76,15 +79,19 @@ async def send_message(message: str) -> AsyncIterable[str]:
 async def http_exception_handler(exc: HTTPException):
     return JSONResponse(status_code=exc.status_code, content={'error': exc.detail}) 
 
+
+#pydantic validation of the request
 class StreamRequest(BaseModel):
     """Request body for streaming."""
     question: str
+
 
 @app.post("/api")
 def stream(body: StreamRequest):
     try:
         return StreamingResponse(send_message(body.question), media_type="text/event-stream")
     except Exception as e:
+        # ToDo: More specific error handling
         raise HTTPException(status_code = 500, detail = str(e))
 
 if __name__ == "__main__":
