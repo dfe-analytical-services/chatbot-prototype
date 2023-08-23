@@ -2,12 +2,11 @@ import asyncio
 import logging
 from typing import AsyncIterable, Awaitable
 
+import config
 import openai
-import uvicorn
-from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 from langchain.callbacks.streaming_aiter import AsyncIteratorCallbackHandler
 from langchain.docstore.document import Document
 from pydantic import BaseModel
@@ -15,13 +14,12 @@ from qdrant_client import QdrantClient
 from starlette.exceptions import HTTPException
 from utils import makechain
 
-load_dotenv()
-
 app = FastAPI()
+router = APIRouter(prefix="/api")
+settings = config.Settings()
 
-origins = [
-    "http://localhost:3000",
-]
+
+origins = [settings.url_public_site]
 
 app.add_middleware(
     CORSMiddleware,
@@ -34,8 +32,8 @@ app.add_middleware(
 
 async def send_message(message: str) -> AsyncIterable[str]:
     callback = AsyncIteratorCallbackHandler()
-    client = QdrantClient("localhost", port=6333)
-    embeds = openai.Embedding.create(input=message, engine="text-embedding-ada-002")
+    client = QdrantClient(settings.host, port=settings.qdrant_port)
+    embeds = openai.Embedding.create(input=message, engine=settings.openai_embedding_model)
 
     chain = makechain(callback)
 
@@ -66,14 +64,7 @@ async def send_message(message: str) -> AsyncIterable[str]:
     async for token in callback.aiter():
         yield f"{token}"
 
-    # yield json.dumps({'sourceDocuments': list_urls})
-
     await task
-
-
-@app.exception_handler(HTTPException)
-async def http_exception_handler(exc: HTTPException):
-    return JSONResponse(status_code=exc.status_code, content={"error": exc.detail})
 
 
 # pydantic validation of the request
@@ -83,8 +74,9 @@ class StreamRequest(BaseModel):
     question: str
 
 
-@app.post("/api")
+@router.post("/chat")
 def stream(body: StreamRequest):
+    print("Hello")
     try:
         return StreamingResponse(send_message(body.question), media_type="text/event-stream")
     except Exception as e:
@@ -92,5 +84,4 @@ def stream(body: StreamRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-if __name__ == "__main__":
-    uvicorn.run(host="0.0.0.0", port=8000, app=app)
+app.include_router(router)
