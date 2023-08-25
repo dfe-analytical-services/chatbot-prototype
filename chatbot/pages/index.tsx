@@ -84,7 +84,7 @@ export default function Home() {
           question,
           history
         }),
-      });
+      })
 
       const data = await response.body;
       
