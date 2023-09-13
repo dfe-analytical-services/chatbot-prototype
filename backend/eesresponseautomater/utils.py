@@ -1,9 +1,8 @@
-import config
+from config import settings
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts.prompt import PromptTemplate
-
-settings = config.Settings()
+from pydantic import BaseModel
 
 prompt_template = """You are an AI assistant on the explore education statistics service. You are given
 a question, links and context which is used to answer the question. Provide an answer to the question based on the context provided. If any of the context
@@ -37,3 +36,10 @@ def makechain(callback) -> load_qa_chain:
     chain = load_qa_chain(llm=model, chain_type="stuff", prompt=QA_PROMPT)
 
     return chain
+
+
+# pydantic validation of the request
+class StreamRequest(BaseModel):
+    """Request body for streaming."""
+
+    question: str
