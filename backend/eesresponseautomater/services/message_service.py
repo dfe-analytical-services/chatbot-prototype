@@ -25,7 +25,7 @@ async def send_message(message: str) -> AsyncIterable[str]:
     chain = makechain(callback)
 
     # query the database
-    resp = client.search(collection_name="ees", query_vector=embeds["data"][0]["embedding"], limit=4)
+    resp = client.search(collection_name="ees", query_vector=embeds["data"][0]["embedding"], limit=6)
 
     logging.info(resp)
 

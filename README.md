@@ -96,9 +96,8 @@ The latter fastapi server exposes the Qdrant, openai and langchain apis which en
 To build the database you can send a post request to [http://localhost:8000/api/maintenance/publications/build](http://localhost:8000/api/maintenance/publications/build). If you need help doing this then open up a new bash prompt window and run the following
 
    ```bash
-   cd ees_gpt
    chmod +x upsert.sh
-   upsert.sh
+   ./upsert.sh
    ```
 
 Once the data is ingested you can stop the FastAPI data ingestion server (if it being run locally)
@@ -138,6 +137,7 @@ Navigate to the root directory of the project in command prompt and run the foll
 - Access the FastAPI Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
 - Access the Qdrant Docker instance dashboard: [http://localhost:6333/dashboard](http://localhost:6333/dashboard)
 - Access the Chatbot frontend [http://localhost:3002](http://localhost:3002)
+- Access postgres database via pgadmin: [http://localhost:8080](http://localhost:8080)
 
 ## Running web App
 
