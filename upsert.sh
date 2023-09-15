@@ -1,1 +1,0 @@
-python helpers/data_ingest.py

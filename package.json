@@ -1,0 +1,7 @@
+{
+  "name": "chatbot-prototype",
+  "engines": {
+    "node": "18.17.0",
+    "pnpm": "8.7.5"
+  }
+}

@@ -20,4 +20,4 @@ Thumbs.db
 
 # Typescript #
 chatbot/.next/
-chatbot/node_modules
+node_modules

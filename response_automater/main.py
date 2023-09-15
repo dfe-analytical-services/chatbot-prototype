@@ -1,13 +1,18 @@
-from config import settings
+from logging.config import dictConfig
+
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from routers import message
+
+from .config import LOGGING_CONFIG, settings
+from .routers import message
+
+dictConfig(LOGGING_CONFIG)
 
 app = FastAPI()
 
-origins = [settings.url_public_site]
+origins = [settings.url_chat_ui]
 
 app.add_middleware(
     CORSMiddleware,
@@ -28,4 +33,4 @@ app.include_router(message.router)
 
 @app.get("/")
 async def root():
-    return {"message": "EES LLM Response app"}
+    return {"message": "Response automater"}

@@ -1,8 +1,9 @@
-from config import settings
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts.prompt import PromptTemplate
 from pydantic import BaseModel
+
+from .config import settings
 
 prompt_template = """You are an AI assistant on the explore education statistics service. You are given
 a question, links and context which is used to answer the question. Provide an answer to the question based on the context provided. If any of the context
