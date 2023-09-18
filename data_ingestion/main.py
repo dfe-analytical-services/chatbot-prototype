@@ -29,4 +29,4 @@ app.include_router(publications.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Content ingestion"}
+    return {"message": "Data ingestion"}

@@ -12,7 +12,7 @@ The frontend tech stack is next.js and typescript although this is subject to ch
 
 ## App structure
 
-There are three projects contained within this repository, a next.js frontend ui project, a fastapi server for the data ingestion, and fastapi server for the backend which are in the `chatbot`, `data_ingestion` and `response_automater` folders respectively.
+There are three projects contained within this repository, a next.js frontend UI project, a fastapi server for the data ingestion, and fastapi server for the backend which are in the `chatbot`, `data_ingestion` and `response_automater` folders respectively.
 
 The fastapi server for data ingestion has various endpoints to build, rebuild and delete different parts of the vector database, qdrant. To build the database information is extracted from the content apis from the explore-education-statistics service and chunked into smaller units of text. Via the openai and qdrant apis these pieces of text are converted into vector embeddings and subsequently stored in the qdrant vector database. The endpoint to build the database is **.../api/maintenance/publications/build** which is contained in the **data_ingestion/routers/maintenance.py** file. This can be used to build or rebuild all the information from the latest publications in the qdrant vector database. There are also endpoints for building information relating to the methodologies and to delete the embeddings stored within the database contained in the same file. The other two files within the router directory, `publications.py` and `methodologies.py` have endpoints for updating a specific publication or methodologies within the qdrant database. For example, if there was a new release of attendance publication, a post request to the **.../pupil-attendance-in-schools/update** could be triggered.
 
@@ -24,7 +24,7 @@ The latter fastapi server exposes the Qdrant, openai and langchain apis which en
 - [Python](https://www.python.org/downloads/) version 3.11 or higher installed on your system.
 - [Docker](https://www.docker.com/get-started) installed and running on your system.
 - [Pipenv](https://pipenv.pypa.io/en/latest/) for managing Python dependencies.
-- [npm](https://nodejs.org/en/download) for managing frontend dependencies. This project uses version 18.16.0
+- [npm](https://nodejs.org/en/download) for managing frontend dependencies.
 
 
 
@@ -36,31 +36,37 @@ The latter fastapi server exposes the Qdrant, openai and langchain apis which en
    cd EES_GPT
    ```
 
-2. Install [Pipenv](https://pipenv.pypa.io/en/latest/) if you haven't already:
+2. Install [pnpm](https://pnpm.io) if you haven't already:
+
+    ```bash
+    npm install -g pnpm
+    ```
+
+3. Install [Pipenv](https://pipenv.pypa.io/en/latest/) if you haven't already:
 
     ```bash
     pip install pipenv
     ```
 
-3. Create a virtual environment and install project dependencies:
+4. Create a virtual environment and install project dependencies:
 
     ```bash
     pipenv install --dev
     ```
 
-4.  Set up pre-commit hooks:
+5.  Set up pre-commit hooks:
 
     ```bash
     pipenv run pre-commit install
     ```
 
-5.  In the project's root directory, `.env.example` contains placeholders for environment variables that need to be set. Copy `.env.example` to `.env`:
+6.  In the project's root directory, `.env.example` contains placeholders for environment variables that need to be set. Copy `.env.example` to `.env`:
 
     ```bash
     cp .env.example .env
     ```
 
-6.  Edit the `.env` file and customise the environment variables.
+7.  Edit the `.env` file and customise the environment variables.
 
 
 ## Docker Setup
@@ -158,29 +164,23 @@ To update a specific publication:
 3. Access the response automater API docs: [http://localhost:8000/docs](http://localhost:8000/docs).
  
  ## Running the Next.js Chatbot UI frontend
- 
-1. Install [pnpm](https://pnpm.io) if you haven't already:
 
-    ```bash
-    npm install -g pnpm
-    ```
-
-2. Install all dependencies for the project:
+1. Install all dependencies for the project:
 
     ```bash
     pnpm i
     ```
 
-3. Start Next.js:
+2. Start Next.js:
 
     ```bash
     pnpm --filter chatbot dev
     ```
-4. Access the chatbot UI: [http://localhost:3002](http://localhost:3002).
+3. Access the chatbot UI: [http://localhost:3002](http://localhost:3002).
 
 ## Quick start
 
-This is a guide to starting up the chatbot ui assuming you have already followed the initial setup and run everything once before.
+This is a guide to starting up the chatbot UI assuming you have already followed the initial setup and run everything once before.
 
 It assumes you have already run the data ingestion server at least once so that you now have a Qdrant data volume and you have used the API to ingest data.
 
