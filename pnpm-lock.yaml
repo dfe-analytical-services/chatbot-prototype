@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  chatbot:
+  chatbot-ui:
     dependencies:
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1

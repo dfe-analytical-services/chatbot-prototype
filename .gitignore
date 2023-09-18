@@ -19,5 +19,5 @@ ehthumbs.db
 Thumbs.db
 
 # Typescript #
-chatbot/.next/
+chatbot-ui/.next/
 node_modules

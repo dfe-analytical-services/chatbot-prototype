@@ -6,7 +6,7 @@ import sys
 
 class DataIngestionClient:
     API_BASE_URLS = {
-        "local": "http://localhost:3000/api"
+        "local": "http://localhost:8000/api"
     }
 
     def __init__(self, env: str, timeout: float):
@@ -22,9 +22,8 @@ class DataIngestionClient:
         r = requests.post(f"{self.api_base_url}/maintenance/publications/build", timeout=self.timeout)
         return r.json()
 
-    def clear(self) -> str:
-        r = requests.delete(f"{self.api_base_url}/maintenance/clear", timeout=self.timeout)
-        return r.json()
+    def clear(self) -> None:
+        requests.delete(f"{self.api_base_url}/maintenance/clear", timeout=self.timeout)
 
     def update_methodology(self, slug: str) -> str:
         r = requests.post(f"{self.api_base_url}/methodologies/{slug}/update", timeout=self.timeout)
@@ -101,4 +100,5 @@ if __name__ == "__main__":
     elif args.update_publication:
         res = client.update_publication(slug=args.slug)
 
-    print(res)
+    if (res is not None):
+        print(res)

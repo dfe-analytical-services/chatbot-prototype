@@ -7,7 +7,7 @@ ENV QDRANT_COLLECTION=ees
 ENV QDRANT_HOST=localhost
 ENV QDRANT_PORT=6333
 ENV URL_API_CONTENT=https://content.explore-education-statistics.service.gov.uk/api
-ENV URL_PUBLIC_SITE=http://localhost:3002
+ENV URL_PUBLIC_SITE=http://localhost:3000
 ENV URL_API_DATA=https://content.explore-education-statistics.service.gov.uk/api
 
 #set working directory
