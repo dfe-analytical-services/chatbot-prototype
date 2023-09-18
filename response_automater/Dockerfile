@@ -12,11 +12,11 @@ ENV URL_CHAT_UI=http://localhost:3002
 WORKDIR /code
 
 #install required packages
-COPY ../requirements.txt /code/requirements.txt
+COPY requirements.txt /code/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 #copy files
-COPY /response_automater /code
+COPY . /code
 
 CMD ["uvicorn", "response_automater.main:app", "--host", "0.0.0.0", "--port", "8010"]
