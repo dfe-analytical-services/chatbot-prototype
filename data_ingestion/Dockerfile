@@ -14,11 +14,11 @@ ENV URL_API_DATA=https://content.explore-education-statistics.service.gov.uk/api
 WORKDIR /code
 
 #install required packages
-COPY ../requirements.txt /code/requirements.txt
+COPY requirements.txt /code/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 #copy files
-COPY /data_ingestion /code
+COPY . /code
 
 CMD ["uvicorn", "data_ingestion.main:app", "--host", "0.0.0.0", "--port", "8000"]
