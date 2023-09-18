@@ -6,12 +6,6 @@ import {Message} from '@/types/chat';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import LoadingDots from '@/components/ui/LoadingDots';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 
 
 
@@ -75,14 +69,13 @@ export default function Home() {
     let pending = '';
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/chat', {
+      const response = await fetch('http://localhost:8000/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          question,
-          history
+          question
         }),
       })
 
@@ -203,31 +196,6 @@ export default function Home() {
                               </ReactMarkdown>
                             </div>
                           </div>
-                      
-                        { /*{ message.links && (
-                            <div className="p-5">
-                              <Accordion
-                                type="single"
-                                collapsible
-                                className="flex-col"
-                              >
-                                {message.links.map((doc, index) => (
-                                  <div key={`messagelinks-${index}`}>
-                                    <AccordionItem value={`item-${index}`}>
-                                      <AccordionTrigger>
-                                        <h3>Related publication {index + 1}</h3>
-                                      </AccordionTrigger>
-                                      <AccordionContent>
-                                        <p className="mt-2">
-                                        <a href={doc}>{doc}</a>
-                                        </p>
-                                      </AccordionContent>
-                                    </AccordionItem>
-                                  </div>
-                                ))}
-                              </Accordion>
-                            </div>
-                                )} */ }
                         </>
                       );
                     })}

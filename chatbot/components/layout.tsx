@@ -27,8 +27,7 @@ interface LayoutProps {
                     src="govuk-logo.png"
                     className="govuk-header__logotype-crown-fallback-image"
                     width="36"
-                    height="32"
-                  />
+                    height="32" alt={""}/>
                   <span className="govuk-header__logotype-text">GOV.UK</span>
                 </span>
               </a>
