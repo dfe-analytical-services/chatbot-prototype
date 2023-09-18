@@ -3,5 +3,8 @@
   "engines": {
     "node": "18.17.0",
     "pnpm": "8.7.5"
+  },
+  "scripts": {
+    "data-ingest": "pipenv run python scripts/data_ingest.py"
   }
 }

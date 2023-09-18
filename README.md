@@ -1,4 +1,4 @@
-# EES chat bot prototype
+# EES chatbot prototype
 
 ## Overview
 
@@ -6,13 +6,13 @@ This is a repository for a prototype of a chatbot for the Department for Educati
 
 The app is powered by embeddings so that when a user inputs a query, the relevant parts of the knowledge base are returned and then the app calls the openai api to answer the question.
 
-The tech stack on the backend is the python framework fastapi and the vector database Qdrant.FastApi is a fast, modern framework for building API's in python. For more information about FastApi visit their [documentation](https://fastapi.tiangolo.com/). Langchain is used to query the Qdrant and interact with the openai api. For more information about langchain visit their [documentation](https://python.langchain.com/en/latest/index.html). For more information on qdrant please visit their [documentation](https://qdrant.tech/documentation/).
+The tech stack on the backend is the python framework fastapi and the vector database Qdrant.FastApi is a fast, modern framework for building APIs in python. For more information about FastApi visit their [documentation](https://fastapi.tiangolo.com/). Langchain is used to query the Qdrant and interact with the openai api. For more information about langchain visit their [documentation](https://python.langchain.com/en/latest/index.html). For more information on qdrant please visit their [documentation](https://qdrant.tech/documentation/).
 
-The frontend tech stack is next.js and typescript although this is subject to change
+The frontend tech stack is next.js and typescript although this is subject to change.
 
 ## App structure
 
-There are three projects contained within this repository, a next.js frontent ui project, a fastapi server for the data ingestion, and fastapi server for the backend which are in the `chatbot`, `data_ingestion` and `response_automater` folders respectively.
+There are three projects contained within this repository, a next.js frontend ui project, a fastapi server for the data ingestion, and fastapi server for the backend which are in the `chatbot`, `data_ingestion` and `response_automater` folders respectively.
 
 The fastapi server for data ingestion has various endpoints to build, rebuild and delete different parts of the vector database, qdrant. To build the database information is extracted from the content apis from the explore-education-statistics service and chunked into smaller units of text. Via the openai and qdrant apis these pieces of text are converted into vector embeddings and subsequently stored in the qdrant vector database. The endpoint to build the database is **.../api/maintenance/publications/build** which is contained in the **data_ingestion/routers/maintenance.py** file. This can be used to build or rebuild all the information from the latest publications in the qdrant vector database. There are also endpoints for building information relating to the methodologies and to delete the embeddings stored within the database contained in the same file. The other two files within the router directory, `publications.py` and `methodologies.py` have endpoints for updating a specific publication or methodologies within the qdrant database. For example, if there was a new release of attendance publication, a post request to the **.../pupil-attendance-in-schools/update** could be triggered.
 
@@ -95,18 +95,51 @@ Access the Qdrant Docker instance dashboard: [http://localhost:6333/dashboard](h
     uvicorn data_ingestion.main:app --host 0.0.0.0 --port 8000 --reload
     ```
 
- ### Usage
+3. Access the data ingestion API docs: [http://localhost:8000/docs](http://localhost:8000/docs).
 
-- Access the data ingestion API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+ ### Ingesting data
 
-To upsert data into the vector database you can send a post request to [http://localhost:8000/api/maintenance/publications/build](http://localhost:8000/api/maintenance/publications/build). If you need help doing this then open up a new bash prompt window and run the following
-
-   ```bash
-   chmod +x upsert.sh
-   ./upsert.sh
-   ```
+The python script `scripts/data_ingest.py` can be used as a helper to make API requests for data maintenance.
 
 Once the data is ingested you can stop the FastAPI data ingestion server (if it's being run locally).
+
+You can run the script with the help of `pnpm` using `pnpm data-ingest`.
+
+For help:
+
+   ```bash
+   pnpm data-ingest --help
+   ```
+
+To clear the vector database:
+
+   ```bash
+   pnpm data-ingest --clear
+   ```
+
+To build all methodologies:
+
+   ```bash
+   pnpm data-ingest --build-methodologies
+   ```
+
+To build all publications:
+
+   ```bash
+   pnpm data-ingest --build-publications
+   ```
+
+To update a specific methodology:
+
+   ```bash
+   pnpm data-ingest --update-methodology --slug SLUG
+   ```
+
+To update a specific publication:
+
+   ```bash
+   pnpm data-ingest --update-publication --slug SLUG
+   ```
 
 ## Running the FastAPI response automater server
 
@@ -122,9 +155,7 @@ Once the data is ingested you can stop the FastAPI data ingestion server (if it'
     uvicorn response_automater.main:app --host 0.0.0.0 --port 8000 --reload
     ```
 
- ### Usage
-
-- Access the response automater API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+3. Access the response automater API docs: [http://localhost:8000/docs](http://localhost:8000/docs).
  
  ## Running the Next.js Chatbot UI frontend
  
@@ -140,18 +171,18 @@ Once the data is ingested you can stop the FastAPI data ingestion server (if it'
     pnpm i
     ```
 
-2. Start Next.js:
+3. Start Next.js:
 
     ```bash
     pnpm --filter chatbot dev
     ```
-### Usage
-
-- Access the chatbot UI: [http://localhost:3002](http://localhost:3002)
+4. Access the chatbot UI: [http://localhost:3002](http://localhost:3002).
 
 ## Quick start
 
-This assumes you have already have the `.env` environment variables configured, the necessary packages installed to run the servers and the frontend, and have a data volume of persisted data stored in Qdrant from running the data ingestion.
+This is a guide to starting up the chatbot ui assuming you have already followed the initial setup and run everything once before.
+
+It assumes you have already run the data ingestion server at least once so that you now have a Qdrant data volume and you have used the API to ingest data.
 
 1. Open a new command prompt in the root directory of the project and run the following:
 
