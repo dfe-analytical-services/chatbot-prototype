@@ -19,6 +19,6 @@ COPY ../requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 #copy files
-COPY /eessupportbot /code
+COPY /data_ingestion /code
 
-CMD ["uvicorn", "eessupportbot.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "data_ingestion.main:app", "--host", "0.0.0.0", "--port", "8000"]

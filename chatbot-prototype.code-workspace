@@ -1,0 +1,16 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "search.exclude": {
+      // Avoid polluting search results with lockfile content
+      "Pipfile.lock": true,
+      "pnpm-lock.yaml": true
+    },
+    // Ensure VSCode uses pnpm instead of npm
+    "npm.packageManager": "pnpm"
+  }
+}

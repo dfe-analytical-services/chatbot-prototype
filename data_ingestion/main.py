@@ -29,4 +29,4 @@ app.include_router(publications.router)
 
 @app.get("/")
 async def root():
-    return {"message": "EES support bot content ingestion"}
+    return {"message": "Data ingestion"}

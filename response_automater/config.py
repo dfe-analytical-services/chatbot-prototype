@@ -2,20 +2,19 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    embedding_model: str = "text-embedding-ada-002"
-    qdrant_collection: str = "ees"
+    openai_api_key: str
+    openai_model: str = "gpt-4"
+    openai_embedding_model: str = "text-embedding-ada-002"
     qdrant_host: str = "localhost"
+    qdrant_collection: str = "ees"
     qdrant_port: int = 6333
-    url_api_content: str = "http://localhost:5010/api"
-    url_api_data: str = "http://localhost:5000/api"
-    url_public_site: str = "http://localhost:3000"
-
-    # TODO update to use SettingsConfigDict from pydantic-settings once langchain is updated to use pydantic v2
-    # model_config = SettingsConfigDict(env_file=".env")
+    url_chat_ui: str = "http://localhost:3002"
 
     class Config:
-        env_file = "../.env"
+        env_file = "../../.env"
 
+
+settings = Settings()
 
 LOGGING_CONFIG = {
     "version": 1,
@@ -34,7 +33,7 @@ LOGGING_CONFIG = {
             "stream": "ext://sys.stdout",  # The default is stderr
         }
     },
-    "loggers": {"eessupportbot": {"handlers": ["console"], "level": "DEBUG", "propagate": False}},
+    "loggers": {"response_automater": {"handlers": ["console"], "level": "DEBUG", "propagate": False}},
     "root": {"handlers": ["console"], "level": "WARNING"},
 }
 
