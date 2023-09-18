@@ -12,7 +12,7 @@ The frontend tech stack is next.js and typescript although this is subject to ch
 
 ## App structure
 
-There are three projects contained within this repository, a next.js frontend UI project, a fastapi server for the data ingestion, and fastapi server for the backend which are in the `chatbot`, `data_ingestion` and `response_automater` folders respectively.
+There are three projects contained within this repository, a next.js frontend UI project, a fastapi server for the data ingestion, and fastapi server for the backend which are in the `chatbot-ui`, `data_ingestion` and `response_automater` folders respectively.
 
 The fastapi server for data ingestion has various endpoints to build, rebuild and delete different parts of the vector database, qdrant. To build the database information is extracted from the content apis from the explore-education-statistics service and chunked into smaller units of text. Via the openai and qdrant apis these pieces of text are converted into vector embeddings and subsequently stored in the qdrant vector database. The endpoint to build the database is **.../api/maintenance/publications/build** which is contained in the **data_ingestion/routers/maintenance.py** file. This can be used to build or rebuild all the information from the latest publications in the qdrant vector database. There are also endpoints for building information relating to the methodologies and to delete the embeddings stored within the database contained in the same file. The other two files within the router directory, `publications.py` and `methodologies.py` have endpoints for updating a specific publication or methodologies within the qdrant database. For example, if there was a new release of attendance publication, a post request to the **.../pupil-attendance-in-schools/update** could be triggered.
 
@@ -30,7 +30,7 @@ The latter fastapi server exposes the Qdrant, openai and langchain apis which en
 
 ## Development - Initial Setup
 
-1. Clone the repo 
+1. Clone the repo
    ```bash
    git clone https://github.com/joesharratt1229/EES_GPT.git
    cd EES_GPT
@@ -158,10 +158,10 @@ To update a specific publication:
 2. Start the response automater server.
 
     ```bash
-    uvicorn response_automater.main:app --host 0.0.0.0 --port 8000 --reload
+    uvicorn response_automater.main:app --host 0.0.0.0 --port 8010 --reload
     ```
 
-3. Access the response automater API docs: [http://localhost:8000/docs](http://localhost:8000/docs).
+3. Access the response automater API docs: [http://localhost:8010/docs](http://localhost:8010/docs).
  
  ## Running the Next.js Chatbot UI frontend
 
@@ -174,7 +174,7 @@ To update a specific publication:
 2. Start Next.js:
 
     ```bash
-    pnpm --filter chatbot dev
+    pnpm --filter chatbot-ui dev
     ```
 3. Access the chatbot UI: [http://localhost:3002](http://localhost:3002).
 
@@ -195,5 +195,5 @@ It assumes you have already run the data ingestion server at least once so that 
 2. Open a new command prompt in the root directory of the project and run the following:
 
     ```bash
-    pnpm --filter chatbot dev
+    pnpm --filter chatbot-ui dev
     ```

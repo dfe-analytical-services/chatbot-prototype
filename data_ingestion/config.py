@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # model_config = SettingsConfigDict(env_file=".env")
 
     class Config:
-        env_file = "../.env"
+        env_file = "../../.env"
 
 
 LOGGING_CONFIG = {
