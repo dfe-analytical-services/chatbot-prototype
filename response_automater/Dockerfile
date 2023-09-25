@@ -1,22 +1,33 @@
-FROM python:3.11
+FROM python:3.11-slim as base
 
-#default values for environment variables
-ENV OPENAI_API_MODEL=gpt-4
-ENV OPENAI_API_EMBEDDING_MODEL=text-embedding-ada-002
-ENV QDRANT_COLLECTION=ees
-ENV QDRANT_HOST=localhost
-ENV QDRANT_PORT=6333
-ENV URL_CHAT_UI=http://localhost:3002
+# Setup env
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-#set working directory
-WORKDIR /code
+WORKDIR /app
 
-#install required packages
-COPY requirements.txt /code/requirements.txt
+FROM base as builder
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install pipenv
 
-#copy files
-COPY . /code
+# Install python dependencies in /.venv
+COPY Pipfile .
+COPY Pipfile.lock .
+RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
+
+FROM base as runtime
+
+# Copy virtual env from builder
+COPY --from=builder /app/.venv .venv
+ENV PATH="/app/.venv/bin:$PATH"
+
+# Copy the app
+COPY response_automater response_automater
+
+# Create and switch to a new user
+RUN useradd --create-home appuser
+USER appuser
+
+EXPOSE 8010
 
 CMD ["uvicorn", "response_automater.main:app", "--host", "0.0.0.0", "--port", "8010"]
