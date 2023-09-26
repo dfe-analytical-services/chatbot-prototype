@@ -1,0 +1,44 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", ":dependencyDashboard"],
+  "schedule": ["before 5am every monday"],
+  "timezone": "Europe/London",
+  "packageRules": [
+    {
+      "groupName": "Python dependencies",
+      "matchDatasources": ["pypi"]
+    },
+    {
+      "groupName": "Python patch dependencies",
+      "matchDatasources": ["pypi"],
+      "matchUpdateTypes": ["patch"],
+      "schedule": ["before 5am on the first day of the month"]
+    },
+    {
+      "groupName": "Frontend dependencies",
+      "matchDatasources": ["node-version", "npm"]
+    },
+    {
+      "groupName": "Frontend patch dependencies",
+      "matchDatasources": ["node-version", "npm"],
+      "matchUpdateTypes": ["patch"],
+      "schedule": ["before 5am on the first day of the month"]
+    },
+    {
+      "groupName": "Docker dependencies",
+      "matchDatasources": ["docker", "docker-version"]
+    },
+    {
+      "description": "Temporarily restrict openai version",
+      "matchDatasources": ["pypi"],
+      "matchPackageNames": ["openai"],
+      "allowedVersions": "<=0.27.9"
+    },
+    {
+      "description": "Temporarily restrict langchain version",
+      "matchDatasources": ["pypi"],
+      "matchPackageNames": ["langchain"],
+      "allowedVersions": "<=0.0.203"
+    }
+  ]
+}
