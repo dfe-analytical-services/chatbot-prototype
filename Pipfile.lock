@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "134167f175ea1ef15ed2e8183e98cea42b7c3ffbacbec8cc4d780afe437aea0a"
+            "sha256": "645cc063c5833a1049d4652a546366b1e0a5978209671d137aeb40a7c0deeda1"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -573,20 +573,20 @@
         },
         "langchain": {
             "hashes": [
-                "sha256:2226f60ed059dd8dd858dcadcf2ad22bf0c8ba35dcc572d4b4ac8088486c963f",
-                "sha256:de667ef840c81e6f638a1409ca58f6a7db0cc7b81a4ad83bba3d7ff1d5bfe095"
+                "sha256:117329768e3419f2d46bcadb5d4401d542372407a3d5ae754c3dadaec4c3fdfe",
+                "sha256:b4872a9922d131b60f3ce94bc01787663e1986bdcd40fca65594605869185e30"
             ],
             "index": "pypi",
             "markers": "python_version < '4.0' and python_full_version >= '3.8.1'",
-            "version": "==0.0.203"
+            "version": "==0.0.236"
         },
-        "langchainplus-sdk": {
+        "langsmith": {
             "hashes": [
-                "sha256:07a869d476755803aa04c4986ce78d00c2fe4ff584c0eaa57d7570c9664188db",
-                "sha256:3d300e2e3290f68cc9d842c059f9458deba60e776c9e790309688cad1bfbb219"
+                "sha256:11e5db0d8e29ee5583cabd872eeece8ce50738737b1f52f316ac984f4a1a58c5",
+                "sha256:716412979613a5eb550c9bce33165cd1bad296eb19009040155deccef427ef07"
             ],
             "markers": "python_version < '4.0' and python_full_version >= '3.8.1'",
-            "version": "==0.0.20"
+            "version": "==0.0.10"
         },
         "marshmallow": {
             "hashes": [
@@ -754,7 +754,7 @@
                 "sha256:f8db2f125746e44dce707dd44d4f4efeea8d7e2b43aace3f8d1f235cfa2733dd",
                 "sha256:f93fc78fe8bf15afe2b8d6b6499f1c73953169fad1e9a8dd086cdff3190e7fdf"
             ],
-            "markers": "python_version < '3.13' and python_version >= '3.9'",
+            "markers": "python_version >= '3.8'",
             "version": "==1.26.0"
         },
         "openai": {
