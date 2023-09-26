@@ -5,27 +5,27 @@
   "timezone": "Europe/London",
   "packageRules": [
     {
-      "groupName": "Python dependencies",
+      "groupName": "python dependencies",
       "matchDatasources": ["pypi"]
     },
     {
-      "groupName": "Python patch dependencies",
+      "groupName": "python patch dependencies",
       "matchDatasources": ["pypi"],
       "matchUpdateTypes": ["patch"],
       "schedule": ["before 5am on the first day of the month"]
     },
     {
-      "groupName": "Frontend dependencies",
+      "groupName": "frontend dependencies",
       "matchDatasources": ["node-version", "npm"]
     },
     {
-      "groupName": "Frontend patch dependencies",
+      "groupName": "frontend patch dependencies",
       "matchDatasources": ["node-version", "npm"],
       "matchUpdateTypes": ["patch"],
       "schedule": ["before 5am on the first day of the month"]
     },
     {
-      "groupName": "Docker dependencies",
+      "groupName": "docker dependencies",
       "matchDatasources": ["docker", "docker-version"]
     },
     {
