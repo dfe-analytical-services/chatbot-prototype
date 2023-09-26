@@ -2,7 +2,7 @@
   "name": "chatbot-prototype",
   "engines": {
     "node": "18.18.0",
-    "pnpm": "8.7.5"
+    "pnpm": "8.8.0"
   },
   "scripts": {
     "data-ingest": "pipenv run python scripts/data_ingest.py"
