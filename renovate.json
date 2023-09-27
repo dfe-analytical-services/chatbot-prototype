@@ -33,12 +33,6 @@
       "matchDatasources": ["pypi"],
       "matchPackageNames": ["openai"],
       "allowedVersions": "<=0.27.9"
-    },
-    {
-      "description": "Temporarily restrict langchain version",
-      "matchDatasources": ["pypi"],
-      "matchPackageNames": ["langchain"],
-      "allowedVersions": "<=0.0.203"
     }
   ]
 }

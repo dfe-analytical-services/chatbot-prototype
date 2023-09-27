@@ -23,7 +23,6 @@
     "clsx": "^1.2.1",
     "dotenv": "^16.0.3",
     "govuk-frontend": "^4.5.0",
-    "langchain": "0.0.33",
     "lucide-react": "^0.125.0",
     "next": "13.2.3",
     "pdf-parse": "1.1.1",
