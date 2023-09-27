@@ -21,3 +21,4 @@ Thumbs.db
 # Typescript #
 chatbot-ui/.next/
 node_modules
+tsconfig.tsbuildinfo
