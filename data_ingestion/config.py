@@ -1,21 +1,17 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    ees_url_api_content: str = "http://localhost:5010/api"
+    ees_url_api_data: str = "http://localhost:5000/api"
+    ees_url_public_ui: str = "http://localhost:3000"
     openai_api_key: str
-    embedding_model: str = "text-embedding-ada-002"
+    openai_embedding_model: str = "text-embedding-ada-002"
     qdrant_collection: str = "ees"
     qdrant_host: str = "localhost"
     qdrant_port: int = 6333
-    url_api_content: str = "http://localhost:5010/api"
-    url_api_data: str = "http://localhost:5000/api"
-    url_public_site: str = "http://localhost:3000"
-
-    # TODO update to use SettingsConfigDict from pydantic-settings once langchain is updated to use pydantic v2
-    # model_config = SettingsConfigDict(env_file=".env")
-
-    class Config:
-        env_file = "../../.env"
 
 
 LOGGING_CONFIG = {
