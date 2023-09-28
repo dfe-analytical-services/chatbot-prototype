@@ -27,12 +27,6 @@
     {
       "groupName": "docker dependencies",
       "matchDatasources": ["docker", "docker-version"]
-    },
-    {
-      "description": "Temporarily restrict openai version",
-      "matchDatasources": ["pypi"],
-      "matchPackageNames": ["openai"],
-      "allowedVersions": "<=0.27.9"
     }
   ]
 }

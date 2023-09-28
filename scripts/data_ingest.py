@@ -1,13 +1,12 @@
 import argparse
-import requests
 import os
 import sys
 
+import requests
+
 
 class DataIngestionClient:
-    API_BASE_URLS = {
-        "local": "http://localhost:8000/api"
-    }
+    API_BASE_URLS = {"local": "http://localhost:8000/api"}
 
     def __init__(self, env: str, timeout: float):
         self.env = (env,)
@@ -55,39 +54,37 @@ if __name__ == "__main__":
     ap.add_argument(
         "--timeout",
         dest="timeout",
-        default=30.0,
+        default=240.0,
         nargs="?",
         help="Timout for the request in number of seconds",
         type=float,
         required=False,
     )
 
-    action_group.add_argument('--clear',
-                              help="Clear the vector database",
-                              action='store_true')
-    action_group.add_argument('--build-methodologies',
-                              help="Build all methodologies",
-                              action='store_true')
-    action_group.add_argument('--build-publications',
-                              help="Build all publications",
-                              action='store_true')
-    action_group.add_argument('--update-methodology',
-                              help="Update a specific methodology. Use in conjunction with --slug",
-                              action='store_true')
-    action_group.add_argument('--update-publication',
-                              help="Update a specific publication. Use in conjunction with --slug",
-                              action='store_true')
+    action_group.add_argument("--clear", help="Clear the vector database", action="store_true")
+    action_group.add_argument("--build-methodologies", help="Build all methodologies", action="store_true")
+    action_group.add_argument("--build-publications", help="Build all publications", action="store_true")
+    action_group.add_argument(
+        "--update-methodology",
+        help="Update a specific methodology. Use in conjunction with --slug",
+        action="store_true",
+    )
+    action_group.add_argument(
+        "--update-publication",
+        help="Update a specific publication. Use in conjunction with --slug",
+        action="store_true",
+    )
 
-    ap.add_argument('--slug',
-                    type=str,
-                    required='--update-methodology' in sys.argv or '--update-publication' in sys.argv,
-                    help='Slug parameter required when using --update-methodology or --update-publication')
+    ap.add_argument(
+        "--slug",
+        type=str,
+        required="--update-methodology" in sys.argv or "--update-publication" in sys.argv,
+        help="Slug parameter required when using --update-methodology or --update-publication",
+    )
 
     args = ap.parse_args()
 
-    client = DataIngestionClient(
-        env=args.env, timeout=args.timeout
-    )
+    client = DataIngestionClient(env=args.env, timeout=args.timeout)
 
     if args.clear:
         res = client.clear()
@@ -100,5 +97,5 @@ if __name__ == "__main__":
     elif args.update_publication:
         res = client.update_publication(slug=args.slug)
 
-    if (res is not None):
+    if res is not None:
         print(res)
