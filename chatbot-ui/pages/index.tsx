@@ -1,36 +1,40 @@
-import { useRef, useState, useEffect} from 'react';
-import Layout from '@/components/layout';
-import styles from '@/styles/Home.module.css';
-import Link from 'next/link';
-import {Message} from '@/types/chat';
-import Image from 'next/image';
-import ReactMarkdown from 'react-markdown';
-import LoadingDots from '@/components/ui/LoadingDots';
+import { useRef, useState, useEffect } from "react";
+import Page from "@/components/Page";
+import styles from "@/styles/Home.module.css";
+import ReactMarkdown from "react-markdown";
+import LoadingDots from "@/components/LoadingDots";
+import classNames from "classnames";
+import React from "react";
+import RobotIcon from "../public/assets/images/icons/robot.svg";
+import UserIcon from "../public/assets/images/icons/user.svg";
 
+type Message = {
+  type: "apiMessage" | "userMessage";
+  message: string;
+  isStreaming?: boolean;
+  links?: string[];
+};
 
-
-//import {Layout} from 'govuk-frontend';
-
-export default function Home() {
-  const [query, setQuery] = useState<string>('');
+function Home() {
+  const [query, setQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [messageState, setMessageState] = useState<{ 
+  const [messageState, setMessageState] = useState<{
     messages: Message[];
     history: [string, string][];
     pending?: string;
   }>({
     messages: [
       {
-        message: 'Hi, what would you like to know about the latest publications on EES?',
-        type: 'apiMessage',
+        message:
+          "Hi, what would you like to know about the latest publications on EES?",
+        type: "apiMessage",
       },
     ],
     history: [],
   });
 
-  const { messages, history } = messageState;
-  
+  const { messages } = messageState;
 
   const messageListRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -43,12 +47,12 @@ export default function Home() {
   async function handleSubmit(e: any) {
     e.preventDefault();
 
-    setError(null);
-
     if (!query) {
-      alert('Please input a question');
+      setError("Enter a question");
       return;
     }
+
+    setError(null);
 
     const question = query.trim();
 
@@ -57,41 +61,40 @@ export default function Home() {
       messages: [
         ...state.messages,
         {
-          type: 'userMessage',
+          type: "userMessage",
           message: question,
         },
       ],
     }));
 
     setLoading(true);
-    setQuery('');
-
-    let pending = '';
+    setQuery("");
 
     try {
-      const response = await fetch('http://localhost:8010/api/chat', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8010/api/chat", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          question
+          question,
         }),
-      })
+      });
 
-      const data = await response.body;
-      
-      setMessageState((state) =>({
+      const data = response.body;
+
+      setMessageState((state) => ({
         history: [...state.history],
         messages: [
-          ...state.messages, {
-            type: 'apiMessage',
-            message: '',
-          }
-        ]
-      }))
+          ...state.messages,
+          {
+            type: "apiMessage",
+            message: "",
+          },
+        ],
+      }));
 
-      if(!data){
+      if (!data) {
         return;
       }
 
@@ -99,160 +102,157 @@ export default function Home() {
       const decoder = new TextDecoder();
       let done = false;
 
-      while (!done){
-        const {value, done: doneReading} = await reader.read()
+      let pending = "";
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
         done = doneReading;
         const chunkValue = decoder.decode(value);
-        if (chunkValue.startsWith('{"sourceDocuments":')){
+        if (chunkValue.startsWith('{"sourceDocuments":')) {
           setMessageState((state) => {
             let messages = state.messages;
-            messages[messages.length - 1].links = JSON.parse(chunkValue).sourceDocuments
-            return {...state, messages: [...messages]};
-          })
-        } else{
+            messages[messages.length - 1].links =
+              JSON.parse(chunkValue).sourceDocuments;
+            return { ...state, messages: [...messages] };
+          });
+        } else {
           pending += chunkValue;
           setMessageState((state) => {
             let messages = state.messages;
-            messages[messages.length-1].message = pending;
-            return {...state, messages: [...messages]};
+            messages[messages.length - 1].message = pending;
+            return { ...state, messages: [...messages] };
           });
+        }
       }
-    }
       setLoading(false);
 
       //scroll to bottom
       //messageListRef.current?.scrollTo(0, messageListRef.current.scrollHeight);
     } catch (error) {
       setLoading(false);
-      setError('An error occurred while fetching the data. Please try again.');
-      console.log('error', error);
+      setError("An error occurred while fetching the data. Please try again.");
     }
   }
 
   //prevent empty submissions
   const handleEnter = (e: any) => {
-    if (e.key === 'Enter' && query) {
+    if (e.key === "Enter" && query) {
       handleSubmit(e);
-    } else if (e.key == 'Enter') {
+    } else if (e.key == "Enter") {
       e.preventDefault();
     }
   };
 
-      return (
+  return (
+    <Page title="Chatbot prototype">
       <>
-          <Layout>
-
-
-            <div>
-
-              <main className={styles.main}>
-                <div className={`${styles.cloud} govuk-clearfix`}>
-                  <div ref={messageListRef} className={styles.messagelist}>
-                   <Link href='/' >
-                    Go back to homepage
-                    <div className='govuk-link'>
-
-                    </div>
-                   </Link>
-                    {messages.map((message, index) => {
-                      let icon;
-                      let className;
-                     
-                     if (message.type === 'apiMessage') {
-                        icon = (
-                          <Image
-                            src="/govuk-logo.png"
-                            alt="AI"
-                            width="40"
-                            height="40"
-                            className={styles.boticon}
-                            priority
-                          />
-                        );
-                        className = styles.apimessage;
-                      } else {
-                        icon = (
-                          <Image
-                            src="/dfe.png"
-                            alt="Me"
-                            width="30"
-                            height="30"
-                            className={styles.usericon}
-                            priority
-                          />
-                        );
-                        // The latest message sent by the user will be animated while waiting for a response
-                        className =
-                          loading && index === messages.length - 1
-                            ? styles.usermessagewaiting
-                            : styles.usermessage;
-                      }  return (
-                        <>
-                          <div key={`chatMessage-${index}`} className={className}>
-                            {icon}
-                            <div className={styles.markdownanswer}>
-                              <ReactMarkdown linkTarget="_blank">
-                                {message.message}
-                              </ReactMarkdown>
-                            </div>
-                          </div>
-                        </>
-                      );
-                    })}
-                  </div>
+        {error && (
+          <>
+            <div
+              className="govuk-error-summary"
+              data-module="govuk-error-summary"
+            >
+              <div role="alert">
+                <h2 className="govuk-error-summary__title">
+                  There is a problem
+                </h2>
+                <div className="govuk-error-summary__body">
+                  <ul className="govuk-list govuk-error-summary__list">
+                    <li>
+                      <a href="#">{error}</a>
+                    </li>
+                  </ul>
                 </div>
-                <div className={styles.center}>
-                  <div className={styles.cloudform}>
-                    <form onSubmit={handleSubmit}>
-                      <textarea
-                        disabled={loading}
-                        onKeyDown={handleEnter}
-                        ref={textAreaRef}
-                        autoFocus={false}
-                        rows={1}
-                        maxLength={5000}
-                        id="userInput"
-                        name="userInput"
-                        placeholder={
-                          loading
-                            ? 'Waiting for response...'
-                            : 'Ask a question here'
-                        }
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        className={styles.textarea}
-                      />
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className={styles.generatebutton}
-                      >
-                        {loading ? (
-                          <div className={styles.loadingwheel}>
-                            <LoadingDots color="#000" />
-                          </div>
-                        ) : (
-                          // Send icon SVG in input field
-                          <svg
-                            viewBox="0 0 20 20"
-                            className={styles.svgicon}
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-                          </svg>
-                        )}
-                      </button>
-                    </form>
-                  </div>
-                </div>
-                {error && (
-                  <div className="border border-red-400 rounded-md p-4">
-                    <p className="text-red-500">{error}</p>
-                  </div>
-                )}
-              </main>
               </div>
-          </Layout>
-        </>
-      );
-    }
+            </div>
+          </>
+        )}
+
+        <div className={"govuk-body"}>
+          <div className={styles.chat}>
+            <div ref={messageListRef} className={styles.messagelist}>
+              {messages.map((message, index) => {
+                let icon;
+                let className;
+
+                if (message.type === "apiMessage") {
+                  icon = <RobotIcon height="1.1em" fill="#1d70b8" />;
+                  className = styles.apimessage;
+                } else {
+                  icon = <UserIcon height="1.1em" fill="	#00703c" />;
+                  // The latest message sent by the user will be animated while waiting for a response
+                  className =
+                    loading && index === messages.length - 1
+                      ? styles.usermessagewaiting
+                      : styles.usermessage;
+                }
+                return (
+                  <>
+                    <div
+                      key={`chatMessage-${index}`}
+                      className={classNames("govuk-body", className)}
+                    >
+                      {icon}
+                      <div className={styles.markdownanswer}>
+                        <ReactMarkdown linkTarget="_blank">
+                          {message.message}
+                        </ReactMarkdown>
+                      </div>
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="govuk-form-group govuk-form-group--error">
+            <h1 className="govuk-label-wrapper">
+              <label className="govuk-label govuk-label--l" htmlFor="question">
+                What is your question?
+              </label>
+            </h1>
+            <div id="question-hint" className="govuk-hint">
+              Ask whatever question you like...
+            </div>
+
+            <p id="more-detail-error" className="govuk-error-message">
+              <span className="govuk-visually-hidden">Error:</span> Enter a
+              question
+            </p>
+
+            <textarea
+              className="govuk-textarea"
+              disabled={loading}
+              onKeyDown={handleEnter}
+              ref={textAreaRef}
+              autoFocus={false}
+              rows={3}
+              maxLength={5000}
+              id="userInput"
+              name="userInput"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              aria-describedby="question-hint"
+            />
+
+            <button
+              className="govuk-button"
+              disabled={loading}
+              data-module="govuk-button"
+            >
+              Send
+              {loading && (
+                <div className={styles.loadingwheel}>
+                  <LoadingDots color="#000" />
+                </div>
+              )}
+            </button>
+          </div>
+        </form>
+      </>
+    </Page>
+  );
+}
+
+export default Home;
