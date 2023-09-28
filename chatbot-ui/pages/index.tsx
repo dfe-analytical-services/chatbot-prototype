@@ -193,9 +193,7 @@ function Home() {
                     >
                       {icon}
                       <div className={styles.markdownanswer}>
-                        <ReactMarkdown linkTarget="_blank">
-                          {message.message}
-                        </ReactMarkdown>
+                        <ReactMarkdown>{message.message}</ReactMarkdown>
                       </div>
                     </div>
                   </>
