@@ -10,13 +10,13 @@ logger = logging.getLogger(__name__)
 
 
 def delete_publication(slug: str):
-    delete_url(url=f"{settings.url_public_site}/find-statistics/{slug}")
+    delete_url(url=f"{settings.ees_url_public_ui}/find-statistics/{slug}")
 
 
 def fetch_publication_slugs():
     try:
         response = requests.get(
-            f"{settings.url_api_content}/publications?page=1&pageSize=9999&sort=published&order=asc"
+            f"{settings.ees_url_api_content}/publications?page=1&pageSize=9999&sort=published&order=asc"
         )
         response.raise_for_status()
         publications = json.loads(response.text)["results"]

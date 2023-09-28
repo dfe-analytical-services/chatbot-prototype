@@ -22,7 +22,7 @@ def data_upsertion(slugs, func, batch_size=100) -> None:
         batch_meta = chunks[i:end_index]
         batch_text = [chunks[j]["text"] for j in range(i, end_index)]
         try:
-            embeds = openai.Embedding.create(input=batch_text, engine=settings.embedding_model)
+            embeds = openai.Embedding.create(input=batch_text, engine=settings.openai_embedding_model)
         except Exception as e:
             logger.error(f"An error occured within embedding model: {e}")
 

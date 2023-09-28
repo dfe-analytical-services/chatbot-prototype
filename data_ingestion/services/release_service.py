@@ -14,7 +14,7 @@ def extract_releases(slugs: str) -> List[Dict]:
     texts = []
     for slug in slugs:
         slug_info = {}
-        res = requests.get(f"{settings.url_api_content}/publications/{slug}/releases/latest")
+        res = requests.get(f"{settings.ees_url_api_content}/publications/{slug}/releases/latest")
         key_stats = {}
         response_json = res.json()
         release_id = response_json["publication"]["releases"][0]["id"]
@@ -43,7 +43,7 @@ def extract_releases(slugs: str) -> List[Dict]:
 
 def fetch_release(slug: str, res: dict) -> dict:
     slug_content = {}
-    slug_content["link"] = f"{settings.url_public_site}/find-statistics/{slug}"
+    slug_content["link"] = f"{settings.ees_url_public_ui}/find-statistics/{slug}"
     try:
         slug_content["data"] = "Headlines Section: "
         slug_content["data"] += BeautifulSoup(res["headlinesSection"]["content"][0]["body"], "html.parser").get_text()

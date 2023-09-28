@@ -12,7 +12,7 @@ dictConfig(LOGGING_CONFIG)
 
 app = FastAPI()
 
-origins = [settings.url_chat_ui]
+origins = [settings.chat_url_public_ui]
 
 app.add_middleware(
     CORSMiddleware,

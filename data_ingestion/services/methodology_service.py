@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def delete_methodology(slug: str):
-    delete_url(url=f"{settings.url_api_content}/methodology{slug}")
+    delete_url(url=f"{settings.ees_url_api_content}/methodology{slug}")
 
 
 def extract_methodologies(slugs):
@@ -27,8 +27,8 @@ def extract_methodologies(slugs):
 
 def fetch_methodology(slug: str):
     methodology_content = {}
-    methodology_content["link"] = f"{settings.url_public_site}/methodology/{slug}"
-    res = requests.get(f"{settings.url_api_content}/methodologies/{slug}")
+    methodology_content["link"] = f"{settings.ees_url_public_ui}/methodology/{slug}"
+    res = requests.get(f"{settings.ees_url_api_content}/methodologies/{slug}")
     text = json.loads(res.text)
     try:
         methodology_content["data"] = "Headlines Section: "
@@ -51,7 +51,7 @@ def fetch_methodology(slug: str):
 
 
 def fetch_methodology_slugs():
-    data = requests.get(f"{settings.url_api_content}/methodology-themes").json()
+    data = requests.get(f"{settings.ees_url_api_content}/methodology-themes").json()
     slugs = []
     for item in data:
         for topic in item["topics"]:
