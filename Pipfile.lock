@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b3bf962af29e9614a2488d2ef2762180eb13ddf2dd279443fedb10262ee8bc9e"
+            "sha256": "0505aea533c5161f856a738714b4c2014b7e68f4d5ca1e519ec34d9de3678028"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -764,11 +764,11 @@
         },
         "openai": {
             "hashes": [
-                "sha256:6a3cf8e276d1a6262b50562fbc0cba7967cfebb78ed827d375986b48fdad6475",
-                "sha256:b687761c82f5ebb6f61efc791b2083d2d068277b94802d4d1369efe39851813d"
+                "sha256:4be1dad329a65b4ce1a660fe6d5431b438f429b5855c883435f0f7fcb6d2dcc8",
+                "sha256:d18690f9e3d31eedb66b57b88c2165d760b24ea0a01f150dd3f068155088ce68"
             ],
             "index": "pypi",
-            "version": "==0.27.9"
+            "version": "==0.28.1"
         },
         "openapi-schema-pydantic": {
             "hashes": [
