@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const PageBanner = () => {
   return (
@@ -8,10 +8,10 @@ const PageBanner = () => {
           Beta
         </strong>
         <span className="govuk-phase-banner__text">
-          This is a new service – your{" "}
+          This is a new service – your{' '}
           <a className="govuk-link" href="#">
             feedback
-          </a>{" "}
+          </a>{' '}
           will help us to improve it.
         </span>
       </p>
