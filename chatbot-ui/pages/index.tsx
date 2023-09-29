@@ -34,6 +34,9 @@ function Home() {
     history: [],
   });
 
+  const api_url =
+    process.env.NEXT_PUBLIC_CHAT_URL_API ?? "http://localhost:8010/api/chat";
+
   const { messages } = messageState;
 
   const messageListRef = useRef<HTMLDivElement>(null);
@@ -71,7 +74,7 @@ function Home() {
     setQuery("");
 
     try {
-      const response = await fetch("http://localhost:8010/api/chat", {
+      const response = await fetch(api_url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -178,7 +181,7 @@ function Home() {
                   icon = <RobotIcon height="1.1em" fill="#1d70b8" />;
                   className = styles.apimessage;
                 } else {
-                  icon = <UserIcon height="1.1em" fill="	#00703c" />;
+                  icon = <UserIcon height="1.1em" fill="#00703c" />;
                   // The latest message sent by the user will be animated while waiting for a response
                   className =
                     loading && index === messages.length - 1
@@ -186,17 +189,15 @@ function Home() {
                       : styles.usermessage;
                 }
                 return (
-                  <>
-                    <div
-                      key={`chatMessage-${index}`}
-                      className={classNames("govuk-body", className)}
-                    >
-                      {icon}
-                      <div className={styles.markdownanswer}>
-                        <ReactMarkdown>{message.message}</ReactMarkdown>
-                      </div>
+                  <div
+                    key={`chatMessage-${index}`}
+                    className={classNames("govuk-body", className)}
+                  >
+                    {icon}
+                    <div className={styles.markdownanswer}>
+                      <ReactMarkdown>{message.message}</ReactMarkdown>
                     </div>
-                  </>
+                  </div>
                 );
               })}
             </div>
