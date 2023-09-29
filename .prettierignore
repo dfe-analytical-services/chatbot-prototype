@@ -1,1 +1,6 @@
+.next
+data/qdrant_storage
+next-env.d.ts
 node_modules
+Pipfile.lock
+pnpm-lock.yaml
