@@ -1,22 +1,22 @@
-import { useRef, useState, useEffect } from "react";
-import Page from "@/components/Page";
-import styles from "@/styles/Home.module.css";
-import ReactMarkdown from "react-markdown";
-import LoadingDots from "@/components/LoadingDots";
-import classNames from "classnames";
-import React from "react";
-import RobotIcon from "../public/assets/images/icons/robot.svg";
-import UserIcon from "../public/assets/images/icons/user.svg";
+import { useRef, useState, useEffect } from 'react';
+import Page from '@/components/Page';
+import styles from '@/styles/Home.module.css';
+import ReactMarkdown from 'react-markdown';
+import LoadingDots from '@/components/LoadingDots';
+import classNames from 'classnames';
+import React from 'react';
+import RobotIcon from '../public/assets/images/icons/robot.svg';
+import UserIcon from '../public/assets/images/icons/user.svg';
 
 type Message = {
-  type: "apiMessage" | "userMessage";
+  type: 'apiMessage' | 'userMessage';
   message: string;
   isStreaming?: boolean;
   links?: string[];
 };
 
 function Home() {
-  const [query, setQuery] = useState<string>("");
+  const [query, setQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [messageState, setMessageState] = useState<{
@@ -27,12 +27,15 @@ function Home() {
     messages: [
       {
         message:
-          "Hi, what would you like to know about the latest publications on EES?",
-        type: "apiMessage",
+          'Hi, what would you like to know about the latest publications on EES?',
+        type: 'apiMessage',
       },
     ],
     history: [],
   });
+
+  const api_url =
+    process.env.NEXT_PUBLIC_CHAT_URL_API ?? 'http://localhost:8010/api/chat';
 
   const { messages } = messageState;
 
@@ -48,7 +51,7 @@ function Home() {
     e.preventDefault();
 
     if (!query) {
-      setError("Enter a question");
+      setError('Enter a question');
       return;
     }
 
@@ -61,20 +64,20 @@ function Home() {
       messages: [
         ...state.messages,
         {
-          type: "userMessage",
+          type: 'userMessage',
           message: question,
         },
       ],
     }));
 
     setLoading(true);
-    setQuery("");
+    setQuery('');
 
     try {
-      const response = await fetch("http://localhost:8010/api/chat", {
-        method: "POST",
+      const response = await fetch(api_url, {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           question,
@@ -88,8 +91,8 @@ function Home() {
         messages: [
           ...state.messages,
           {
-            type: "apiMessage",
-            message: "",
+            type: 'apiMessage',
+            message: '',
           },
         ],
       }));
@@ -102,7 +105,7 @@ function Home() {
       const decoder = new TextDecoder();
       let done = false;
 
-      let pending = "";
+      let pending = '';
       while (!done) {
         const { value, done: doneReading } = await reader.read();
         done = doneReading;
@@ -129,15 +132,15 @@ function Home() {
       //messageListRef.current?.scrollTo(0, messageListRef.current.scrollHeight);
     } catch (error) {
       setLoading(false);
-      setError("An error occurred while fetching the data. Please try again.");
+      setError('An error occurred while fetching the data. Please try again.');
     }
   }
 
   //prevent empty submissions
   const handleEnter = (e: any) => {
-    if (e.key === "Enter" && query) {
+    if (e.key === 'Enter' && query) {
       handleSubmit(e);
-    } else if (e.key == "Enter") {
+    } else if (e.key == 'Enter') {
       e.preventDefault();
     }
   };
@@ -167,18 +170,18 @@ function Home() {
           </>
         )}
 
-        <div className={"govuk-body"}>
+        <div className={'govuk-body'}>
           <div className={styles.chat}>
             <div ref={messageListRef} className={styles.messagelist}>
               {messages.map((message, index) => {
                 let icon;
                 let className;
 
-                if (message.type === "apiMessage") {
+                if (message.type === 'apiMessage') {
                   icon = <RobotIcon height="1.1em" fill="#1d70b8" />;
                   className = styles.apimessage;
                 } else {
-                  icon = <UserIcon height="1.1em" fill="	#00703c" />;
+                  icon = <UserIcon height="1.1em" fill="#00703c" />;
                   // The latest message sent by the user will be animated while waiting for a response
                   className =
                     loading && index === messages.length - 1
@@ -186,17 +189,15 @@ function Home() {
                       : styles.usermessage;
                 }
                 return (
-                  <>
-                    <div
-                      key={`chatMessage-${index}`}
-                      className={classNames("govuk-body", className)}
-                    >
-                      {icon}
-                      <div className={styles.markdownanswer}>
-                        <ReactMarkdown>{message.message}</ReactMarkdown>
-                      </div>
+                  <div
+                    key={`chatMessage-${index}`}
+                    className={classNames('govuk-body', className)}
+                  >
+                    {icon}
+                    <div className={styles.markdownanswer}>
+                      <ReactMarkdown>{message.message}</ReactMarkdown>
                     </div>
-                  </>
+                  </div>
                 );
               })}
             </div>
