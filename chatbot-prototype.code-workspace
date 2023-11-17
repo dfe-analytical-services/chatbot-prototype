@@ -1,10 +1,35 @@
 {
   "folders": [
     {
-      "path": "."
+      "name": "Chatbot UI",
+      "path": "./chatbot-ui"
+    },    
+    {
+      "name": "Response Automater",
+      "path": "./response_automater"
+    },  
+    {
+      "name": "Response Automater Tests",
+      "path": "./response_automater_tests"
+    },    
+    {
+      "name": "Data Ingestion API",
+      "path": "./data_ingestion"
+    },
+        {
+      "name": "Data Ingestion API Tests",
+      "path": "./data_ingestion_tests"
+    },
+    {
+      "name": "Root",
+      "path": "./"
     }
   ],
   "settings": {
+    "window.title": "Chatbot Prototype",
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.black-formatter"
+    },
     "search.exclude": {
       // Avoid polluting search results with lockfile content
       "Pipfile.lock": true,
