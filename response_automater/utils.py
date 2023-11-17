@@ -44,3 +44,7 @@ class StreamRequest(BaseModel):
     """Request body for streaming."""
 
     question: str
+
+
+def temp_method_for_proof_of_concept_tests(some_number):
+    return 2 * some_number
