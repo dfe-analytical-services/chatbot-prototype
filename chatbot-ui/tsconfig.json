@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./types"],
+    "types": ["jest", "node", "@testing-library/jest-dom"],
     "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

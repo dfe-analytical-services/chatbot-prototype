@@ -1,28 +1,28 @@
 {
   "folders": [
     {
+      "name": "Root",
+      "path": "./"
+    },
+    {
       "name": "Chatbot UI",
       "path": "./chatbot-ui"
-    },    
+    },
     {
       "name": "Response Automater",
       "path": "./response_automater"
-    },  
+    },
     {
       "name": "Response Automater Tests",
       "path": "./response_automater_tests"
-    },    
+    },
     {
       "name": "Data Ingestion API",
       "path": "./data_ingestion"
     },
-        {
+    {
       "name": "Data Ingestion API Tests",
       "path": "./data_ingestion_tests"
-    },
-    {
-      "name": "Root",
-      "path": "./"
     }
   ],
   "settings": {
@@ -36,6 +36,13 @@
       "pnpm-lock.yaml": true
     },
     // Ensure VSCode uses pnpm instead of npm
-    "npm.packageManager": "pnpm"
+    "npm.packageManager": "pnpm",
+    "jest.disabledWorkspaceFolders": [
+      "Root",
+      "Response Automater",
+      "Response Automater Tests",
+      "Data Ingestion API",
+      "Data Ingestion API Tests"
+    ]
   }
 }
