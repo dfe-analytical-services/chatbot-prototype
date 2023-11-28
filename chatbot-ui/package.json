@@ -9,7 +9,7 @@
     "dev": "next dev -p 3002",
     "build": "next build",
     "start": "next start -p 3002",
-    "lint": "eslint --ignore-path .gitignore \"**/*.+(ts|js|tsx)\"",
+    "lint": "eslint \"**/*.+(ts|js|tsx)\"",
     "tsc": "tsc --noEmit",
     "test": "tsc --noEmit && eslint \"**/*.+(ts|js|tsx)\" && jest",
     "test-no-check": "jest"
