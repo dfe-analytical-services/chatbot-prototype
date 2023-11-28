@@ -47,9 +47,7 @@ function Home() {
   }, []);
 
   //handle form submission
-  async function handleSubmit(e: any) {
-    e.preventDefault();
-
+  async function handleSubmit() {
     if (!query) {
       setError('Enter a question');
       return;
@@ -112,7 +110,7 @@ function Home() {
         const chunkValue = decoder.decode(value);
         if (chunkValue.startsWith('{"sourceDocuments":')) {
           setMessageState((state) => {
-            let messages = state.messages;
+            const messages = state.messages;
             messages[messages.length - 1].links =
               JSON.parse(chunkValue).sourceDocuments;
             return { ...state, messages: [...messages] };
@@ -120,7 +118,7 @@ function Home() {
         } else {
           pending += chunkValue;
           setMessageState((state) => {
-            let messages = state.messages;
+            const messages = state.messages;
             messages[messages.length - 1].message = pending;
             return { ...state, messages: [...messages] };
           });
@@ -137,9 +135,9 @@ function Home() {
   }
 
   //prevent empty submissions
-  const handleEnter = (e: any) => {
+  const handleEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && query) {
-      handleSubmit(e);
+      handleSubmit();
     } else if (e.key == 'Enter') {
       e.preventDefault();
     }
@@ -204,7 +202,13 @@ function Home() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+            console.log('Hello');
+          }}
+        >
           <div className="govuk-form-group govuk-form-group--error">
             <h1 className="govuk-label-wrapper">
               <label className="govuk-label govuk-label--l" htmlFor="question">
@@ -225,7 +229,6 @@ function Home() {
               disabled={loading}
               onKeyDown={handleEnter}
               ref={textAreaRef}
-              autoFocus={false}
               rows={3}
               maxLength={5000}
               id="userInput"
