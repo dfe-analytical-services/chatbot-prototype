@@ -35,8 +35,8 @@ def fetch_methodology(slug: str):
         methodology_content["data"] += BeautifulSoup(
             text["headlinesSection"]["content"][0]["body"], "html.parser"
         ).get_text()
-    except Exception as e:
-        logger.info(f" Error: {e}. For {slug} the headlines section doesnt exist")
+    except KeyError as e:
+        logger.error(f" Error: Key '{e.args[0]}' not found whilst reading content for methodology with slug: '{slug}'")
 
     methodology_content["data"] += "Content Section"
     for i in range(len(text["content"])):
