@@ -25,9 +25,17 @@ jobs:
       displayName: 'Install Dependencies'
 
     - script: |
-        pnpm test-with-coverage
+        pnpm test-ci
       displayName: 'Run Tests'
       workingDirectory: chatbot-ui
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Jest Unit Test Results'
+      inputs:
+        testResultsFiles: junit.xml
+        mergeTestResults: true
+        testRunTitle: 'Jest Unit Tests'
+        failTaskOnFailedTests: true
 
     - task: PublishCodeCoverageResults@2
       displayName: 'Collect Code Coverage'
@@ -58,7 +66,7 @@ jobs:
 
     - script: |
         pip install pytest pytest-azurepipelines pytest-cov
-        pipenv run python -m pytest --cov=data_ingestion data_ingestion_tests/ --cov-report=xml
+        pipenv run python -m pytest --cov=data_ingestion data_ingestion_tests/ --cov-report=xml --test-run-title="Data Ingestion API Tests"
       displayName: 'Run Tests'
 
     - task: PublishCodeCoverageResults@2
@@ -90,7 +98,7 @@ jobs:
 
     - script: |
         pip install pytest pytest-azurepipelines pytest-cov
-        pipenv run python -m pytest --cov=response_automater response_automater_tests/ --cov-report=xml --test-run-title="Temp value to test"
+        pipenv run python -m pytest --cov=response_automater response_automater_tests/ --cov-report=xml --test-run-title="Response Automater API Tests"
       displayName: 'Run Tests'
 
     - task: PublishCodeCoverageResults@2
