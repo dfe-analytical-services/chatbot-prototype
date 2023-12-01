@@ -30,7 +30,7 @@ steps:
     displayName: "Install PNPM Dependencies"
 
   - script: |
-      pnpm test-no-check
+      pnpm test
     displayName: "Run Chatbot UI Tests"
     workingDirectory: "chatbot-ui"
 
@@ -49,12 +49,12 @@ steps:
 
   - script: |
       pip install pytest pytest-azurepipelines
-      pytest
+      pipenv run python -m pytest
     displayName: 'Run Data Ingestion Tests'
     workingDirectory: data_ingestion_tests
 
   - script: |
       pip install pytest pytest-azurepipelines
-      pytest
+      pipenv run python -m pytest
     displayName: 'Run Response Automater Tests'
     workingDirectory: response_automater_tests
