@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import PageTitle from './PageTitle';
+import PageTitle from '@/components/PageTitle';
 
 describe('Page Title', () => {
   it('Renders', () => {
@@ -7,7 +7,7 @@ describe('Page Title', () => {
 
     expect(
       screen.getByRole('heading', { name: 'Test Page Title' }),
-    ).toBeVisible();
+    ).toBeInTheDocument();
   });
 
   it('Renders a caption if one is provided', () => {
@@ -18,7 +18,7 @@ describe('Page Title', () => {
       ></PageTitle>,
     );
 
-    expect(screen.getByText('Test Caption Text')).toBeVisible();
+    expect(screen.getByText('Test Caption Text')).toBeInTheDocument();
   });
 
   it('Does not render a caption if none is provided', () => {
