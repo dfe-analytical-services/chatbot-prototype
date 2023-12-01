@@ -90,7 +90,7 @@ jobs:
 
     - script: |
         pip install pytest pytest-azurepipelines pytest-cov
-        pipenv run python -m pytest --cov=response_automater response_automater_tests/ --cov-report=xml
+        pipenv run python -m pytest --cov=response_automater response_automater_tests/ --cov-report=xml --test-run-title="Temp value to test"
       displayName: 'Run Tests'
 
     - task: PublishCodeCoverageResults@2
