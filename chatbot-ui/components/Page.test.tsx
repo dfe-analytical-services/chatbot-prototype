@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import Page from '@/components/Page';
+import React from 'react';
 
 describe('Page', () => {
   it('Renders', () => {

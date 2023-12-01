@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import PageHeader from '@/components/PageHeader';
+import React from 'react';
 
 describe('Page Banner', () => {
   it('Renders', () => {
