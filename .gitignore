@@ -22,3 +22,4 @@ Thumbs.db
 chatbot-ui/.next/
 node_modules
 tsconfig.tsbuildinfo
+chatbot-ui/coverage/

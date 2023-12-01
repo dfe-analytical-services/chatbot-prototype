@@ -1,5 +1,7 @@
+name: "Chatbot Prototype CI Pipeline"
 trigger:
   - main
+appendCommitMessageToRunName: false
 
 variables:
   pnpm_config_cache: $(Pipeline.Workspace)/.pnpm-store
@@ -27,10 +29,15 @@ jobs:
       displayName: "Install PNPM Dependencies"
 
     - script: |
-        pnpm test
+        pnpm test-with-coverage
       displayName: "Run Chatbot UI Tests"
       workingDirectory: "chatbot-ui"
 
+    - task: PublishCodeCoverageResults@2
+      displayName: 'Collect UI Code Coverage'
+      inputs: 
+        summaryFileLocation: 'chatbot-ui/coverage/clover.xml'
+        
 - job: 'DataIngestion'
   pool:
     vmImage: ubuntu-latest

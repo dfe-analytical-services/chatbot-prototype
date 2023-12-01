@@ -13,7 +13,8 @@
     "lint": "eslint \"**/*.+(ts|js|tsx)\"",
     "tsc": "tsc --noEmit",
     "test": "tsc --noEmit && eslint \"**/*.+(ts|js|tsx)\" && jest",
-    "test-no-check": "jest"
+    "test-no-check": "jest",
+    "test-with-coverage": "jest --coverage"
   },
   "dependencies": {
     "classnames": "^2.3.2",
