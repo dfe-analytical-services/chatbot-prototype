@@ -1,9 +1,6 @@
 trigger:
   - main
 
-pool:
-  vmImage: ubuntu-latest
-
 strategy:
   matrix:
     Python311:
@@ -14,6 +11,8 @@ variables:
 
 jobs:
 - job: 'ChatbotUI'
+  pool:
+    vmImage: ubuntu-latest
   displayName: 'Chatbot UI Tests'
   steps:
     - task: Cache@2
@@ -38,6 +37,8 @@ jobs:
       workingDirectory: "chatbot-ui"
 
 - job: 'DataIngestion'
+  pool:
+    vmImage: ubuntu-latest
   displayName: 'Data Ingestion Tests'
   steps:
     - task: UsePythonVersion@0
@@ -60,6 +61,8 @@ jobs:
       workingDirectory: data_ingestion_tests
 
 - job: 'ResponseAutomater'
+  pool:
+    vmImage: ubuntu-latest
   displayName: 'Response Automater Tests'
   steps:
     - task: UsePythonVersion@0
