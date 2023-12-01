@@ -11,6 +11,7 @@ const config = {
   verbose: true,
   testEnvironment: 'jest-environment-jsdom',
   resetMocks: true,
+  reporters: ['default', 'jest-junit'],
 };
 
 export default createJestConfig(config);

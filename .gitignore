@@ -23,3 +23,4 @@ chatbot-ui/.next/
 node_modules
 tsconfig.tsbuildinfo
 chatbot-ui/coverage/
+chatbot-ui/junit.xml
