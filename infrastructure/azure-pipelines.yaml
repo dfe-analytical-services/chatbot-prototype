@@ -12,49 +12,73 @@ strategy:
 variables:
   pnpm_config_cache: $(Pipeline.Workspace)/.pnpm-store
 
-steps:
-  - task: Cache@2
-    inputs:
-      key: 'pnpm | "$(Agent.OS)" | pnpm-lock.yaml'
-      path: $(pnpm_config_cache)
-    displayName: Cache PNPM
+jobs:
+- job: 'ChatbotUI'
+  displayName: 'Chatbot UI Tests'
+  steps:
+    - task: Cache@2
+      inputs:
+        key: 'pnpm | "$(Agent.OS)" | pnpm-lock.yaml'
+        path: $(pnpm_config_cache)
+      displayName: Cache PNPM
 
-  - script: |
-      corepack enable
-      corepack prepare pnpm@latest-8 --activate
-      pnpm config set store-dir $(pnpm_config_cache)
-    displayName: "Setup PNPM"
+    - script: |
+        corepack enable
+        corepack prepare pnpm@latest-8 --activate
+        pnpm config set store-dir $(pnpm_config_cache)
+      displayName: "Setup PNPM"
 
-  - script: |
-      pnpm install
-    displayName: "Install PNPM Dependencies"
+    - script: |
+        pnpm install
+      displayName: "Install PNPM Dependencies"
 
-  - script: |
-      pnpm test
-    displayName: "Run Chatbot UI Tests"
-    workingDirectory: "chatbot-ui"
+    - script: |
+        pnpm test
+      displayName: "Run Chatbot UI Tests"
+      workingDirectory: "chatbot-ui"
 
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-      addToPath: true
-      architecture: 'x64'
-    displayName: 'Use Python $(python.version)'
+- job: 'DataIngestion'
+  displayName: 'Data Ingestion Tests'
+  steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(python.version)'
+        addToPath: true
+        architecture: 'x64'
+      displayName: 'Use Python $(python.version)'
 
-  - script: |
-      python -m pip install --upgrade pip
-      pip install pipenv
-      pipenv install --dev
-    displayName: 'Install Python dependencies'
+    - script: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install --dev
+      displayName: 'Install Python dependencies'
 
-  - script: |
-      pip install pytest pytest-azurepipelines
-      pipenv run python -m pytest
-    displayName: 'Run Data Ingestion Tests'
-    workingDirectory: data_ingestion_tests
+    - script: |
+        pip install pytest pytest-azurepipelines
+        pipenv run python -m pytest
+      displayName: 'Run Data Ingestion Tests'
+      workingDirectory: data_ingestion_tests
 
-  - script: |
-      pip install pytest pytest-azurepipelines
-      pipenv run python -m pytest
-    displayName: 'Run Response Automater Tests'
-    workingDirectory: response_automater_tests
+- job: 'ResponseAutomater'
+  displayName: 'Response Automater Tests'
+  steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(python.version)'
+        addToPath: true
+        architecture: 'x64'
+      displayName: 'Use Python $(python.version)'
+
+    - script: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install --dev
+      displayName: 'Install Python dependencies'
+
+    - script: |
+        pip install pytest pytest-azurepipelines
+        pipenv run python -m pytest
+      displayName: 'Run Response Automater Tests'
+      workingDirectory: response_automater_tests
+
+
