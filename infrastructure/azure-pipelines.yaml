@@ -1,51 +1,47 @@
-name: "Chatbot Prototype CI Pipeline"
+name: 'Chatbot Prototype CI Pipeline'
 trigger:
   - main
-appendCommitMessageToRunName: false
 
 variables:
   pnpm_config_cache: $(Pipeline.Workspace)/.pnpm-store
 
 jobs:
-- job: 'ChatbotUI'
+- job: 'chatbot_ui'
   pool:
     vmImage: ubuntu-latest
   displayName: 'Chatbot UI Tests'
   steps:
     - task: Cache@2
       inputs:
-        key: 'pnpm | "$(Agent.OS)" | pnpm-lock.yaml'
+        key: pnpm | "$(Agent.OS)" | pnpm-lock.yaml
         path: $(pnpm_config_cache)
-      displayName: Cache PNPM
+      displayName: 'Cache PNPM'
 
     - script: |
         corepack enable
         corepack prepare pnpm@latest-8 --activate
         pnpm config set store-dir $(pnpm_config_cache)
-      displayName: "Setup PNPM"
-
-    - script: |
         pnpm install
-      displayName: "Install PNPM Dependencies"
+      displayName: 'Install Dependencies'
 
     - script: |
         pnpm test-with-coverage
-      displayName: "Run Chatbot UI Tests"
-      workingDirectory: "chatbot-ui"
+      displayName: 'Run Tests'
+      workingDirectory: chatbot-ui
 
     - task: PublishCodeCoverageResults@2
-      displayName: 'Collect UI Code Coverage'
+      displayName: 'Collect Code Coverage'
       inputs: 
-        summaryFileLocation: 'chatbot-ui/coverage/clover.xml'
+        summaryFileLocation: chatbot-ui/coverage/clover.xml
         
-- job: 'DataIngestion'
+- job: 'data_ingestion_api'
   pool:
     vmImage: ubuntu-latest
   strategy:
     matrix:
       Python311:
         python.version: '3.11'
-  displayName: 'Data Ingestion Tests'
+  displayName: 'Data Ingestion API Tests'
   steps:
     - task: UsePythonVersion@0
       inputs:
@@ -58,15 +54,19 @@ jobs:
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv install --dev
-      displayName: 'Install Python dependencies'
+      displayName: 'Install Dependencies'
 
     - script: |
-        pip install pytest pytest-azurepipelines
-        pipenv run python -m pytest
-      displayName: 'Run Data Ingestion Tests'
-      workingDirectory: data_ingestion_tests
+        pip install pytest pytest-azurepipelines pytest-cov
+        pipenv run python -m pytest --cov=data_ingestion data_ingestion_tests/ --cov-report=xml
+      displayName: 'Run Tests'
 
-- job: 'ResponseAutomater'
+    - task: PublishCodeCoverageResults@2
+      displayName: 'Collect Code Coverage'
+      inputs: 
+        summaryFileLocation: ./coverage.xml
+
+- job: 'response_automater_api'
   pool:
     vmImage: ubuntu-latest
   strategy:
@@ -86,12 +86,16 @@ jobs:
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv install --dev
-      displayName: 'Install Python dependencies'
+      displayName: 'Install Dependencies'
 
     - script: |
-        pip install pytest pytest-azurepipelines
-        pipenv run python -m pytest
-      displayName: 'Run Response Automater Tests'
-      workingDirectory: response_automater_tests
+        pip install pytest pytest-azurepipelines pytest-cov
+        pipenv run python -m pytest --cov=response_automater response_automater_tests/ --cov-report=xml
+      displayName: 'Run Tests'
+
+    - task: PublishCodeCoverageResults@2
+      displayName: 'Collect Code Coverage'
+      inputs: 
+        summaryFileLocation: ./coverage.xml
 
 
