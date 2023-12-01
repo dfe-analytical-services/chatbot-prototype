@@ -10,7 +10,3 @@ def test_that_tests_can_import_the_module():
     expected = 4
 
     assert result == expected
-
-
-def test_that_should_fail():
-    assert 1 == 2
