@@ -206,7 +206,6 @@ function Home() {
           onSubmit={(e) => {
             e.preventDefault();
             handleSubmit();
-            console.log('Hello');
           }}
         >
           <div className="govuk-form-group govuk-form-group--error">
