@@ -9,22 +9,19 @@ jobs:
 - job: 'chatbot_ui'
   pool:
     vmImage: ubuntu-latest
-  displayName: 'Chatbot UI Tests'
+  displayName: 'Create Chatbot UI Artifact'
   steps:
     - template: templates/pnpm-steps.yaml
 
     - task: CopyFiles@2
       inputs:
         sourceFolder: '$(Build.SourcesDirectory)/chatbot-ui'
-        contents: |
-          src/*
-          public/*
         targetFolder: '$(Build.ArtifactStagingDirectory)/ChatbotUI'
       displayName: 'Copy Chatbot UI files'
 
     - task: PublishPipelineArtifact@1
       inputs:
-        artifactName: e2e-server
+        artifactName: ChatbotUI
         targetPath: '$(Build.ArtifactStagingDirectory)/ChatbotUI'
         publishLocation: 'pipeline'
       displayName: 'Publish Chatbot UI artifact'
@@ -36,7 +33,7 @@ jobs:
     matrix:
       Python311:
         python.version: '3.11'
-  displayName: 'Data Ingestion API Tests'
+  displayName: 'Create Data Ingestion API Artifact'
   steps:
     - template: templates/python-steps.yaml
 
@@ -45,13 +42,13 @@ jobs:
         rootFolderOrFile: '$(Build.SourcesDirectory)/data_ingestion'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/DataIngestionAPI/DataIngestionAPI$(Build.BuildId).zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/DataIngestionAPI$(Build.BuildId).zip'
         replaceExistingArchive: true
         verbose: # (no value); this input is optional
 
-    - publish: $(Build.ArtifactStagingDirectory)/DataIngestionAPI/DataIngestionAPI$(Build.BuildId).zip
+    - publish: $(Build.ArtifactStagingDirectory)/DataIngestionAPI$(Build.BuildId).zip
       displayName: 'Upload Data Ingestion API'
-      artifact: drop
+      artifact: DataIngestionAPI
 
 - job: 'response_automater_api'
   pool:
@@ -60,7 +57,7 @@ jobs:
     matrix:
       Python311:
         python.version: '3.11'
-  displayName: 'Response Automater Tests'
+  displayName: 'Create Response Automater API Artifact'
   steps:
     - template: templates/python-steps.yaml
 
@@ -75,6 +72,6 @@ jobs:
 
     - publish: $(Build.ArtifactStagingDirectory)/ResponseAutomaterAPI/ResponseAutomaterAPI$(Build.BuildId).zip
       displayName: 'Upload Response Automater'
-      artifact: drop
+      artifact: ResponseAutomaterAPI
 
 
