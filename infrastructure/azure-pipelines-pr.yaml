@@ -30,7 +30,7 @@ jobs:
       workingDirectory: chatbot-ui
 
     - task: PublishTestResults@2
-      displayName: 'Publish Jest Unit Test Results'
+      displayName: 'Publish Test Results'
       inputs:
         testResultsFiles: ./chatbot-ui/junit.xml
         mergeTestResults: true
@@ -55,7 +55,7 @@ jobs:
     - script: |
         pip install pytest pytest-azurepipelines pytest-cov
         pipenv run python -m pytest --cov=data_ingestion data_ingestion_tests/ --cov-report=xml --test-run-title="Data Ingestion API Tests"
-      displayName: 'Run Tests'
+      displayName: 'Run and Publish Tests'
 
     - task: PublishCodeCoverageResults@2
       displayName: 'Collect Code Coverage'
@@ -76,7 +76,7 @@ jobs:
     - script: |
         pip install pytest pytest-azurepipelines pytest-cov
         pipenv run python -m pytest --cov=response_automater response_automater_tests/ --cov-report=xml --test-run-title="Response Automater API Tests"
-      displayName: 'Run Tests'
+      displayName: 'Run and Publish Tests'
 
     - task: PublishCodeCoverageResults@2
       displayName: 'Collect Code Coverage'
