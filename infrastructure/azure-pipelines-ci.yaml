@@ -1,0 +1,107 @@
+name: 'Chatbot Prototype CI Pipeline'
+trigger:
+  - main
+
+variables:
+  pnpm_config_cache: $(Pipeline.Workspace)/.pnpm-store
+
+jobs:
+- job: 'chatbot_ui'
+  pool:
+    vmImage: ubuntu-latest
+  displayName: 'Chatbot UI Tests'
+  steps:
+    - template: templates/pnpm-steps.yaml
+
+    - script: |
+        pnpm tsc
+      displayName: 'Build Type System'
+      workingDirectory: chatbot-ui
+
+    - script: |
+        pnpm lint
+      displayName: 'Run ESLint'
+      workingDirectory: chatbot-ui
+
+    - script: |
+        pnpm test-ci
+      displayName: 'Run Tests'
+      workingDirectory: chatbot-ui
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Jest Unit Test Results'
+      inputs:
+        testResultsFiles: ./chatbot-ui/junit.xml
+        mergeTestResults: true
+        testRunTitle: 'Chatbot UI Jest Unit Tests'
+
+    - task: PublishCodeCoverageResults@2
+      displayName: 'Collect Code Coverage'
+      inputs: 
+        summaryFileLocation: chatbot-ui/coverage/clover.xml
+        
+- job: 'data_ingestion_api'
+  pool:
+    vmImage: ubuntu-latest
+  strategy:
+    matrix:
+      Python311:
+        python.version: '3.11'
+  displayName: 'Data Ingestion API Tests'
+  steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(python.version)'
+        addToPath: true
+        architecture: 'x64'
+      displayName: 'Use Python $(python.version)'
+
+    - script: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install --dev
+      displayName: 'Install Dependencies'
+
+    - script: |
+        pip install pytest pytest-azurepipelines pytest-cov
+        pipenv run python -m pytest --cov=data_ingestion data_ingestion_tests/ --cov-report=xml --test-run-title="Data Ingestion API Tests"
+      displayName: 'Run Tests'
+
+    - task: PublishCodeCoverageResults@2
+      displayName: 'Collect Code Coverage'
+      inputs: 
+        summaryFileLocation: ./coverage.xml
+
+- job: 'response_automater_api'
+  pool:
+    vmImage: ubuntu-latest
+  strategy:
+    matrix:
+      Python311:
+        python.version: '3.11'
+  displayName: 'Response Automater Tests'
+  steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(python.version)'
+        addToPath: true
+        architecture: 'x64'
+      displayName: 'Use Python $(python.version)'
+
+    - script: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install --dev
+      displayName: 'Install Dependencies'
+
+    - script: |
+        pip install pytest pytest-azurepipelines pytest-cov
+        pipenv run python -m pytest --cov=response_automater response_automater_tests/ --cov-report=xml --test-run-title="Response Automater API Tests"
+      displayName: 'Run Tests'
+
+    - task: PublishCodeCoverageResults@2
+      displayName: 'Collect Code Coverage'
+      inputs: 
+        summaryFileLocation: ./coverage.xml
+
+
