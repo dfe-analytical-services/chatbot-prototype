@@ -16,6 +16,9 @@ jobs:
     - task: CopyFiles@2
       inputs:
         sourceFolder: '$(Build.SourcesDirectory)/chatbot-ui'
+        ## TODO: Be smarter about what we copy. atm leaving this blank copies the entire folder
+        ## We can do this by moving the deployable files into a src folder
+        ## content: src/
         targetFolder: '$(Build.ArtifactStagingDirectory)/ChatbotUI'
       displayName: 'Copy Chatbot UI files'
 
