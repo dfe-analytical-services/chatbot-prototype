@@ -13,32 +13,21 @@ jobs:
   steps:
     - template: templates/pnpm-steps.yaml
 
-    - script: |
-        pnpm tsc
-      displayName: 'Build Type System'
-      workingDirectory: chatbot-ui
-
-    - script: |
-        pnpm lint
-      displayName: 'Run ESLint'
-      workingDirectory: chatbot-ui
-
-    - script: |
-        pnpm test-ci
-      displayName: 'Run Tests'
-      workingDirectory: chatbot-ui
-
-    - task: PublishTestResults@2
-      displayName: 'Publish Jest Unit Test Results'
+    - task: CopyFiles@2
       inputs:
-        testResultsFiles: ./chatbot-ui/junit.xml
-        mergeTestResults: true
-        testRunTitle: 'Chatbot UI Jest Unit Tests'
+        sourceFolder: '$(Build.SourcesDirectory)/chatbot-ui'
+        contents: |
+          src/*
+          public/*
+        targetFolder: '$(Build.ArtifactStagingDirectory)/ChatbotUI'
+      displayName: 'Copy Chatbot UI files'
 
-    - task: PublishCodeCoverageResults@2
-      displayName: 'Collect Code Coverage'
-      inputs: 
-        summaryFileLocation: chatbot-ui/coverage/clover.xml
+    - task: PublishPipelineArtifact@1
+      inputs:
+        artifactName: e2e-server
+        targetPath: '$(Build.ArtifactStagingDirectory)/ChatbotUI'
+        publishLocation: 'pipeline'
+      displayName: 'Publish Chatbot UI artifact'
         
 - job: 'data_ingestion_api'
   pool:
@@ -51,15 +40,18 @@ jobs:
   steps:
     - template: templates/python-steps.yaml
 
-    - script: |
-        pip install pytest pytest-azurepipelines pytest-cov
-        pipenv run python -m pytest --cov=data_ingestion data_ingestion_tests/ --cov-report=xml --test-run-title="Data Ingestion API Tests"
-      displayName: 'Run Tests'
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.SourcesDirectory)/data_ingestion'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/DataIngestionAPI/DataIngestionAPI$(Build.BuildId).zip'
+        replaceExistingArchive: true
+        verbose: # (no value); this input is optional
 
-    - task: PublishCodeCoverageResults@2
-      displayName: 'Collect Code Coverage'
-      inputs: 
-        summaryFileLocation: ./coverage.xml
+    - publish: $(Build.ArtifactStagingDirectory)/DataIngestionAPI/DataIngestionAPI$(Build.BuildId).zip
+      displayName: 'Upload Data Ingestion API'
+      artifact: drop
 
 - job: 'response_automater_api'
   pool:
@@ -72,14 +64,17 @@ jobs:
   steps:
     - template: templates/python-steps.yaml
 
-    - script: |
-        pip install pytest pytest-azurepipelines pytest-cov
-        pipenv run python -m pytest --cov=response_automater response_automater_tests/ --cov-report=xml --test-run-title="Response Automater API Tests"
-      displayName: 'Run Tests'
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.SourcesDirectory)/response_automater'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/ResponseAutomaterAPI/ResponseAutomaterAPI$(Build.BuildId).zip'
+        replaceExistingArchive: true
+        verbose: # (no value); this input is optional
 
-    - task: PublishCodeCoverageResults@2
-      displayName: 'Collect Code Coverage'
-      inputs: 
-        summaryFileLocation: ./coverage.xml
+    - publish: $(Build.ArtifactStagingDirectory)/ResponseAutomaterAPI/ResponseAutomaterAPI$(Build.BuildId).zip
+      displayName: 'Upload Response Automater'
+      artifact: drop
 
 
