@@ -4,7 +4,7 @@
     {
       "label": "Run Chatbot UI Tests",
       "type": "shell",
-      "command": "npm run test",
+      "command": "pnpm run test",
       "group": "test",
       "presentation": {
         "reveal": "always",
