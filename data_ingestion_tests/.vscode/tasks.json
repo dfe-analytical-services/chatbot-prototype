@@ -4,7 +4,8 @@
     {
       "label": "Run Data Ingestion API Tests",
       "type": "shell",
-      "command": "pytest",
+      "command": "pipenv",
+      "args": ["run", "pytest", "--junitxml=test-output.xml"],
       "group": "test",
       "presentation": {
         "reveal": "always",
