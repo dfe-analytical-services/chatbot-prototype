@@ -9,7 +9,6 @@ describe('Page Banner', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument();
   });
 
-  // TODO: Query if this is the correct target, update if not
   it('Displays the expected links', () => {
     render(<PageHeader />);
 

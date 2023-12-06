@@ -9,7 +9,6 @@ describe('Page Banner', () => {
     expect(screen.getByText(/This is a new service/)).toBeInTheDocument();
   });
 
-  // TODO: Query if this is the correct target, update if not
   it('Displays a link for providing feedback', () => {
     render(<PageBanner />);
 

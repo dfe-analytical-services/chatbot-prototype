@@ -9,7 +9,6 @@ describe('Page Footer', () => {
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 
-  // TODO: Query if these are the correct targets, update if not
   it('Displays the expected links', () => {
     render(<PageFooter />);
 
