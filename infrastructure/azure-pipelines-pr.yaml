@@ -1,5 +1,6 @@
 name: 'Chatbot Prototype Pull Request Pipeline'
 
+trigger: none
 pr:
   - main
 
