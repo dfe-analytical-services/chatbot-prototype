@@ -1,4 +1,5 @@
 import logging
+from itertools import chain
 
 import openai
 import qdrant_client.models as models
@@ -10,13 +11,15 @@ from ..utils import chunk_text
 
 logger = logging.getLogger(__name__)
 
-client = QdrantClient(settings.qdrant_host, port=settings.qdrant_port)
+client = QdrantClient(location=settings.qdrant_host, port=settings.qdrant_port)
 
 
-def data_upsertion(slugs, func, batch_size=100) -> None:
+def data_upsertion(records: list[dict[str, str]], batch_size: int = 100) -> None:
+    # Make sure the collection exists
     get_collection()
-    text = func(slugs)
-    chunks = chunk_text(text)
+
+    chunks = list(chain.from_iterable(map(create_url_text_map, records)))
+
     for i in range(0, len(chunks), batch_size):
         end_index = min(i + batch_size, len(chunks))
         batch_meta = chunks[i:end_index]
@@ -27,6 +30,7 @@ def data_upsertion(slugs, func, batch_size=100) -> None:
             logger.error(f"An error occured within embedding model: {e}")
 
         formatted_embeddings = [embeds["data"][j]["embedding"] for j in range(len(embeds["data"]))]
+
         client.upsert(
             collection_name=settings.qdrant_collection,
             points=models.Batch(
@@ -36,27 +40,34 @@ def data_upsertion(slugs, func, batch_size=100) -> None:
             ),
         )
 
-        logger.info("Batch upserted")
+        logger.debug("Batch upserted")
 
-    logger.info("Text upserted")
+    logger.info("Data upsertion completed")
 
 
-def recreate_collection():
+def create_url_text_map(record: dict[str, str]) -> list[dict[str, str]]:
+    if record is None:
+        return []
+    chunks = chunk_text(text=record["text"])
+    return list(map(lambda text: {"url": record["link"], "text": text}, chunks))
+
+
+def recreate_collection() -> bool:
     return client.recreate_collection(
         collection_name=settings.qdrant_collection,
         vectors_config=models.VectorParams(distance=models.Distance.COSINE, size=1536),
     )
 
 
-def get_collection():
+def get_collection() -> None:
     try:
         client.get_collection(collection_name=settings.qdrant_collection)
     except UnexpectedResponse:
-        logger.debug("EES database doesn't exist - need to create database")
+        logger.debug("Collection doesn't exist - recreating collection")
         recreate_collection()
 
 
-def delete_url(url: str):
+def delete_url(url: str) -> None:
     client.delete(
         collection_name=settings.qdrant_collection,
         points_selector=models.FilterSelector(

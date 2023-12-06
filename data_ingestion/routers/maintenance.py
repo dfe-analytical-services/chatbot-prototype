@@ -12,26 +12,24 @@ from ..services.vector_db_client import data_upsertion, recreate_collection
 router = APIRouter(prefix="/api/maintenance")
 
 
-@router.post("/publications/build")
-async def build_publications():
-    slugs = fetch_publication_slugs()
+@router.post(path="/publications/build")
+async def build_publications() -> JSONResponse:
     try:
-        data_upsertion(slugs, extract_releases)
+        data_upsertion(records=extract_releases(slugs=fetch_publication_slugs()))
     except Exception as e:
         return JSONResponse(status_code=500, content={"Content": e})
     return JSONResponse(status_code=200, content={"Content": "Successful"})
 
 
-@router.post("/methodologies/build")
-async def build_methodologies():
-    slugs = fetch_methodology_slugs()
+@router.post(path="/methodologies/build")
+async def build_methodologies() -> JSONResponse:
     try:
-        data_upsertion(slugs, extract_methodologies)
+        data_upsertion(records=extract_methodologies(slugs=fetch_methodology_slugs()))
     except Exception as e:
         return JSONResponse(status_code=500, content={"Content": e})
     return JSONResponse(status_code=200, content={"Content": "Successful"})
 
 
-@router.delete("/clear", status_code=status.HTTP_204_NO_CONTENT)
-async def clear():
+@router.delete(path="/clear", status_code=status.HTTP_204_NO_CONTENT)
+async def clear() -> None:
     recreate_collection()
