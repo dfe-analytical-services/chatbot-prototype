@@ -30,6 +30,14 @@
     "[python]": {
       "editor.defaultFormatter": "ms-python.black-formatter"
     },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSaveMode": "modificationsIfAvailable",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+
     "search.exclude": {
       // Avoid polluting search results with lockfile content
       "Pipfile.lock": true,
@@ -37,12 +45,23 @@
     },
     // Ensure VSCode uses pnpm instead of npm
     "npm.packageManager": "pnpm",
+    "jest.autoRun": "off",
     "jest.disabledWorkspaceFolders": [
       "Root",
       "Response Automater",
       "Response Automater Tests",
       "Data Ingestion API",
       "Data Ingestion API Tests"
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "orta.vscode-jest",
+      "esbenp.prettier-vscode",
+      "ms-python.black-formatter",
+      "ms-azuretools.vscode-docker",
+      "ms-azure-devops.azure-pipelines"
     ]
   }
 }
