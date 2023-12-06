@@ -4,7 +4,6 @@ import styles from '@/styles/Home.module.css';
 import ReactMarkdown from 'react-markdown';
 import LoadingDots from '@/components/LoadingDots';
 import classNames from 'classnames';
-import React from 'react';
 import RobotIcon from '../public/assets/images/icons/robot.svg';
 import UserIcon from '../public/assets/images/icons/user.svg';
 
