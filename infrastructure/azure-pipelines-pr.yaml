@@ -74,7 +74,6 @@ jobs:
     - template: templates/python-steps.yaml
 
     - script: |
-        pip install pytest pytest-azurepipelines pytest-cov
         pipenv run pytest --cov=response_automater response_automater_tests/ --cov-report=xml --test-run-title="Response Automater API Tests"
       displayName: 'Run and Publish Tests'
 
