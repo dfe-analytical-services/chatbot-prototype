@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import PageFooter from '@/components/PageFooter';
-import React from 'react';
 
 describe('Page Footer', () => {
   it('Renders', () => {
