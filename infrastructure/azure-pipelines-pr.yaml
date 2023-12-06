@@ -54,7 +54,7 @@ jobs:
 
     - script: |
         pip install pytest pytest-azurepipelines pytest-cov
-        pipenv run python -m pytest --cov=data_ingestion data_ingestion_tests/ --cov-report=xml --test-run-title="Data Ingestion API Tests"
+        pipenv run pytest --cov=data_ingestion data_ingestion_tests/ --cov-report=xml --test-run-title="Data Ingestion API Tests"
       displayName: 'Run and Publish Tests'
 
     - task: PublishCodeCoverageResults@2
@@ -75,7 +75,7 @@ jobs:
 
     - script: |
         pip install pytest pytest-azurepipelines pytest-cov
-        pipenv run python -m pytest --cov=response_automater response_automater_tests/ --cov-report=xml --test-run-title="Response Automater API Tests"
+        pipenv run pytest --cov=response_automater response_automater_tests/ --cov-report=xml --test-run-title="Response Automater API Tests"
       displayName: 'Run and Publish Tests'
 
     - task: PublishCodeCoverageResults@2
