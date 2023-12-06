@@ -53,6 +53,11 @@ jobs:
     - template: templates/python-steps.yaml
 
     - script: |
+        pipenv run flake8
+      displayName: 'Run Flake8'
+      workingDirectory: data_ingestion
+
+    - script: |
         pipenv run black ./ --check
       displayName: 'Run Black'
       workingDirectory: data_ingestion
@@ -77,6 +82,11 @@ jobs:
   displayName: 'Response Automater Tests'
   steps:
     - template: templates/python-steps.yaml
+
+    - script: |
+        pipenv run flake8
+      displayName: 'Run Flake8'
+      workingDirectory: response_automater
 
     - script: |
         pipenv run black ./ --check
