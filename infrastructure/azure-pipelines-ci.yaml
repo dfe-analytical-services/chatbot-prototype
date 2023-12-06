@@ -1,6 +1,8 @@
 name: 'Chatbot Prototype CI Pipeline'
+
 trigger:
   - main
+pr: none
 
 variables:
   pnpm_config_cache: $(Pipeline.Workspace)/.pnpm-store
