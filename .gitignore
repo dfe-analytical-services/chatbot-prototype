@@ -8,6 +8,8 @@ data/qdrant_storage
 __pycache__/
 *.py[cod]
 *$py.class
+data_ingestion_tests/test-output.xml
+response_automater_tests/test-output.xml
 
 # OS generated files #
 .DS_Store
@@ -18,7 +20,7 @@ __pycache__/
 ehthumbs.db
 Thumbs.db
 
-# Typescript #
+# Frontend #
 chatbot-ui/.next/
 node_modules
 tsconfig.tsbuildinfo
