@@ -11,3 +11,7 @@ def chunk_text(text):
         chunks.extend([{"url": record["link"], "text": text_temp[i]} for i in range(len(text_temp))])
 
     return chunks
+
+
+def temp_method_for_proof_of_concept_tests(some_number):
+    return 2 * some_number

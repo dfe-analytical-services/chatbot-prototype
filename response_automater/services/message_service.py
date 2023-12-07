@@ -25,7 +25,9 @@ async def send_message(message: str) -> AsyncIterable[str]:
     chain = makechain(callback)
 
     # query the database
-    resp = client.search(collection_name=settings.qdrant_collection, query_vector=embeds["data"][0]["embedding"], limit=6)
+    resp = client.search(
+        collection_name=settings.qdrant_collection, query_vector=embeds["data"][0]["embedding"], limit=6
+    )
 
     documents = [Document(page_content=resp[i].payload["text"]) for i in range(len(resp))]
     list_urls = list(set(resp[i].payload["url"] for i in range(len(resp))))

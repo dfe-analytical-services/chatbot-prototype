@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PageBanner = () => {
   return (
     <div className="govuk-phase-banner">

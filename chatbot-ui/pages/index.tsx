@@ -4,7 +4,6 @@ import styles from '@/styles/Home.module.css';
 import ReactMarkdown from 'react-markdown';
 import LoadingDots from '@/components/LoadingDots';
 import classNames from 'classnames';
-import React from 'react';
 import RobotIcon from '../public/assets/images/icons/robot.svg';
 import UserIcon from '../public/assets/images/icons/user.svg';
 
@@ -47,9 +46,7 @@ function Home() {
   }, []);
 
   //handle form submission
-  async function handleSubmit(e: any) {
-    e.preventDefault();
-
+  async function handleSubmit() {
     if (!query) {
       setError('Enter a question');
       return;
@@ -112,7 +109,7 @@ function Home() {
         const chunkValue = decoder.decode(value);
         if (chunkValue.startsWith('{"sourceDocuments":')) {
           setMessageState((state) => {
-            let messages = state.messages;
+            const messages = state.messages;
             messages[messages.length - 1].links =
               JSON.parse(chunkValue).sourceDocuments;
             return { ...state, messages: [...messages] };
@@ -120,7 +117,7 @@ function Home() {
         } else {
           pending += chunkValue;
           setMessageState((state) => {
-            let messages = state.messages;
+            const messages = state.messages;
             messages[messages.length - 1].message = pending;
             return { ...state, messages: [...messages] };
           });
@@ -137,9 +134,9 @@ function Home() {
   }
 
   //prevent empty submissions
-  const handleEnter = (e: any) => {
+  const handleEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && query) {
-      handleSubmit(e);
+      handleSubmit();
     } else if (e.key == 'Enter') {
       e.preventDefault();
     }
@@ -204,7 +201,12 @@ function Home() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
           <div className="govuk-form-group govuk-form-group--error">
             <h1 className="govuk-label-wrapper">
               <label className="govuk-label govuk-label--l" htmlFor="question">
@@ -225,7 +227,6 @@ function Home() {
               disabled={loading}
               onKeyDown={handleEnter}
               ref={textAreaRef}
-              autoFocus={false}
               rows={3}
               maxLength={5000}
               id="userInput"

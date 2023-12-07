@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     chat_url_public_ui: str = "http://localhost:3002"
-    openai_api_key: str
+    openai_api_key: str = "placeholder-value"
     openai_model: str = "gpt-4"
     openai_embedding_model: str = "text-embedding-ada-002"
     qdrant_collection: str = "ees"

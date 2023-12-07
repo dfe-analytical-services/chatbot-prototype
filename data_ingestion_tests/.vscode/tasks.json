@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Data Ingestion API Tests",
+      "type": "shell",
+      "command": "pipenv",
+      "args": ["run", "pytest", "--junitxml=test-output.xml"],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}

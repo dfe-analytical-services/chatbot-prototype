@@ -6,7 +6,7 @@ This is a repository for a prototype of a chatbot for the Department for Educati
 
 The app is powered by embeddings so that when a user inputs a query, the relevant parts of the knowledge base are returned and then the app calls the openai api to answer the question.
 
-The tech stack on the backend is the python framework fastapi and the vector database Qdrant.FastApi is a fast, modern framework for building APIs in python. For more information about FastApi visit their [documentation](https://fastapi.tiangolo.com/). Langchain is used to query the Qdrant and interact with the openai api. For more information about langchain visit their [documentation](https://python.langchain.com/en/latest/index.html). For more information on qdrant please visit their [documentation](https://qdrant.tech/documentation/).
+The tech stack on the backend is the python framework fastapi and the vector database Qdrant. FastApi is a fast, modern framework for building APIs in python. For more information about FastApi visit their [documentation](https://fastapi.tiangolo.com/). Langchain is used to query the Qdrant and interact with the openai api. For more information about langchain visit their [documentation](https://python.langchain.com/en/latest/index.html). For more information on qdrant please visit their [documentation](https://qdrant.tech/documentation/).
 
 The frontend tech stack is next.js and typescript although this is subject to change.
 
@@ -14,10 +14,10 @@ The frontend tech stack is next.js and typescript although this is subject to ch
 
 There are three projects contained within this repository, a next.js frontend UI project, a fastapi server for the data ingestion, and fastapi server for the backend which are in the `chatbot-ui`, `data_ingestion` and `response_automater` folders respectively.
 
-The fastapi server for data ingestion has various endpoints to build, rebuild and delete different parts of the vector database, qdrant. To build the database information is extracted from the content apis from the explore-education-statistics service and chunked into smaller units of text. Via the openai and qdrant apis these pieces of text are converted into vector embeddings and subsequently stored in the qdrant vector database. The endpoint to build the database is **.../api/maintenance/publications/build** which is contained in the **data_ingestion/routers/maintenance.py** file. This can be used to build or rebuild all the information from the latest publications in the qdrant vector database. There are also endpoints for building information relating to the methodologies and to delete the embeddings stored within the database contained in the same file. The other two files within the router directory, `publications.py` and `methodologies.py` have endpoints for updating a specific publication or methodologies within the qdrant database. For example, if there was a new release of attendance publication, a post request to the **.../pupil-attendance-in-schools/update** could be triggered.
+The fastapi server for data ingestion has various endpoints to build, rebuild and delete different parts of the vector database, qdrant. To build the database, information is extracted from the content apis from the explore-education-statistics service and chunked into smaller units of text. Via the openai and qdrant apis these pieces of text are converted into vector embeddings and subsequently stored in the qdrant vector database. The endpoint to build the database is **.../api/maintenance/publications/build** which is contained in the **data_ingestion/routers/maintenance.py** file. This can be used to build or rebuild all the information from the latest publications in the qdrant vector database. There are also endpoints for building information relating to the methodologies and to delete the embeddings stored within the database contained in the same file. The other two files within the router directory, `publications.py` and `methodologies.py` have endpoints for updating a specific publication or methodologies within the qdrant database. For example, if there was a new release of attendance publication, a post request to the **.../pupil-attendance-in-schools/update** could be triggered.
 
 
-The latter fastapi server exposes the Qdrant, openai and langchain apis which en. This means when a user inputs a question into the app, the question is sent to the **.../api/chat** endpoint. Here the question is converted into a vector embedding. Based on the cosine similarity of this embedding with the embeddings in the vector database, the three most relevant chunks of the vector database are returned. How the api responds is governed by prompt template (contained in `utils.py`) and the `services.message_service.py`. The latter contains a send_message function which encompasses the logic for interacting with th qdrant, openai and langchain apis and allows the endpoint to send a response as an event stream.
+The latter fastapi server exposes the Qdrant, openai and langchain apis. This means when a user inputs a question into the app, the question is sent to the **.../api/chat** endpoint. Here the question is converted into a vector embedding. Based on the cosine similarity of this embedding with the embeddings in the vector database, the three most relevant chunks of the vector database are returned. How the api responds is governed by prompt template (contained in `utils.py`) and the `services.message_service.py`. The latter contains a send_message function which encompasses the logic for interacting with the qdrant, openai and langchain apis and allows the endpoint to send a response as an event stream.
 
 ## Prerequisites
 
@@ -32,8 +32,8 @@ The latter fastapi server exposes the Qdrant, openai and langchain apis which en
 
 1. Clone the repo
    ```bash
-   git clone https://github.com/joesharratt1229/EES_GPT.git
-   cd EES_GPT
+   git clone https://github.com/dfe-analytical-services/chatbot-prototype.git
+   cd chatbot-prototype
    ```
 
 2. Install [pnpm](https://pnpm.io) if you haven't already:
