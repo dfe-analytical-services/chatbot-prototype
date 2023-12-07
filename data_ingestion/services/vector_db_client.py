@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 client = QdrantClient(location=settings.qdrant_host, port=settings.qdrant_port)
 
 
-def data_upsertion(records: list[dict[str, str]], batch_size: int = 100) -> None:
+def upsert_data(records: list[dict[str, str]], batch_size: int = 100) -> None:
     # Make sure the collection exists
     get_collection()
 

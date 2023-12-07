@@ -7,7 +7,7 @@ from ..services.methodology_service import (
 )
 from ..services.publication_service import fetch_publication_slugs
 from ..services.release_service import extract_releases
-from ..services.vector_db_client import data_upsertion, recreate_collection
+from ..services.vector_db_client import recreate_collection, upsert_data
 
 router = APIRouter(prefix="/api/maintenance")
 
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/api/maintenance")
 @router.post(path="/publications/build")
 async def build_publications() -> JSONResponse:
     try:
-        data_upsertion(records=extract_releases(slugs=fetch_publication_slugs()))
+        upsert_data(records=extract_releases(slugs=fetch_publication_slugs()))
     except Exception as e:
         return JSONResponse(status_code=500, content={"Content": e})
     return JSONResponse(status_code=200, content={"Content": "Successful"})
@@ -24,7 +24,7 @@ async def build_publications() -> JSONResponse:
 @router.post(path="/methodologies/build")
 async def build_methodologies() -> JSONResponse:
     try:
-        data_upsertion(records=extract_methodologies(slugs=fetch_methodology_slugs()))
+        upsert_data(records=extract_methodologies(slugs=fetch_methodology_slugs()))
     except Exception as e:
         return JSONResponse(status_code=500, content={"Content": e})
     return JSONResponse(status_code=200, content={"Content": "Successful"})
