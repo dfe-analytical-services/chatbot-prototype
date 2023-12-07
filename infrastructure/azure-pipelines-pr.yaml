@@ -64,7 +64,6 @@ jobs:
       workingDirectory: data_ingestion
 
     - script: |
-        pip install pytest pytest-azurepipelines pytest-cov
         pipenv run pytest --cov=data_ingestion data_ingestion_tests/ --cov-report=xml --test-run-title="Data Ingestion API Tests"
       displayName: 'Run and Publish Tests'
 
