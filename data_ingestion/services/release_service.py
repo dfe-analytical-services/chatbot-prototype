@@ -22,8 +22,8 @@ def fetch_release(slug: str) -> dict[str, str]:
 
     logger.debug(f"Processing content for release id: {release_id}")
 
-    headlines_text = str(get_headlines_text(res=response_json))
-    key_stats_text = get_key_statistics_text(release_id=release_id, res=response_json)
+    headlines_text = get_headlines_text(res=response_json) or ""
+    key_stats_text = get_key_statistics_text(release_id=release_id, res=response_json) or ""
     content_block_text = get_content_block_text(res=response_json)
 
     return {
