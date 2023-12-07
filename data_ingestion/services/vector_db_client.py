@@ -7,7 +7,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.http.exceptions import UnexpectedResponse
 
 from ..config import settings
-from ..utils import chunk_text
+from ..utils.text_utils import chunk_text
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,4 @@
-from data_ingestion.utils import temp_method_for_proof_of_concept_tests
+from data_ingestion.utils.text_utils import temp_method_for_proof_of_concept_tests
 
 
 def test_that_tests_run():
