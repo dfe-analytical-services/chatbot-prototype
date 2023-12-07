@@ -11,7 +11,7 @@ uvicorn = "==0.24.0.post1"
 asyncio = "==3.4.3"
 pydantic-settings = "2.0.3"
 python-dotenv = "==1.0.0"
-langchain = "==0.0.267"
+langchain = "==0.0.329"
 requests = "==2.31.0"
 qdrant-client = "==1.6.9"
 
