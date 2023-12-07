@@ -15,8 +15,7 @@ client = QdrantClient(location=settings.qdrant_host, port=settings.qdrant_port)
 
 
 def upsert_data(records: list[dict[str, str]], batch_size: int = 100) -> None:
-    # Make sure the collection exists
-    get_collection()
+    ensure_collection_exists()
 
     chunks = list(chain.from_iterable(map(create_url_text_map, records)))
 
@@ -59,12 +58,15 @@ def recreate_collection() -> bool:
     )
 
 
-def get_collection() -> None:
+def ensure_collection_exists() -> None:
     try:
         client.get_collection(collection_name=settings.qdrant_collection)
-    except UnexpectedResponse:
-        logger.debug("Collection doesn't exist - recreating collection")
-        recreate_collection()
+    except UnexpectedResponse as e:
+        if e.status_code == 404:
+            logger.debug("Collection doesn't exist - recreating collection")
+            recreate_collection()
+        else:
+            raise
 
 
 def delete_url(url: str) -> None:
