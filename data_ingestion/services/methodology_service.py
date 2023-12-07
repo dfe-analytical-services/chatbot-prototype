@@ -1,59 +1,49 @@
-import json
 import logging
 
 import requests
-from bs4 import BeautifulSoup
 
 from ..config import settings
+from ..utils.content_utils import get_content_block_text
 from .vector_db_client import delete_url
 
 logger = logging.getLogger(__name__)
 
 
-def delete_methodology(slug: str):
+def delete_methodology(slug: str) -> None:
     delete_url(url=f"{settings.ees_url_api_content}/methodology{slug}")
 
 
-def extract_methodologies(slugs):
-    texts = []
-    for slug in slugs:
-        methodology_info = {}
-        content = fetch_methodology(slug)
-        methodology_info["text"] = content["data"]
-        methodology_info["link"] = content["link"]
-        texts.append(methodology_info)
-    return texts
+def extract_methodologies(slugs: list[str]) -> list[dict[str, str]]:
+    return list(map(fetch_methodology, slugs))
 
 
-def fetch_methodology(slug: str):
-    methodology_content = {}
-    methodology_content["link"] = f"{settings.ees_url_public_ui}/methodology/{slug}"
-    res = requests.get(f"{settings.ees_url_api_content}/methodologies/{slug}")
-    text = json.loads(res.text)
+def fetch_methodology(slug: str) -> dict[str, str]:
     try:
-        methodology_content["data"] = "Headlines Section: "
-        methodology_content["data"] += BeautifulSoup(
-            text["headlinesSection"]["content"][0]["body"], "html.parser"
-        ).get_text()
-    except KeyError as e:
-        logger.error(f" Error: Key '{e.args[0]}' not found whilst reading content for methodology with slug: '{slug}'")
+        response = requests.get(url=f"{settings.ees_url_api_content}/methodologies/{slug}")
+        response.raise_for_status()
+        response_json = response.json()
+        methodology_version_id = response_json["id"]
 
-    methodology_content["data"] += "Content Section"
-    for i in range(len(text["content"])):
-        for j in range(len(text["content"][i]["content"])):
-            try:
-                methodology_content["data"] += BeautifulSoup(
-                    text["content"][i]["content"][j]["body"], "html.parser"
-                ).get_text()
-            except KeyError:
-                logger.debug(f"Key does not exist for {slug} at {i}")
-    return methodology_content
+        logger.debug(f"Processing content for methodology version: {methodology_version_id}")
+
+        return {
+            "link": f"{settings.ees_url_public_ui}/methodology/{slug}",
+            "text": get_content_block_text(res=response_json),
+        }
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 404:
+            logger.error(f"Methodology version for slug {slug} was not found")
+            return {}
+        else:
+            raise
 
 
-def fetch_methodology_slugs():
-    data = requests.get(f"{settings.ees_url_api_content}/methodology-themes").json()
-    slugs = []
-    for item in data:
+def fetch_methodology_slugs() -> list[str]:
+    response = requests.get(url=f"{settings.ees_url_api_content}/methodology-themes")
+    response.raise_for_status()
+    response_json = response.json()
+    slugs: list[str] = []
+    for item in response_json:
         for topic in item["topics"]:
             for publication in topic["publications"]:
                 for methodology in publication["methodologies"]:
