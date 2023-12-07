@@ -16,7 +16,7 @@ requests = "==2.31.0"
 qdrant-client = "==1.5.4"
 
 [dev-packages]
-pytest = "==7.4.2"
+pytest = "==7.4.3"
 pytest-cov = "==4.1.0"
 pytest-azurepipelines = "==1.0.5"
 isort = "==5.12.0"
