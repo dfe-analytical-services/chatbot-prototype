@@ -26,25 +26,35 @@ const MessageHistory = ({ messages, loading }: Props) => {
   };
 
   return (
-    <div className={'govuk-body'}>
+    <div>
       <div className={styles.chat}>
         <div className={styles.messagelist}>
           {messages.map((message, index) => (
             <div
               key={`chatMessage-${index}`}
-              className={classNames(
-                'govuk-body',
-                deriveCssClass(message.type, index),
-              )}
+              className={classNames(deriveCssClass(message.type, index))}
+              data-testid={
+                message.type === 'apiMessage' ? 'api-message' : 'user-message'
+              }
             >
               {message.type === 'apiMessage' ? (
-                <RobotIcon height="1.1em" fill="#1d70b8" />
+                <RobotIcon
+                  className={styles.icon}
+                  height="1.1em"
+                  fill="#1d70b8"
+                />
               ) : (
-                <UserIcon height="1.1em" fill="#00703c" />
+                <UserIcon
+                  className={styles.icon}
+                  height="1.1em"
+                  fill="#00703c"
+                />
               )}
 
               <div className={styles.markdownanswer}>
-                <ReactMarkdown>{message.content}</ReactMarkdown>
+                <ReactMarkdown className="govuk-body">
+                  {message.content}
+                </ReactMarkdown>
               </div>
             </div>
           ))}

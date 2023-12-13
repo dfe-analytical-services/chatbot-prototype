@@ -17,6 +17,6 @@ describe('Error Summary', () => {
 
     expect(
       screen.getByRole('link', { name: 'This is an error' }),
-    ).toHaveAttribute('href', '#');
+    ).toHaveAttribute('href', '#user-input-form');
   });
 });
