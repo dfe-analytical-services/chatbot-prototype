@@ -8,7 +8,7 @@ const ErrorSummary = ({ error }: Props) => {
         <div className="govuk-error-summary__body">
           <ul className="govuk-list govuk-error-summary__list">
             <li>
-              <a href="#">{error}</a>
+              <a href="#user-input-form">{error}</a>
             </li>
           </ul>
         </div>

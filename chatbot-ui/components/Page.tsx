@@ -18,9 +18,6 @@ const Page = ({ title, caption = '', children = null }: Props) => {
 
       <div className="govuk-width-container ">
         <PageBanner />
-        <a href="#" className="govuk-back-link">
-          Back
-        </a>
         <main className="govuk-main-wrapper" id="main-content" role="main">
           <PageTitle title={title} caption={caption} />
           {children}

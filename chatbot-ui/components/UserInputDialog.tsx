@@ -3,6 +3,7 @@ import styles from '@/styles/Home.module.css';
 import LoadingDots from '@/components/LoadingDots';
 import { UseChatbotState } from '@/hooks/useChatbot';
 import ErrorSummary from '@/components/ErrorSummary';
+import classNames from 'classnames';
 
 const UserInputDialog = ({ sendMessage, error: APIError, fetching }: Props) => {
   const [query, setQuery] = useState<string>('');
@@ -24,27 +25,32 @@ const UserInputDialog = ({ sendMessage, error: APIError, fetching }: Props) => {
     const question = query.trim();
 
     await sendMessage(question);
+    setQuery('');
   }
 
-  //prevent empty submissions
-  const handleEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && query) {
-      handleSubmit();
-    } else if (e.key == 'Enter') {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') {
       e.preventDefault();
+      handleSubmit();
     }
   };
 
   return (
     <form
+      id="user-input-form"
       onSubmit={(e) => {
         e.preventDefault();
         handleSubmit();
+        setQuery('');
       }}
     >
-      <div className="govuk-form-group govuk-form-group--error">
+      <div
+        className={classNames('govuk-form-group', {
+          'govuk-form-group--error': userInputError,
+        })}
+      >
         <h1 className="govuk-label-wrapper">
-          <label className="govuk-label govuk-label--l" htmlFor="question">
+          <label className="govuk-label govuk-label--l" htmlFor="userInput">
             What is your question?
           </label>
         </h1>
@@ -52,22 +58,25 @@ const UserInputDialog = ({ sendMessage, error: APIError, fetching }: Props) => {
           Ask whatever question you like...
         </div>
 
-        <p id="more-detail-error" className="govuk-error-message">
-          <span className="govuk-visually-hidden">Error:</span> Enter a question
-        </p>
-
         {userInputError && <ErrorSummary error={userInputError} />}
         <textarea
           className="govuk-textarea"
           disabled={fetching || APIError !== null}
-          onKeyDown={handleEnter}
+          onKeyDown={handleKeyDown}
           ref={textAreaRef}
           rows={3}
           maxLength={5000}
           id="userInput"
           name="userInput"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onBlur={() => {
+            if (query) {
+              setUserInputError(null);
+            }
+          }}
+          onChange={(e) => {
+            setQuery(e.target.value);
+          }}
           aria-describedby="question-hint"
         />
 

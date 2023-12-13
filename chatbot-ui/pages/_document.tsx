@@ -34,6 +34,7 @@ export default function Document() {
           rel="apple-touch-icon"
           href="/assets/images/govuk-apple-touch-icon.png"
         />
+        <title>Chatbot prototype</title>
       </Head>
       <body className="govuk-template__body app-body-class">
         <Main />
