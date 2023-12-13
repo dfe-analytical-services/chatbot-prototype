@@ -38,7 +38,7 @@ const parseResponseFromAPI = async (response: Response): Promise<Message> => {
   };
 };
 
-const sendUserMessage = async (message: string): Promise<Message> => {
+const sendMessage = async (message: string): Promise<Message> => {
   if (strangle_api) {
     await delay(3000);
 
@@ -64,4 +64,10 @@ const sendUserMessage = async (message: string): Promise<Message> => {
   return responseMessage;
 };
 
-export default sendUserMessage;
+const ChatBotService = {
+  sendUserMessage(message: string): Promise<Message> {
+    return sendMessage(message);
+  },
+};
+
+export default ChatBotService;

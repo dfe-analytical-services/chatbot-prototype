@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import sendUserMessage from '@/services/chatbot-service';
+import ChatBotService from '@/services/chatbot-service';
 
 function useChatbot(): UseChatbotState {
   const [fetching, setFetching] = useState<boolean>(false);
@@ -22,7 +22,7 @@ function useChatbot(): UseChatbotState {
     setFetching(true);
 
     try {
-      const responseMessage = await sendUserMessage(userInput);
+      const responseMessage = await ChatBotService.sendUserMessage(userInput);
 
       // TODO: Refactor state management so this works without having to re-add user message
       recordMessageInHistory([userMessage, responseMessage]);
