@@ -3,7 +3,7 @@ import { Message } from '@/hooks/useChatbot';
 const api_url =
   process.env.NEXT_PUBLIC_CHAT_URL_API ?? 'http://localhost:8010/api/chat';
 
-const strangle_api = process.env.NEXT_TEMP_STRANGLE_API ?? true;
+const strangle_api = process.env.NEXT_TEMP_STRANGLE_API ?? false;
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 const parseResponseFromAPI = async (response: Response): Promise<Message> => {
@@ -55,7 +55,7 @@ const sendUserMessage = async (message: string): Promise<Message> => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      message,
+      question: message,
     }),
   });
 
