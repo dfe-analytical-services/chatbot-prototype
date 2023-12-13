@@ -11,6 +11,7 @@ type Props = {
   loading: boolean;
 };
 
+// TODO: This could maybe be renamed
 const MessageHistory = ({ messages, loading }: Props) => {
   const deriveCssClass = (messageType: MessageType, index: number): string => {
     if (messageType === 'apiMessage') {
