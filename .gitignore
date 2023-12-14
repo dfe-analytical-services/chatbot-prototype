@@ -1,6 +1,9 @@
 # Qdrant
 data/qdrant_storage
 
+# Azure Developer CLI
+.azure
+
 # Environments
 .env
 
