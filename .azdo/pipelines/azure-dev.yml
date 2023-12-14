@@ -1,0 +1,26 @@
+# Run when commits are pushed to mainline branch
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+container: mcr.microsoft.com/azure-dev-cli-apps:latest
+
+steps:
+  - pwsh: |
+      azd config set auth.useAzCliAuth "true"
+    displayName: Configure AZD to use AZ CLI authentication
+
+  - task: AzureCLI@2
+    displayName: Provision infrastructure
+    inputs:
+      azureSubscription: $(SERVICE_CONNECTION_NAME)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        azd provision --no-prompt
+    env:
+      AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+      AZURE_ENV_NAME: $(AZURE_ENV_NAME)
+      AZURE_LOCATION: $(AZURE_LOCATION)
