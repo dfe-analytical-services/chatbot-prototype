@@ -6,12 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.loadingwheel {
-  position: absolute;
-  top: 0.2rem;
-  right: 0.25rem;
+  margin-bottom: 2rem;
 }
 
 .messagelist {
@@ -28,53 +23,38 @@
   margin-top: 1rem;
 }
 
-.apimessage,
-.usermessage,
-.usermessagewaiting {
-  display: flex;
+.icon { 
+  flex-shrink: 0;
+  height: 26px;
+  width: 26px;
 }
 
-.apimessage {
+.robot {
+  margin-top: -2px;
+}
+
+.message {
   background: #f3f2f1;
-  padding-left: 1.5rem;
-  padding-top: 1.5rem;
-  animation: fadein 0.5s;
+  display: flex;
+  padding: 1.5rem 1.5rem 0 1.5rem;
 }
 
 .usermessage {
   background: #ffffff;
-  padding-left: 1.5rem;
-  padding-top: 1.5rem;
-  color: #0b0c0c;
 }
 
 .usermessagewaiting {
-  padding: 1.5rem;
-  color: #0b0c0c;
   background: linear-gradient(to left, #07080938, #1a1c2024, #07080936);
   background-size: 200% 200%;
   background-position: -100% 0;
-  animation: loading-gradient 2s ease-in-out infinite;
-  animation-direction: alternate;
-  animation-name: loading-gradient;
 }
 
-@keyframes loading-gradient {
-  0% {
-    background-position: -100% 0;
-  }
-  100% {
-    background-position: 100% 0;
-  }
+.markdownanswer {
+  padding-left: 1rem; 
 }
 
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.markdownanswer p:first-of-type {
+  margin-top: 0;
 }
 
 .markdownanswer a:hover {

@@ -12,6 +12,9 @@ const config = {
   testEnvironment: 'jest-environment-jsdom',
   resetMocks: true,
   reporters: ['default', 'jest-junit'],
+  moduleNameMapper: {
+    '^.+\\.(svg)$': '<rootDir>/__mocks__/svg.js',
+  },
 };
 
 export default createJestConfig(config);
