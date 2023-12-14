@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import styles from '@/styles/Home.module.css';
-import LoadingDots from '@/components/LoadingDots';
 import { UseChatbotState } from '@/hooks/useChatbot';
 import ErrorSummary from '@/components/ErrorSummary';
 import classNames from 'classnames';
@@ -86,11 +84,6 @@ const UserInputDialog = ({ sendMessage, error: APIError, fetching }: Props) => {
           data-module="govuk-button"
         >
           Send
-          {fetching && (
-            <div className={styles.loadingwheel}>
-              <LoadingDots color="#000" />
-            </div>
-          )}
         </button>
       </div>
     </form>

@@ -11,7 +11,6 @@ type Props = {
   loading: boolean;
 };
 
-// TODO: This could maybe be renamed
 const MessageHistory = ({ messages, loading }: Props) => {
   return (
     <div>

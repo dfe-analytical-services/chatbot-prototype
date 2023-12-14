@@ -11,7 +11,6 @@ describe('Error Summary', () => {
     ).toBeInTheDocument();
   });
 
-  // TODO: Change this for something a bit nicer
   it('Displays the error as a link', () => {
     render(<ErrorSummary error="This is an error" />);
 

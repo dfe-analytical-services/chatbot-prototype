@@ -24,7 +24,6 @@ function useChatbot(): UseChatbotState {
     try {
       const responseMessage = await ChatBotService.sendUserMessage(userInput);
 
-      // TODO: Refactor state management so this works without having to re-add user message
       recordMessageInHistory([userMessage, responseMessage]);
     } catch (error) {
       setError('An error occurred while fetching the data. Please try again.');
