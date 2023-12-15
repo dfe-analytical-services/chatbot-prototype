@@ -64,6 +64,18 @@ module containerRegistry './shared/container-registry.bicep' = {
   scope: rg
 }
 
+// Monitor application with Azure Monitor
+module monitoring './shared/monitoring.bicep' = {
+  name: 'monitoring'
+  params: {
+    location: location
+    tags: tags
+    logAnalyticsName: '${resourceGroupName}-${abbrs.operationalInsightsWorkspaces}01'
+    applicationInsightsName: '${resourceGroupName}-${abbrs.insightsComponents}01'
+  }
+  scope: rg
+}
+
 output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
 output AZURE_KEY_VAULT_ENDPOINT string = keyVault.outputs.endpoint
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerRegistry.outputs.loginServer
