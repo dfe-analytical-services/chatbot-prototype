@@ -43,7 +43,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
 
 // Store secrets in a keyvault
 module keyVault './shared/keyvault.bicep' = {
-  name: 'keyvault'
+  name: 'key-vault'
   params: {
     location: location
     tags: tags
@@ -72,6 +72,19 @@ module monitoring './shared/monitoring.bicep' = {
     tags: tags
     logAnalyticsName: '${resourceGroupName}-${abbrs.operationalInsightsWorkspaces}01'
     applicationInsightsName: '${resourceGroupName}-${abbrs.insightsComponents}01'
+  }
+  scope: rg
+}
+
+// Container apps host
+module appsEnv './shared/container-apps-environment.bicep' = {
+  name: 'container-apps-environment'
+  params: {
+    name: '${resourceGroupName}-${abbrs.appManagedEnvironments}01'
+    location: location
+    tags: tags
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
   }
   scope: rg
 }
