@@ -53,5 +53,18 @@ module keyVault './shared/keyvault.bicep' = {
   scope: rg
 }
 
+// Container registry
+module containerRegistry './shared/container-registry.bicep' = {
+  name: 'container-registry'
+  params: {
+    location: location
+    tags: tags
+    name: '${replace(resourceGroupName,'-','')}${abbrs.containerRegistryRegistries}01'
+  }
+  scope: rg
+}
+
 output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
 output AZURE_KEY_VAULT_ENDPOINT string = keyVault.outputs.endpoint
+output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerRegistry.outputs.loginServer
+output AZURE_CONTAINER_REGISTRY_NAME string = containerRegistry.outputs.name
