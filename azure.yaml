@@ -6,3 +6,10 @@ metadata:
 pipeline:
   provider: azdo
 services:
+  api:
+    project: response_automater
+    host: containerapp
+    docker:
+      path: ./Dockerfile
+      context: ../
+    language: python

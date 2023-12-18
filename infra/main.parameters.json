@@ -19,6 +19,14 @@
     },
     "deployRoleAssignments": {
       "value": "${DEPLOY_ROLE_ASSIGNMENTS=true}"
+    },
+    "apiAppExists": {
+      "value": "${SERVICE_API_RESOURCE_EXISTS=false}"
+    },
+    "apiAppDefinition": {
+      "value": {
+        "settings": []
+      }
     }
   }
 }
