@@ -1,6 +1,7 @@
 # Run when commits are pushed to mainline branch
 trigger:
   - main
+pr: none
 
 pool:
   vmImage: ubuntu-latest
