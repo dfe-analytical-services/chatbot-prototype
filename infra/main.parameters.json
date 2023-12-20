@@ -12,7 +12,7 @@
       "value": "${AZURE_PRINCIPAL_ID}"
     },
     "resourceGroupName": {
-      "value": "s180d01-supportbot"
+      "value": "${AZURE_RESOURCE_GROUP_NAME}"
     },
     "productName": {
       "value": "Statistics as a Service"
