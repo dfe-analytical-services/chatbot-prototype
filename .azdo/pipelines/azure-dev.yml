@@ -28,6 +28,6 @@ jobs:
                 azd provision --no-prompt
             env:
               AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
-              AZURE_ENV_NAME: $(ENVIRONMENT_NAME)
+              AZURE_ENV_NAME: $(Environment.Name)
               AZURE_LOCATION: $(AZURE_LOCATION)
               AZURE_RESOURCE_GROUP_NAME: ${AZURE_RESOURCE_GROUP_NAME}
