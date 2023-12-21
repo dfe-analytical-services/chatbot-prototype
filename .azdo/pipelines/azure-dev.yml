@@ -38,4 +38,4 @@ jobs:
               AZURE_LOCATION: $(AZURE_LOCATION)
               AZURE_RESOURCE_GROUP_NAME: ${AZURE_RESOURCE_GROUP_NAME}
               PRODUCT_NAME: ${PRODUCT_NAME}
-              DEPLOY_ROLE_ASSIGNMENTS: ${parameters.deployRoleAssignments}
+              DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
