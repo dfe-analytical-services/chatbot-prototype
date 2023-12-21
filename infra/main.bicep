@@ -25,6 +25,10 @@ param resourceGroupName string
 @description('Specify if role assignments should be deployed')
 param deployRoleAssignments bool = true
 
+param apiAppExists bool = false
+@secure()
+param apiAppDefinition object
+
 // Tags that should be applied to all resources.
 // 
 // Note that 'azd-service-name' tags should be applied separately to service host resources.
@@ -34,6 +38,9 @@ var tags = {
   'azd-env-name': environmentName
   Product: productName
 }
+
+var apiContainerAppNameOrDefault = '${abbrs.appContainerApps}web'
+var corsAcaUrl = 'https://${apiContainerAppNameOrDefault}.${containerAppsEnv.outputs.defaultDomain}'
 
 var abbrs = loadJsonContent('./abbreviations.json')
 
@@ -79,6 +86,19 @@ module monitoring './shared/monitoring.bicep' = {
   scope: rg
 }
 
+// Container apps host
+module containerAppsEnv './shared/container-apps-environment.bicep' = {
+  name: 'container-apps-environment'
+  params: {
+    name: '${resourceGroupName}-${abbrs.appManagedEnvironments}01'
+    location: location
+    tags: tags
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
+  }
+  scope: rg
+}
+
 // Api container app
 module api './app/api.bicep' = {
   name: 'api'
@@ -88,6 +108,13 @@ module api './app/api.bicep' = {
     tags: tags
     identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}api'
     deployRoleAssignments: deployRoleAssignments
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    containerAppsEnvironmentName: containerAppsEnv.outputs.name
+    containerRegistryName: containerRegistry.outputs.name
+    keyVaultName: keyVault.outputs.name
+    corsAcaUrl: corsAcaUrl
+    exists: apiAppExists
+    appDefinition: apiAppDefinition
   }
   scope: rg
 }

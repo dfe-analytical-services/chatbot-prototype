@@ -2,8 +2,11 @@ param name string
 param location string = resourceGroup().location
 param tags object = {}
 
+@description('Name of the Log Analytics workspace')
 param logAnalyticsWorkspaceName string
-param applicationInsightsName string = ''
+
+@description('Name of the Application Insights resource')
+param applicationInsightsName string
 
 resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-04-01-preview' = {
   name: name
@@ -30,4 +33,4 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' existing
 }
 
 output name string = containerAppsEnvironment.name
-output domain string = containerAppsEnvironment.properties.defaultDomain
+output defaultDomain string = containerAppsEnvironment.properties.defaultDomain
