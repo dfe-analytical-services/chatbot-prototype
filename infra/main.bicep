@@ -22,6 +22,9 @@ param productName string
 @description('Name of the resource group')
 param resourceGroupName string
 
+@description('Specify if role assignments should be deployed')
+param deployRoleAssignments bool = true
+
 // Tags that should be applied to all resources.
 // 
 // Note that 'azd-service-name' tags should be applied separately to service host resources.
@@ -80,9 +83,11 @@ module monitoring './shared/monitoring.bicep' = {
 module api './app/api.bicep' = {
   name: 'api'
   params: {
+    name: '${resourceGroupName}-${abbrs.appContainerApps}api'
     location: location
     tags: tags
     identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}api'
+    deployRoleAssignments: deployRoleAssignments
   }
   scope: rg
 }
@@ -91,9 +96,11 @@ module api './app/api.bicep' = {
 module web './app/web.bicep' = {
   name: 'web'
   params: {
+    name: '${resourceGroupName}-${abbrs.appContainerApps}web'
     location: location
     tags: tags
     identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}web'
+    deployRoleAssignments: deployRoleAssignments
   }
   scope: rg
 }
