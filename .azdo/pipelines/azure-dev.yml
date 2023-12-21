@@ -3,6 +3,12 @@ trigger:
   - main
 pr: none
 
+parameters:
+- name: deployRoleAssignments
+  displayName: 'Deploy role assignments?'
+  type: boolean
+  default: false
+
 jobs:
 - deployment: All
   displayName: All
@@ -31,3 +37,5 @@ jobs:
               AZURE_ENV_NAME: $(Environment.Name)
               AZURE_LOCATION: $(AZURE_LOCATION)
               AZURE_RESOURCE_GROUP_NAME: ${AZURE_RESOURCE_GROUP_NAME}
+              PRODUCT_NAME: ${PRODUCT_NAME}
+              DEPLOY_ROLE_ASSIGNMENTS: ${parameters.deployRoleAssignments}

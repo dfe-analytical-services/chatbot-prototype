@@ -15,7 +15,10 @@
       "value": "${AZURE_RESOURCE_GROUP_NAME}"
     },
     "productName": {
-      "value": "Statistics as a Service"
+      "value": "${PRODUCT_NAME}"
+    },
+    "deployRoleAssignments": {
+      "value": "${DEPLOY_ROLE_ASSIGNMENTS=true}"
     }
   }
 }
