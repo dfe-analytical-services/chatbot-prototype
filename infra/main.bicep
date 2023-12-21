@@ -76,15 +76,22 @@ module monitoring './shared/monitoring.bicep' = {
   scope: rg
 }
 
-// Container apps host
-module appsEnv './shared/container-apps-environment.bicep' = {
-  name: 'container-apps-environment'
+// Api container app
+module api './app/api.bicep' = {
+  name: 'api'
   params: {
-    name: '${resourceGroupName}-${abbrs.appManagedEnvironments}01'
     location: location
-    tags: tags
-    applicationInsightsName: monitoring.outputs.applicationInsightsName
-    logAnalyticsWorkspaceName: monitoring.outputs.logAnalyticsWorkspaceName
+    identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}api'
+  }
+  scope: rg
+}
+
+// Web container app
+module web './app/web.bicep' = {
+  name: 'web'
+  params: {
+    location: location
+    identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}web'
   }
   scope: rg
 }
