@@ -81,6 +81,7 @@ module api './app/api.bicep' = {
   name: 'api'
   params: {
     location: location
+    tags: tags
     identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}api'
   }
   scope: rg
@@ -91,6 +92,7 @@ module web './app/web.bicep' = {
   name: 'web'
   params: {
     location: location
+    tags: tags
     identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}web'
   }
   scope: rg
