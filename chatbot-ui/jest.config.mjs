@@ -1,5 +1,7 @@
 import nextJest from 'next/jest.js';
 
+process.env.NODE_ENV = 'test';
+
 const createJestConfig = nextJest({
   dir: './',
 });
