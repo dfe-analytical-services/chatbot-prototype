@@ -26,8 +26,11 @@ param resourceGroupName string
 param deployRoleAssignments bool = true
 
 param apiAppExists bool = false
+param webAppExists bool = false
 @secure()
 param apiAppDefinition object
+@secure()
+param webAppDefinition object
 
 // Tags that should be applied to all resources.
 // 
@@ -39,8 +42,8 @@ var tags = {
   Product: productName
 }
 
-var apiContainerAppNameOrDefault = '${abbrs.appContainerApps}web'
-var corsAcaUrl = 'https://${apiContainerAppNameOrDefault}.${containerAppsEnv.outputs.defaultDomain}'
+var webContainerAppNameOrDefault = '${abbrs.appContainerApps}web'
+var corsAcaUrl = 'https://${webContainerAppNameOrDefault}.${containerAppsEnv.outputs.defaultDomain}'
 
 var abbrs = loadJsonContent('./abbreviations.json')
 
@@ -128,6 +131,12 @@ module web './app/web.bicep' = {
     tags: tags
     identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}web'
     deployRoleAssignments: deployRoleAssignments
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    containerAppsEnvironmentName: containerAppsEnv.outputs.name
+    containerRegistryName: containerRegistry.outputs.name
+    keyVaultName: keyVault.outputs.name
+    exists: webAppExists
+    appDefinition: webAppDefinition
   }
   scope: rg
 }
