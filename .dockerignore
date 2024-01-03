@@ -3,4 +3,7 @@
 **/.env
 **/.git
 **/.gitignore
+**/.md
 **/Dockerfile
+**/node_modules
+**/.next
