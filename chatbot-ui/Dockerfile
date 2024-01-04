@@ -8,7 +8,7 @@ FROM base AS deps
 WORKDIR /app
 
 COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY chatbot-ui/package.json chatbot-ui/package-lock.json ./chatbot-ui/
+COPY chatbot-ui/package.json ./chatbot-ui/
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm --filter chatbot-ui install --frozen-lockfile
 
 FROM base AS builder
