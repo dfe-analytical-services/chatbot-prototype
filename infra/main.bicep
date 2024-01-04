@@ -102,6 +102,22 @@ module containerAppsEnv './shared/container-apps-environment.bicep' = {
   scope: rg
 }
 
+// Qdrant database service
+module db './shared/container-app-service.bicep' = {
+  name: 'db'
+  params: {
+    name: '${resourceGroupName}-${abbrs.appContainerApps}db'
+    location: location
+    tags: tags
+    containerAppsEnvironmentName: containerAppsEnv.outputs.name
+    serviceType: 'qdrant'
+    targetPort: 6333
+    containerMinReplicas: 1
+    containerMaxReplicas: 1
+  }
+  scope: rg
+}
+
 // Api container app
 module api './app/api.bicep' = {
   name: 'api'
@@ -112,6 +128,7 @@ module api './app/api.bicep' = {
     identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}api'
     deployRoleAssignments: deployRoleAssignments
     applicationInsightsName: monitoring.outputs.applicationInsightsName
+    dbServiceName: db.outputs.name
     containerAppsEnvironmentName: containerAppsEnv.outputs.name
     containerRegistryName: containerRegistry.outputs.name
     keyVaultName: keyVault.outputs.name
