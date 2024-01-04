@@ -1,10 +1,15 @@
 import { Message } from '@/hooks/useChatbot';
 
-const api_url =
-  process.env.NEXT_PUBLIC_CHAT_URL_API ?? 'http://localhost:8010/api/chat';
-
 const strangle_api = process.env.NEXT_TEMP_STRANGLE_API ?? false;
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+let apiUrl = '';
+
+export function initChatbotService(url: string) {
+  if (!apiUrl) {
+    apiUrl = url;
+  }
+}
 
 const parseResponseFromAPI = async (response: Response): Promise<Message> => {
   const data = response.body;
@@ -49,7 +54,7 @@ const sendMessage = async (message: string): Promise<Message> => {
     return fakeMessage;
   }
 
-  const response = await fetch(api_url, {
+  const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -66,6 +71,9 @@ const sendMessage = async (message: string): Promise<Message> => {
 
 const ChatBotService = {
   sendUserMessage(message: string): Promise<Message> {
+    if (!apiUrl) {
+      throw new Error('Not initialised');
+    }
     return sendMessage(message);
   },
 };
