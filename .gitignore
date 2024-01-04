@@ -24,8 +24,10 @@ ehthumbs.db
 Thumbs.db
 
 # Frontend #
-chatbot-ui/.next/
 node_modules
 tsconfig.tsbuildinfo
+chatbot-ui/!.env.example
+chatbot-ui/.env.*
+chatbot-ui/.next/
 chatbot-ui/coverage/
 chatbot-ui/junit.xml
