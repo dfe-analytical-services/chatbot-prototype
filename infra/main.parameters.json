@@ -23,7 +23,15 @@
     "apiAppExists": {
       "value": "${SERVICE_API_RESOURCE_EXISTS=false}"
     },
+    "webAppExists": {
+      "value": "${SERVICE_WEB_RESOURCE_EXISTS=false}"
+    },
     "apiAppDefinition": {
+      "value": {
+        "settings": []
+      }
+    },
+    "webAppDefinition": {
       "value": {
         "settings": []
       }
