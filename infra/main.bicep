@@ -136,6 +136,7 @@ module web './app/web.bicep' = {
     containerRegistryName: containerRegistry.outputs.name
     exists: webAppExists
     appDefinition: webAppDefinition
+    apiBaseUrl: api.outputs.uri
   }
   scope: rg
 }
