@@ -42,7 +42,7 @@ var tags = {
   Product: productName
 }
 
-var webContainerAppNameOrDefault = '${abbrs.appContainerApps}web'
+var webContainerAppNameOrDefault = '${resourceGroupName}-${abbrs.appContainerApps}web'
 var corsAcaUrl = 'https://${webContainerAppNameOrDefault}.${containerAppsEnv.outputs.defaultDomain}'
 
 var abbrs = loadJsonContent('./abbreviations.json')
@@ -136,6 +136,7 @@ module web './app/web.bicep' = {
     containerRegistryName: containerRegistry.outputs.name
     exists: webAppExists
     appDefinition: webAppDefinition
+    apiBaseUrl: api.outputs.uri
   }
   scope: rg
 }
