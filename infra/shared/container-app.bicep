@@ -74,7 +74,7 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-05-01'
   name: containerAppsEnvironmentName
 }
 
-resource existingApp 'Microsoft.App/containerApps@2023-04-01-preview' existing = if (exists) {
+resource existingApp 'Microsoft.App/containerApps@2023-05-01' existing = if (exists) {
   name: name
 }
 
@@ -82,7 +82,7 @@ resource userIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-
   name: identityName
 }
 
-resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
+resource app 'Microsoft.App/containerApps@2023-05-01' = {
   name: name
   location: location
   tags: tags
