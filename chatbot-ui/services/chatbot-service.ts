@@ -1,8 +1,5 @@
 import { Message } from '@/hooks/useChatbot';
 
-const strangle_api = process.env.NEXT_TEMP_STRANGLE_API ?? false;
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
 let apiUrl = '';
 
 export function initChatbotService(url: string) {
@@ -44,16 +41,6 @@ const parseResponseFromAPI = async (response: Response): Promise<Message> => {
 };
 
 const sendMessage = async (message: string): Promise<Message> => {
-  if (strangle_api) {
-    await delay(3000);
-
-    const fakeMessage: Message = {
-      content: 'This is a fake mocked out message',
-      type: 'apiMessage',
-    };
-    return fakeMessage;
-  }
-
   const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
