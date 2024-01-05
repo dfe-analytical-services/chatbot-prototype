@@ -86,7 +86,7 @@ module app '../shared/container-app.bicep' = {
       }
       {
         name: 'API_ALLOW_ORIGINS'
-        value: corsAcaUrl
+        value: string(array(corsAcaUrl))
       }
     ],
     env,

@@ -11,6 +11,7 @@ param applicationInsightsName string
 param exists bool
 @secure()
 param appDefinition object
+param apiBaseUrl string
 
 var appSettingsArray = filter(array(appDefinition.settings), i => i.name != '')
 var secrets = map(filter(appSettingsArray, i => i.?secret != null), i => {
@@ -64,6 +65,10 @@ module app '../shared/container-app.bicep' = {
       {
         name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
         value: applicationInsights.properties.ConnectionString
+      }
+      {
+        name: 'CHAT_URL_API'
+        value: uri(apiBaseUrl, 'api/chat')
       }
     ],
     env,
