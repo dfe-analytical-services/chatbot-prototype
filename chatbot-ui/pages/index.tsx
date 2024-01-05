@@ -33,9 +33,7 @@ export default function Home({
 export const getServerSideProps = (async () => {
   return {
     props: {
-      apiUrl:
-        process.env.NEXT_PUBLIC_CHAT_URL_API ??
-        'http://localhost:8010/api/chat',
+      apiUrl: process.env.CHAT_URL_API ?? 'http://localhost:8010/api/chat',
     },
   };
 }) satisfies GetServerSideProps<{ apiUrl: string }>;
