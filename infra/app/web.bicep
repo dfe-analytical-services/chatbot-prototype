@@ -5,7 +5,6 @@ param tags object = {}
 param identityName string
 param deployRoleAssignments bool = true
 param containerRegistryName string
-param keyVaultName string
 param serviceName string = 'web'
 param containerAppsEnvironmentName string
 param applicationInsightsName string
@@ -34,10 +33,6 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' existing
   name: applicationInsightsName
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
-  name: keyVaultName
-}
-
 // Assign access to the ACR
 module containerRegistryAccess '../shared/container-registry-access.bicep' = if (deployRoleAssignments) {
   name: '${name}-container-registry-access'
@@ -46,18 +41,9 @@ module containerRegistryAccess '../shared/container-registry-access.bicep' = if 
   }
 }
 
-// Assign access to the key vault
-module webKeyVaultAccess '../shared/keyvault-access.bicep' = {
-  name: '${name}-keyvault-access'
-  params: {
-    keyVaultName: keyVaultName
-    principalId: webIdentity.properties.principalId
-  }
-}
-
 module app '../shared/container-app.bicep' = {
   name: '${serviceName}-container-app'
-  dependsOn: deployRoleAssignments ? [ containerRegistryAccess, webKeyVaultAccess ] : [ webKeyVaultAccess ]
+  dependsOn: deployRoleAssignments ? [ containerRegistryAccess ] : []
   params: {
     name: name
     location: location
@@ -74,10 +60,6 @@ module app '../shared/container-app.bicep' = {
       {
         name: 'AZURE_CLIENT_ID'
         value: webIdentity.properties.clientId
-      }
-      {
-        name: 'AZURE_KEY_VAULT_ENDPOINT'
-        value: keyVault.properties.vaultUri
       }
       {
         name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
