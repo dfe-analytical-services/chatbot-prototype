@@ -36,8 +36,8 @@ jobs:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      Python311:
-        python.version: '3.11'
+      Python312:
+        python.version: '3.12'
   displayName: 'Create Data Ingestion API Artifact'
   steps:
     - template: templates/python-steps.yaml
@@ -60,8 +60,8 @@ jobs:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      Python311:
-        python.version: '3.11'
+      Python312:
+        python.version: '3.12'
   displayName: 'Create Response Automater API Artifact'
   steps:
     - template: templates/python-steps.yaml
@@ -78,5 +78,3 @@ jobs:
     - publish: $(Build.ArtifactStagingDirectory)/ResponseAutomaterAPI/ResponseAutomaterAPI$(Build.BuildId).zip
       displayName: 'Upload Response Automater'
       artifact: ResponseAutomaterAPI
-
-

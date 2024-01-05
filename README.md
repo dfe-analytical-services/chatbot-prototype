@@ -21,7 +21,7 @@ The latter fastapi server exposes the Qdrant, openai and langchain apis. This me
 
 ## Prerequisites
 
-- [Python](https://www.python.org/downloads/) version 3.11 or higher installed on your system.
+- [Python](https://www.python.org/downloads/) version 3.12.0 installed on your system.
 - [Docker](https://www.docker.com/get-started) installed and running on your system.
 - [Pipenv](https://pipenv.pypa.io/en/latest/) for managing Python dependencies.
 - [npm](https://nodejs.org/en/download) for managing frontend dependencies.

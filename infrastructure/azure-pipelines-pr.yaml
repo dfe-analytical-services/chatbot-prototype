@@ -47,8 +47,8 @@ jobs:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      Python311:
-        python.version: '3.11'
+      Python312:
+        python.version: '3.12'
   displayName: 'Data Ingestion API Tests'
   steps:
     - template: templates/python-steps.yaml
@@ -77,8 +77,8 @@ jobs:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      Python311:
-        python.version: '3.11'
+      Python312:
+        python.version: '3.12'
   displayName: 'Response Automater Tests'
   steps:
     - template: templates/python-steps.yaml
@@ -101,5 +101,3 @@ jobs:
       displayName: 'Collect Code Coverage'
       inputs: 
         summaryFileLocation: ./coverage.xml
-
-
