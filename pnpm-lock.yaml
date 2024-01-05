@@ -27,8 +27,8 @@ importers:
         specifier: ^2.3.2
         version: 2.3.2
       govuk-frontend:
-        specifier: ^5.0.0
-        version: 5.0.0
+        specifier: ^4.5.0
+        version: 4.7.0
       next:
         specifier: 14.0.4
         version: 14.0.4(@babel/core@7.23.3)(react-dom@18.2.0)(react@18.2.0)(sass@1.68.0)
@@ -4217,8 +4217,8 @@ packages:
     dependencies:
       get-intrinsic: 1.2.2
 
-  /govuk-frontend@5.0.0:
-    resolution: {integrity: sha512-3WSfvQ+3kw/q/m8jrq/t8XnMUA8D2r0uhGyZaDbIh1gWTJBQzJBHbHiKYI9nc9ixIXdCFsc9RozkgEm57a795g==}
+  /govuk-frontend@4.7.0:
+    resolution: {integrity: sha512-0OsdCusF5qvLWwKziU8zqxiC0nq6WP0ZQuw51ymZ/1V0tO71oIKMlSLN2S9bm8RcEGSoidPt2A34gKxePrLjvg==}
     engines: {node: '>= 4.2.0'}
     dev: false
 
