@@ -12,6 +12,12 @@ param location string
 @description('Id of the user or app to assign application roles')
 param principalId string
 
+@description('Id of the admin security group')
+param adminSecurityGroupId string
+
+@description('Id of the delivery team security group')
+param deliveryTeamSecurityGroupId string
+
 @minLength(1)
 @maxLength(64)
 @description('Name of the product to be used a value for the Product tag')
@@ -54,7 +60,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2023-07-01' = {
   tags: tags
 }
 
-// Store secrets in a keyvault
+// Store secrets in a key vault
 module keyVault './shared/keyvault.bicep' = {
   name: 'key-vault'
   params: {
@@ -62,6 +68,8 @@ module keyVault './shared/keyvault.bicep' = {
     tags: tags
     name: '${resourceGroupName}-${abbrs.keyVaultVaults}01'
     principalId: principalId
+    adminSecurityGroupId: adminSecurityGroupId
+    deliveryTeamSecurityGroupId: deliveryTeamSecurityGroupId
   }
   scope: rg
 }
