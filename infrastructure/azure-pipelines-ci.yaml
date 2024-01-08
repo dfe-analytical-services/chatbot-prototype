@@ -1,4 +1,4 @@
-name: 'Chatbot Prototype CI Pipeline'
+name: 'Support bot CI pipeline'
 
 trigger:
   - main

@@ -1,4 +1,4 @@
-name: 'Chatbot Prototype Pull Request Pipeline'
+name: 'Support bot PR pipeline'
 
 trigger: none
 pr:

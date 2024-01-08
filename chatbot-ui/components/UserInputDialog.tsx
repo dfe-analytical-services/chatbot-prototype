@@ -53,7 +53,7 @@ const UserInputDialog = ({ sendMessage, error: APIError, fetching }: Props) => {
           </label>
         </h1>
         <div id="question-hint" className="govuk-hint">
-          Ask whatever question you like...
+          Ask a question relevant to the Explore Education Statistics service...
         </div>
 
         {userInputError && <ErrorSummary error={userInputError} />}
