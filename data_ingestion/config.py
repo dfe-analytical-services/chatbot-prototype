@@ -1,3 +1,4 @@
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -7,7 +8,7 @@ class Settings(BaseSettings):
     ees_url_api_content: str = "http://localhost:5010/api"
     ees_url_api_data: str = "http://localhost:5000/api"
     ees_url_public_ui: str = "http://localhost:3000"
-    openai_api_key: str = "placeholder-value"
+    openai_api_key: str = Field(default="placeholder-value", alias="openai-api-key")
     openai_embedding_model: str = "text-embedding-ada-002"
     qdrant_collection: str = "ees"
     qdrant_host: str = "localhost"

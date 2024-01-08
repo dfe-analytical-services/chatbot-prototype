@@ -4,16 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+azure-identity = "==1.15.0"
+azure-keyvault-secrets = "==4.7.0"
 beautifulsoup4 = "==4.12.2"
 openai = "==0.28.1"
 fastapi = "==0.104.1"
 uvicorn = "==0.24.0.post1"
 asyncio = "==3.4.3"
-pydantic-settings = "2.0.3"
+pydantic-settings = "==2.1.0"
 python-dotenv = "==1.0.0"
 langchain = "==0.0.329"
 requests = "==2.31.0"
 qdrant-client = "==1.6.9"
+settus = "==0.0.9"
 
 [dev-packages]
 pytest = "==7.4.3"

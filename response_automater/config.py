@@ -1,11 +1,18 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+import os
+
+from settus import BaseSettings, Field, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore", populate_by_name=True)
 
     api_allow_origins: list[str] = ["http://localhost:3002"]
-    openai_api_key: str = "placeholder-value"
+    # TODO in a local environment without a key vault URL this variable should populate by name, i.e. from OPENAI_API_KEY but it doesn't work
+    # As a workaround the local .env file variable must match the alias name OPENAI-API-KEY which is the name in Azure key vault.
+    # This is different from the other environment variables which use snake case.
+    openai_api_key: str = Field(
+        default="placeholder-value", alias="openai-api-key", keyvault_url=os.getenv(key="AZURE_KEY_VAULT_ENDPOINT")
+    )
     openai_model: str = "gpt-4"
     openai_embedding_model: str = "text-embedding-ada-002"
     qdrant_collection: str = "ees"

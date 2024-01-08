@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from typing import AsyncIterable, Awaitable
 
 import openai
@@ -9,6 +10,11 @@ from qdrant_client import QdrantClient
 from ..config import settings
 from ..utils import makechain
 
+logger = logging.getLogger(__name__)
+
+openai.api_key = settings.openai_api_key
+db_client = QdrantClient(location=settings.qdrant_host, port=settings.qdrant_port)
+
 
 async def wrap_done(fn: Awaitable, event: asyncio.Event):
     """Wrap an awaitable with a event to signal when it's done or an exception is raised."""
@@ -18,14 +24,13 @@ async def wrap_done(fn: Awaitable, event: asyncio.Event):
 
 async def send_message(message: str) -> AsyncIterable[str]:
     callback = AsyncIteratorCallbackHandler()
-    client = QdrantClient(settings.qdrant_host, port=settings.qdrant_port)
 
     embeds = openai.Embedding.create(input=message, engine=settings.openai_embedding_model)
 
     chain = makechain(callback)
 
     # query the database
-    resp = client.search(
+    resp = db_client.search(
         collection_name=settings.qdrant_collection, query_vector=embeds["data"][0]["embedding"], limit=6
     )
 
