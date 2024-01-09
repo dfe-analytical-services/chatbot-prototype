@@ -31,7 +31,7 @@ param sku object = {
 @description('Zone redundancy setting')
 param zoneRedundancy string = 'Disabled'
 
-resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
+resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-01-01-preview' = {
   name: name
   location: location
   tags: tags

@@ -38,7 +38,7 @@ var deliveryTeamSecurityGroupAccessPolicies = !empty(deliveryTeamSecurityGroupId
 
 var defaultAccessPolicies = union(servicePrincipalAccessPolicies, adminSecurityGroupAccessPolicies, deliveryTeamSecurityGroupAccessPolicies)
 
-resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: name
   location: location
   tags: tags

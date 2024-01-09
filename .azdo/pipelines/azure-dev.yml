@@ -21,9 +21,15 @@ jobs:
       deploy:
         steps:
           - checkout: self
+          - script: |
+              sudo apt-get update
+              az --version
+              az upgrade --y
+              az --version
+            displayName: Upgrade Azure CLI
           - pwsh: |
               azd config set auth.useAzCliAuth "true"
-            displayName: Configure AZD to use AZ CLI authentication
+            displayName: Configure AZD to use Azure CLI authentication
           - task: AzureCLI@2
             displayName: Provision infrastructure
             inputs:
@@ -31,7 +37,7 @@ jobs:
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                azd provision --no-prompt
+                azd provision --no-prompt --preview
             env:
               AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
               AZURE_ENV_NAME: $(Environment.Name)
@@ -40,6 +46,7 @@ jobs:
               PRODUCT_NAME: ${PRODUCT_NAME}
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
           - task: AzureCLI@2
+            condition: false
             displayName: Azure Dev Deploy
             inputs:
               azureSubscription: $(SERVICE_CONNECTION_NAME)
