@@ -42,7 +42,7 @@ module containerRegistryAccess '../shared/container-registry-access.bicep' = if 
   }
 }
 
-module app '../shared/container-app.bicep' = {
+module app '../shared/container-app-upsert.bicep' = {
   name: '${serviceName}-container-app'
   dependsOn: deployRoleAssignments ? [ containerRegistryAccess ] : []
   params: {

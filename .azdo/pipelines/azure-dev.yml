@@ -4,10 +4,18 @@ trigger:
 pr: none
 
 parameters:
+- name: provisionInfrastructure
+  displayName: 'Provision infrastructure resources?'
+  type: boolean
+  default: true
 - name: deployRoleAssignments
-  displayName: 'Deploy role assignments?'
+  displayName: 'Deploy role assignments during infrastructure provision?'
   type: boolean
   default: false
+- name: deployServices
+  displayName: 'Deploy all application services?'
+  type: boolean
+  default: true
 
 jobs:
 - deployment: All
@@ -26,6 +34,7 @@ jobs:
             displayName: Configure AZD to use Azure CLI authentication
           - task: AzureCLI@2
             displayName: Provision infrastructure
+            condition: ${{ parameters.provisionInfrastructure }}
             inputs:
               azureSubscription: $(SERVICE_CONNECTION_NAME)
               scriptType: bash
@@ -41,14 +50,14 @@ jobs:
               PRODUCT_NAME: ${PRODUCT_NAME}
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
           - task: AzureCLI@2
-            condition: false
-            displayName: Azure Dev Deploy
+            displayName: Deploy all services
+            condition: ${{ parameters.deployServices }}
             inputs:
               azureSubscription: $(SERVICE_CONNECTION_NAME)
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                azd deploy --no-prompt
+                azd deploy --no-prompt --all
             env:
               AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
               AZURE_ENV_NAME: $(Environment.Name)
