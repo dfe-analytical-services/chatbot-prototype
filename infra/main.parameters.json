@@ -29,10 +29,18 @@
     "apiAppExists": {
       "value": "${SERVICE_API_RESOURCE_EXISTS=false}"
     },
+    "dataManagerApiAppExists": {
+      "value": "${SERVICE_DATA_MANAGER_API_RESOURCE_EXISTS=false}"
+    },
     "webAppExists": {
       "value": "${SERVICE_WEB_RESOURCE_EXISTS=false}"
     },
     "apiAppDefinition": {
+      "value": {
+        "settings": []
+      }
+    },
+    "dataManagerApiAppDefinition": {
       "value": {
         "settings": []
       }

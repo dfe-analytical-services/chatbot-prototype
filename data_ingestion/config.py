@@ -1,5 +1,6 @@
-from pydantic import Field
-from pydantic_settings import BaseSettings, SettingsConfigDict
+import os
+
+from settus import BaseSettings, Field, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -8,7 +9,12 @@ class Settings(BaseSettings):
     ees_url_api_content: str = "http://localhost:5010/api"
     ees_url_api_data: str = "http://localhost:5000/api"
     ees_url_public_ui: str = "http://localhost:3000"
-    openai_api_key: str = Field(default="placeholder-value", alias="openai-api-key")
+    # TODO in a local environment without a key vault URL this variable should populate by name, i.e. from OPENAI_API_KEY but it doesn't work
+    # As a workaround the local .env file variable must match the alias name OPENAI-API-KEY which is the name in Azure key vault.
+    # This is different from the other environment variables which use snake case.
+    openai_api_key: str = Field(
+        default="placeholder-value", alias="openai-api-key", keyvault_url=os.getenv(key="AZURE_KEY_VAULT_ENDPOINT")
+    )
     openai_embedding_model: str = "text-embedding-ada-002"
     qdrant_collection: str = "ees"
     qdrant_host: str = "localhost"

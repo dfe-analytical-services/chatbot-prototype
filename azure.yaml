@@ -13,6 +13,12 @@ services:
       path: ./Dockerfile
       context: ../
     language: python
+#  data-manager-api:
+#    project: data_ingestion
+#    host: containerapp
+#    docker:
+#      path: ./Dockerfile
+#      context: ../
   web:
     project: chatbot-ui
     host: containerapp

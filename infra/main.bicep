@@ -32,9 +32,12 @@ param resourceGroupName string
 param deployRoleAssignments bool = true
 
 param apiAppExists bool = false
+param dataManagerAppExists bool = false
 param webAppExists bool = false
 @secure()
 param apiAppDefinition object
+@secure()
+param dataManagerAppDefinition object
 @secure()
 param webAppDefinition object
 
@@ -143,6 +146,26 @@ module api './app/api.bicep' = {
     corsAcaUrl: corsAcaUrl
     exists: apiAppExists
     appDefinition: apiAppDefinition
+  }
+  scope: rg
+}
+
+// Data Manager container app
+module dataManager './app/data-manager.bicep' = {
+  name: 'data-manager'
+  params: {
+    name: '${resourceGroupName}-${abbrs.appContainerApps}data-mgr'
+    location: location
+    tags: tags
+    identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}data-mgr'
+    deployRoleAssignments: deployRoleAssignments
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    dbServiceName: db.outputs.name
+    containerAppsEnvironmentName: containerAppsEnv.outputs.name
+    containerRegistryName: containerRegistry.outputs.name
+    keyVaultName: keyVault.outputs.name
+    exists: dataManagerAppExists
+    appDefinition: dataManagerAppDefinition
   }
   scope: rg
 }
