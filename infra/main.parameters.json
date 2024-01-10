@@ -29,12 +29,33 @@
     "apiAppExists": {
       "value": "${SERVICE_API_RESOURCE_EXISTS=false}"
     },
+    "dataManagerAppExists": {
+      "value": "${SERVICE_DATA_MGR_RESOURCE_EXISTS=false}"
+    },
     "webAppExists": {
       "value": "${SERVICE_WEB_RESOURCE_EXISTS=false}"
     },
     "apiAppDefinition": {
       "value": {
         "settings": []
+      }
+    },
+    "dataManagerAppDefinition": {
+      "value": {
+        "settings": [
+          {
+            "name": "EES_URL_API_CONTENT",
+            "value": "${EES_URL_API_CONTENT}"
+          },
+          {
+            "name": "EES_URL_API_DATA",
+            "value": "${EES_URL_API_DATA}"
+          },
+          {
+            "name": "EES_URL_PUBLIC_UI",
+            "value": "${EES_URL_PUBLIC_UI}"
+          }
+        ]
       }
     },
     "webAppDefinition": {
