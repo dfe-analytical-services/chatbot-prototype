@@ -12,7 +12,7 @@ describe('useChatbot', () => {
     const { messages } = result.current;
     expect(messages).toHaveLength(1);
     expect(messages[0].content).toBe(
-      'Hi, what would you like to know about the latest publications on EES?',
+      'Hi, what would you like to know about Explore Education Statistics?',
     );
   });
 
@@ -25,7 +25,7 @@ describe('useChatbot', () => {
     const { messages } = result.current;
     expect(messages).toHaveLength(1);
     expect(messages[0].content).toBe(
-      'Hi, what would you like to know about the latest publications on EES?',
+      'Hi, what would you like to know about Explore Education Statistics?',
     );
 
     await act(() => result.current.sendMessage('I am a message'));

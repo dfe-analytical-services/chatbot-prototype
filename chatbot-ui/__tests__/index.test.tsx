@@ -6,6 +6,6 @@ describe('Home Page', () => {
   it('Renders', () => {
     render(<Home />);
 
-    expect(screen.getByText('Chatbot prototype')).toBeInTheDocument();
+    expect(screen.getByText('Support bot')).toBeInTheDocument();
   });
 });

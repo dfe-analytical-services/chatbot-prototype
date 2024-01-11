@@ -7,7 +7,7 @@ function useChatbot(): UseChatbotState {
   const [messageHistory, setMessageHistory] = useState<Message[]>([
     {
       content:
-        'Hi, what would you like to know about the latest publications on EES?',
+        'Hi, what would you like to know about Explore Education Statistics?',
       type: 'apiMessage',
     },
   ]);

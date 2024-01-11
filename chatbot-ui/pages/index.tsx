@@ -9,7 +9,7 @@ function Home() {
   const { messages, sendMessage, fetching, error } = useChatbot();
 
   return (
-    <Page title="Chatbot prototype">
+    <Page title="Support bot">
       <>
         {error && <ErrorSummary error={error} />}
 
