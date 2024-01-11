@@ -13,7 +13,12 @@ jobs:
     vmImage: ubuntu-latest
   displayName: 'Create Chatbot UI Artifact'
   steps:
+    env:
+      BUILD_NUMBER: $(Build.BuildNumber)
+    
     - template: templates/pnpm-steps.yaml
+
+    - script: echo $(Build.BuildNumber) #Temp step to check Run Number. Will remove soon
 
     - task: CopyFiles@2
       inputs:
