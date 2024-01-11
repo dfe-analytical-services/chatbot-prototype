@@ -1,8 +1,17 @@
-interface Props {}
+import classNames from 'classnames';
+import React from 'react';
 
-const PageFooter = ({}: Props) => (
+interface Props {
+  wide?: boolean;
+}
+
+const PageFooter = ({ wide }: Props) => (
   <footer className="govuk-footer" role="contentinfo">
-    <div className="govuk-width-container ">
+    <div
+      className={classNames('govuk-width-container', {
+        'dfe-width-container--wide': wide,
+      })}
+    >
       <div className="govuk-footer__meta">
         <div className="govuk-footer__meta-item govuk-footer__meta-item--grow">
           <h2 className="govuk-visually-hidden">Support links</h2>
@@ -38,13 +47,18 @@ const PageFooter = ({}: Props) => (
               </a>
             </li>
           </ul>
-          {process.env.BUILD_NUMBER && (
-            <div className="govuk-footer__meta-custom">
-              Build number: {process.env.BUILD_NUMBER}
-            </div>
-          )}
+          <div className="govuk-footer__meta-custom">
+            Our statistical practice is regulated by the{' '}
+            <a
+              className="govuk-footer__link"
+              href="https://osr.statisticsauthority.gov.uk/what-we-do/"
+            >
+              Office for Statistics Regulation
+            </a>{' '}
+            (OSR)
+          </div>
           <svg
-            aria-hidden="true"
+            role="presentation"
             focusable="false"
             className="govuk-footer__licence-logo"
             xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +72,7 @@ const PageFooter = ({}: Props) => (
             />
           </svg>
           <span className="govuk-footer__licence-description">
-            All content is available under the
+            All content is available under the{' '}
             <a
               className="govuk-footer__link"
               href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
@@ -68,6 +82,15 @@ const PageFooter = ({}: Props) => (
             </a>
             , except where otherwise stated
           </span>
+
+          {process.env.BUILD_NUMBER && (
+            <p
+              aria-hidden
+              className="govuk-!-margin-top-3 govuk-!-font-size-14"
+            >
+              Build: {process.env.BUILD_NUMBER}
+            </p>
+          )}
         </div>
         <div className="govuk-footer__meta-item">
           <a
