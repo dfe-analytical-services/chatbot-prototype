@@ -32,7 +32,7 @@ describe('Page Footer', () => {
 
     render(<PageFooter />);
 
-    expect(screen.queryByText('Build number: Testing123')).toBeNull();
+    expect(screen.queryByText('Build: Testing123')).toBeNull();
   });
 
   it('Displays the expected links', () => {
