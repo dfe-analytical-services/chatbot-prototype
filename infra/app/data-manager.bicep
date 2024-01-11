@@ -6,11 +6,10 @@ param identityName string
 param deployRoleAssignments bool = true
 param containerRegistryName string
 param keyVaultName string
-param serviceName string = 'api'
+param serviceName string = 'data-mgr'
 param dbServiceName string
 param containerAppsEnvironmentName string
 param applicationInsightsName string
-param corsAcaUrl string
 param exists bool
 @secure()
 param appDefinition object
@@ -26,7 +25,7 @@ var env = map(filter(appSettingsArray, i => i.?secret == null), i => {
   value: i.value
 })
 
-resource apiIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+resource dataManagerIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: identityName
   location: location
   tags: tags
@@ -48,7 +47,7 @@ resource db 'Microsoft.App/containerApps@2023-04-01-preview' existing = {
 module containerRegistryAccess '../shared/container-registry-access.bicep' = if (deployRoleAssignments) {
   name: '${name}-container-registry-access'
   params: {
-    principalId: apiIdentity.properties.principalId
+    principalId: dataManagerIdentity.properties.principalId
   }
 }
 
@@ -57,7 +56,7 @@ module keyVaultAccess '../shared/keyvault-access.bicep' = {
   name: '${name}-keyvault-access'
   params: {
     keyVaultName: keyVaultName
-    principalId: apiIdentity.properties.principalId
+    principalId: dataManagerIdentity.properties.principalId
   }
 }
 
@@ -68,7 +67,7 @@ module app '../shared/container-app-upsert.bicep' = {
     name: name
     location: location
     tags: union(tags, { 'azd-service-name': serviceName })
-    identityName: apiIdentity.name
+    identityName: dataManagerIdentity.name
     exists: exists
     containerAppsEnvironmentName: containerAppsEnvironmentName
     containerRegistryName: containerRegistryName
@@ -79,7 +78,7 @@ module app '../shared/container-app-upsert.bicep' = {
     env: union([
       {
         name: 'AZURE_CLIENT_ID'
-        value: apiIdentity.properties.clientId
+        value: dataManagerIdentity.properties.clientId
       }
       {
         name: 'AZURE_KEY_VAULT_ENDPOINT'
@@ -88,10 +87,6 @@ module app '../shared/container-app-upsert.bicep' = {
       {
         name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
         value: applicationInsights.properties.ConnectionString
-      }
-      {
-        name: 'API_ALLOW_ORIGINS'
-        value: string(array(corsAcaUrl))
       }
     ],
     env,
@@ -111,7 +106,7 @@ module app '../shared/container-app-upsert.bicep' = {
         name: db.name
       }
     ]
-    targetPort: 8010
+    targetPort: 8000
   }
 }
 

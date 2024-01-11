@@ -33,6 +33,18 @@ jobs:
               azd config set auth.useAzCliAuth "true"
             displayName: Configure AZD to use Azure CLI authentication
           - task: AzureCLI@2
+            displayName: Refresh environment if not re-provisioning infrastructure
+            condition: ${{ not(parameters.provisionInfrastructure) }}
+            inputs:
+              azureSubscription: $(SERVICE_CONNECTION_NAME)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                azd env refresh --no-prompt
+            env:
+              AZURE_ENV_NAME: $(Environment.Name)
+              DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
+          - task: AzureCLI@2
             displayName: Provision infrastructure
             condition: ${{ parameters.provisionInfrastructure }}
             inputs:
@@ -43,11 +55,7 @@ jobs:
                 azd provision --no-prompt --preview
                 azd provision --no-prompt
             env:
-              AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
               AZURE_ENV_NAME: $(Environment.Name)
-              AZURE_LOCATION: $(AZURE_LOCATION)
-              AZURE_RESOURCE_GROUP_NAME: ${AZURE_RESOURCE_GROUP_NAME}
-              PRODUCT_NAME: ${PRODUCT_NAME}
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
           - task: AzureCLI@2
             displayName: Deploy all services
@@ -59,9 +67,5 @@ jobs:
               inlineScript: |
                 azd deploy --no-prompt --all
             env:
-              AZURE_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
               AZURE_ENV_NAME: $(Environment.Name)
-              AZURE_LOCATION: $(AZURE_LOCATION)
-              AZURE_RESOURCE_GROUP_NAME: ${AZURE_RESOURCE_GROUP_NAME}
-              PRODUCT_NAME: ${PRODUCT_NAME}
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
