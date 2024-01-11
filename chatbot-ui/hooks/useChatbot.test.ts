@@ -63,4 +63,35 @@ describe('useChatbot', () => {
       'An error occurred while fetching the data. Please try again.',
     );
   });
+
+  it('Resets the error state after sending a new message', async () => {
+    ChatBotService.sendUserMessage.mockRejectedValue('I am the error');
+    const { result } = renderHook(() => useChatbot());
+
+    await act(() => result.current.sendMessage('I am a message'));
+
+    await waitFor(() => {
+      expect(ChatBotService.sendUserMessage).toHaveBeenCalledWith(
+        'I am a message',
+      );
+    });
+
+    const { error, messages: updatedMessages } = result.current;
+    expect(updatedMessages).toHaveLength(2);
+
+    expect(error).toBe(
+      'An error occurred while fetching the data. Please try again.',
+    );
+
+    ChatBotService.sendUserMessage.mockResolvedValue({
+      content: 'I am a future successful message',
+      type: 'apiMessage',
+    });
+
+    await act(() => result.current.sendMessage('I am a second message'));
+
+    const { error: errorTwo, messages: updatedMessagesTwo } = result.current;
+    expect(updatedMessagesTwo).toHaveLength(4);
+    expect(errorTwo).toBeNull();
+  });
 });

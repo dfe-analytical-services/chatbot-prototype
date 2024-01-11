@@ -3,7 +3,7 @@ import { UseChatbotState } from '@/hooks/useChatbot';
 import ErrorSummary from '@/components/ErrorSummary';
 import classNames from 'classnames';
 
-const UserInputDialog = ({ sendMessage, error: APIError, fetching }: Props) => {
+const UserInputDialog = ({ sendMessage, fetching }: Props) => {
   const [query, setQuery] = useState<string>('');
   const [userInputError, setUserInputError] = useState<string | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -59,7 +59,7 @@ const UserInputDialog = ({ sendMessage, error: APIError, fetching }: Props) => {
         {userInputError && <ErrorSummary error={userInputError} />}
         <textarea
           className="govuk-textarea"
-          disabled={fetching || APIError !== null}
+          disabled={fetching}
           onKeyDown={handleKeyDown}
           ref={textAreaRef}
           rows={3}
@@ -90,6 +90,6 @@ const UserInputDialog = ({ sendMessage, error: APIError, fetching }: Props) => {
   );
 };
 
-interface Props extends Omit<UseChatbotState, 'messages'> {}
+interface Props extends Omit<UseChatbotState, 'messages' | 'error'> {}
 
 export default UserInputDialog;

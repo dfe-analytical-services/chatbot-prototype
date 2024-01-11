@@ -9,7 +9,6 @@ describe('Message history', () => {
       <UserInputDialog
         sendMessage={() => Promise.resolve()}
         fetching={false}
-        error=""
       />,
     );
 
@@ -20,9 +19,7 @@ describe('Message history', () => {
 
   it('Calls `sendMessage` when successfully submitted', async () => {
     const handleSend = jest.fn();
-    render(
-      <UserInputDialog sendMessage={handleSend} fetching={false} error="" />,
-    );
+    render(<UserInputDialog sendMessage={handleSend} fetching={false} />);
 
     fireEvent.change(screen.getByLabelText('What is your question?'), {
       target: { value: 'Is the ski village on fire?' },
@@ -37,9 +34,7 @@ describe('Message history', () => {
 
   it('Shows an error message when submitted without a question', async () => {
     const handleSend = jest.fn();
-    render(
-      <UserInputDialog sendMessage={handleSend} fetching={false} error="" />,
-    );
+    render(<UserInputDialog sendMessage={handleSend} fetching={false} />);
 
     await userEvent.click(screen.getByRole('button', { name: 'Send' }));
 
