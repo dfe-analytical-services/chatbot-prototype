@@ -38,6 +38,11 @@ const PageFooter = ({}: Props) => (
               </a>
             </li>
           </ul>
+          {process.env.BUILD_NUMBER && (
+            <div className="govuk-footer__meta-custom">
+              Build number: {process.env.BUILD_NUMBER}
+            </div>
+          )}
           <svg
             aria-hidden="true"
             focusable="false"
