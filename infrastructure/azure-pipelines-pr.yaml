@@ -1,4 +1,4 @@
-name: SupportBot_PR_$(Date:yyyyMMdd)$(Rev:.r)
+name: 'Support bot PR pipeline'
 
 trigger: none
 pr:

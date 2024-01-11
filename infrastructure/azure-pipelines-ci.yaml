@@ -1,4 +1,4 @@
-name: SupportBot_$(Date:yyyyMMdd)$(Rev:.r)
+name: 'Support bot CI pipeline'
 
 trigger:
   - main
@@ -6,7 +6,6 @@ pr: none
 
 variables:
   pnpm_config_cache: $(Pipeline.Workspace)/.pnpm-store
-  BUILD_NUMBER: $(Build.BuildNumber)
 
 jobs:
 - job: 'chatbot_ui'
@@ -15,8 +14,6 @@ jobs:
   displayName: 'Create Chatbot UI Artifact'
   steps:
     - template: templates/pnpm-steps.yaml
-
-    - script: echo $(Build.BuildNumber) #Temp step to check Run Number. Will remove soon
 
     - task: CopyFiles@2
       inputs:
