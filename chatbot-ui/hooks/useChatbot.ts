@@ -17,6 +17,7 @@ function useChatbot(): UseChatbotState {
   };
 
   const sendMessage = async (userInput: string) => {
+    setError(null);
     const userMessage: Message = { content: userInput, type: 'userMessage' };
     recordMessageInHistory([userMessage]);
     setFetching(true);
