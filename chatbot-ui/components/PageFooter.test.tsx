@@ -2,10 +2,37 @@ import { render, screen } from '@testing-library/react';
 import PageFooter from '@/components/PageFooter';
 
 describe('Page Footer', () => {
+  const OLD_ENV = process.env;
+
+  beforeEach(() => {
+    jest.resetModules();
+    process.env = { ...OLD_ENV };
+  });
+
+  afterAll(() => {
+    process.env = OLD_ENV;
+  });
+
   it('Renders', () => {
     render(<PageFooter />);
 
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+  });
+
+  it('Displays the build number if one is present', () => {
+    process.env.BUILD_NUMBER = 'Testing123';
+
+    render(<PageFooter />);
+
+    expect(screen.getByText('Build number: Testing123')).toBeInTheDocument();
+  });
+
+  it('Hides the build number if one is absent', () => {
+    process.env.BUILD_NUMBER = undefined;
+
+    render(<PageFooter />);
+
+    expect(screen.queryByText('Build number: Testing123')).toBeNull();
   });
 
   it('Displays the expected links', () => {
