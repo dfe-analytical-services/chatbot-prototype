@@ -7,10 +7,10 @@ from ..config import settings
 logger = logging.getLogger(__name__)
 
 
-def fetch_data_block(release_id: str, data_block_id: str, key_statistic: dict[str, str], index: int) -> str:
+def fetch_data_block(release_id: str, data_block_parent_id: str, key_statistic: dict[str, str]) -> str:
     try:
         response = requests.get(
-            url=f"{settings.ees_url_api_data}/tablebuilder/release/{release_id}/data-block/{data_block_id}"
+            url=f"{settings.ees_url_api_data}/tablebuilder/release/{release_id}/data-block/{data_block_parent_id}"
         )
         response.raise_for_status()
         response_json = response.json()
@@ -26,8 +26,8 @@ def fetch_data_block(release_id: str, data_block_id: str, key_statistic: dict[st
         measure = key_statistic["statistic"]
     try:
         trend = key_statistic["trend"]
-        data_string: str = f"{index + 1}: {label}-{measure} {trend}."
+        data_string: str = f"{label} - {measure} {trend}."
     except Exception:
-        data_string = f"{index + 1}: {label}-{measure}."
+        data_string = f"{label} - {measure}."
 
     return data_string
