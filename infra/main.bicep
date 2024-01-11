@@ -12,6 +12,12 @@ param location string
 @description('Id of the user or app to assign application roles')
 param principalId string
 
+@description('Id of the admin security group')
+param adminSecurityGroupId string
+
+@description('Id of the delivery team security group')
+param deliveryTeamSecurityGroupId string
+
 @minLength(1)
 @maxLength(64)
 @description('Name of the product to be used a value for the Product tag')
@@ -26,8 +32,11 @@ param resourceGroupName string
 param deployRoleAssignments bool = true
 
 param apiAppExists bool = false
+param webAppExists bool = false
 @secure()
 param apiAppDefinition object
+@secure()
+param webAppDefinition object
 
 // Tags that should be applied to all resources.
 // 
@@ -39,8 +48,8 @@ var tags = {
   Product: productName
 }
 
-var apiContainerAppNameOrDefault = '${abbrs.appContainerApps}web'
-var corsAcaUrl = 'https://${apiContainerAppNameOrDefault}.${containerAppsEnv.outputs.defaultDomain}'
+var webContainerAppNameOrDefault = '${resourceGroupName}-${abbrs.appContainerApps}web'
+var corsAcaUrl = 'https://${webContainerAppNameOrDefault}.${containerAppsEnv.outputs.defaultDomain}'
 
 var abbrs = loadJsonContent('./abbreviations.json')
 
@@ -51,7 +60,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2023-07-01' = {
   tags: tags
 }
 
-// Store secrets in a keyvault
+// Store secrets in a key vault
 module keyVault './shared/keyvault.bicep' = {
   name: 'key-vault'
   params: {
@@ -59,6 +68,8 @@ module keyVault './shared/keyvault.bicep' = {
     tags: tags
     name: '${resourceGroupName}-${abbrs.keyVaultVaults}01'
     principalId: principalId
+    adminSecurityGroupId: adminSecurityGroupId
+    deliveryTeamSecurityGroupId: deliveryTeamSecurityGroupId
   }
   scope: rg
 }
@@ -99,6 +110,22 @@ module containerAppsEnv './shared/container-apps-environment.bicep' = {
   scope: rg
 }
 
+// Qdrant database service
+module db './shared/container-app-service.bicep' = {
+  name: 'db'
+  params: {
+    name: '${resourceGroupName}-${abbrs.appContainerApps}db'
+    location: location
+    tags: tags
+    containerAppsEnvironmentName: containerAppsEnv.outputs.name
+    serviceType: 'qdrant'
+    targetPort: 6333
+    containerMinReplicas: 1
+    containerMaxReplicas: 1
+  }
+  scope: rg
+}
+
 // Api container app
 module api './app/api.bicep' = {
   name: 'api'
@@ -109,6 +136,7 @@ module api './app/api.bicep' = {
     identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}api'
     deployRoleAssignments: deployRoleAssignments
     applicationInsightsName: monitoring.outputs.applicationInsightsName
+    dbServiceName: db.outputs.name
     containerAppsEnvironmentName: containerAppsEnv.outputs.name
     containerRegistryName: containerRegistry.outputs.name
     keyVaultName: keyVault.outputs.name
@@ -128,6 +156,12 @@ module web './app/web.bicep' = {
     tags: tags
     identityName: '${resourceGroupName}-${abbrs.managedIdentityUserAssignedIdentities}web'
     deployRoleAssignments: deployRoleAssignments
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    containerAppsEnvironmentName: containerAppsEnv.outputs.name
+    containerRegistryName: containerRegistry.outputs.name
+    exists: webAppExists
+    appDefinition: webAppDefinition
+    apiBaseUrl: api.outputs.uri
   }
   scope: rg
 }

@@ -7,6 +7,7 @@ param deployRoleAssignments bool = true
 param containerRegistryName string
 param keyVaultName string
 param serviceName string = 'api'
+param dbServiceName string
 param containerAppsEnvironmentName string
 param applicationInsightsName string
 param corsAcaUrl string
@@ -35,8 +36,12 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' existing
   name: applicationInsightsName
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
+}
+
+resource db 'Microsoft.App/containerApps@2023-04-01-preview' existing = {
+  name: dbServiceName
 }
 
 // Assign access to the ACR
@@ -56,7 +61,7 @@ module apiKeyVaultAccess '../shared/keyvault-access.bicep' = {
   }
 }
 
-module app '../shared/container-app.bicep' = {
+module app '../shared/container-app-upsert.bicep' = {
   name: '${serviceName}-container-app'
   dependsOn: deployRoleAssignments ? [ containerRegistryAccess, apiKeyVaultAccess ] : [ apiKeyVaultAccess ]
   params: {
@@ -86,7 +91,7 @@ module app '../shared/container-app.bicep' = {
       }
       {
         name: 'API_ALLOW_ORIGINS'
-        value: corsAcaUrl
+        value: string(array(corsAcaUrl))
       }
     ],
     env,
@@ -100,6 +105,12 @@ module app '../shared/container-app.bicep' = {
       name: secret.name
       secretRef: secret.secretRef
     }))
+    serviceBinds: [
+      {
+        serviceId: db.id
+        name: db.name
+      }
+    ]
     targetPort: 8010
   }
 }

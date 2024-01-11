@@ -11,6 +11,12 @@
     "principalId": {
       "value": "${AZURE_PRINCIPAL_ID}"
     },
+    "adminSecurityGroupId": {
+      "value": "${AZURE_ADMIN_SECURITY_GROUP_ID}"
+    },
+    "deliveryTeamSecurityGroupId": {
+      "value": "${AZURE_DELIVERY_TEAM_SECURITY_GROUP_ID}"
+    },
     "resourceGroupName": {
       "value": "${AZURE_RESOURCE_GROUP_NAME}"
     },
@@ -23,7 +29,15 @@
     "apiAppExists": {
       "value": "${SERVICE_API_RESOURCE_EXISTS=false}"
     },
+    "webAppExists": {
+      "value": "${SERVICE_WEB_RESOURCE_EXISTS=false}"
+    },
     "apiAppDefinition": {
+      "value": {
+        "settings": []
+      }
+    },
+    "webAppDefinition": {
       "value": {
         "settings": []
       }

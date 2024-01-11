@@ -50,9 +50,6 @@ param identityName string = ''
 @description('The name of the container image')
 param imageName string = ''
 
-@description('Specifies if the resource already exists')
-param exists bool = false
-
 @description('Specifies if Ingress is enabled for the container app')
 param ingressEnabled bool = true
 
@@ -72,10 +69,6 @@ param targetPort int = 80
 
 resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-05-01' existing = {
   name: containerAppsEnvironmentName
-}
-
-resource existingApp 'Microsoft.App/containerApps@2023-05-01' existing = if (exists) {
-  name: name
 }
 
 resource userIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
@@ -125,7 +118,7 @@ resource app 'Microsoft.App/containerApps@2023-05-01' = {
       serviceBinds: !empty(serviceBinds) ? serviceBinds : null
       containers: [
         {
-          image: !empty(imageName) ? imageName : exists ? existingApp.properties.template.containers[0].image : 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+          image: !empty(imageName) ? imageName : 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
           name: containerName
           env: env
           resources: {

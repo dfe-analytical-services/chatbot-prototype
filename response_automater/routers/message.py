@@ -28,8 +28,8 @@ def stream(body: StreamRequest):
     except openai.error.RateLimitError:
         logger.error("You have exceeded your predefined rate limits")
         raise HTTPException(status_code=500)
-    except openai.error.ServiceUnavaiableError:
-        logger.error("OpenAi service is down")
+    except openai.error.ServiceUnavailableError:
+        logger.error("OpenAI service is down")
         raise HTTPException(status_code=500)
 
     return StreamingResponse(send_message(body.question), media_type="text/event-stream")
