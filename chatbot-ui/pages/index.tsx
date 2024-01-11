@@ -15,11 +15,7 @@ function Home() {
 
         <MessageHistory messages={messages} loading={fetching} />
 
-        <UserInputDialog
-          sendMessage={sendMessage}
-          fetching={fetching}
-          error={error}
-        />
+        <UserInputDialog sendMessage={sendMessage} fetching={fetching} />
       </>
     </Page>
   );
