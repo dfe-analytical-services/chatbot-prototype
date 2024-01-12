@@ -62,9 +62,7 @@
       }
     },
     "webAppDefinition": {
-      "value": {
-        "settings": [{ "name": "BUILD_NUMBER", "value": "${BUILD_NUMBER}" }]
-      }
+      "value": {}
     }
   }
 }
