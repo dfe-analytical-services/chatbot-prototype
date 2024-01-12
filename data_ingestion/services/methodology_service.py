@@ -3,7 +3,7 @@ import logging
 import requests
 
 from ..config import settings
-from ..utils.content_utils import get_content_block_text
+from ..utils.content_utils import get_content
 from .vector_db_client import delete_url
 
 logger = logging.getLogger(__name__)
@@ -24,11 +24,15 @@ def fetch_methodology(slug: str) -> dict[str, str]:
         response_json = response.json()
         methodology_version_id = response_json["id"]
 
-        logger.debug(f"Processing content for methodology version: {methodology_version_id}")
+        logger.debug(f"Processing content for methodology: {slug}, methodology version id: {methodology_version_id}")
+
+        content_block_text = get_content(content_sections=response_json["content"])
+        annexes_block_text = get_content(content_sections=response_json["annexes"])
+        all_text = content_block_text + (" " + annexes_block_text if content_block_text else annexes_block_text)
 
         return {
             "link": f"{settings.ees_url_public_ui}/methodology/{slug}",
-            "text": get_content_block_text(res=response_json),
+            "text": all_text,
         }
     except requests.exceptions.HTTPError as err:
         if err.response.status_code == 404:

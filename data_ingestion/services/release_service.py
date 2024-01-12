@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from ..config import settings
-from ..utils.content_utils import get_content_block_text
+from ..utils.content_utils import get_content
 from .tablebuilder_service import fetch_data_block
 
 logger = logging.getLogger(__name__)
@@ -24,11 +24,12 @@ def fetch_release(slug: str) -> dict[str, str]:
 
     headlines_text = get_headlines_text(res=response_json) or ""
     key_stats_text = get_key_statistics_text(release_id=release_id, res=response_json) or ""
-    content_block_text = get_content_block_text(res=response_json)
+    content_block_text = get_content(content_sections=response_json["content"])
+    all_text = f"{headlines_text}{key_stats_text}{content_block_text}"
 
     return {
         "link": f"{settings.ees_url_public_ui}/find-statistics/{slug}",
-        "text": f"{headlines_text}{key_stats_text}{content_block_text}",
+        "text": all_text,
     }
 
 
