@@ -1,6 +1,6 @@
 FROM node:20.10.0-alpine AS base
 
-ARG BUILD_NUMBER
+ARG BUILD_NUMBER="This-is-a-default-build-number-defined-in-the-dockerfile"
 ENV BUILD_NUMBER=${BUILD_NUMBER}
 
 ENV PNPM_HOME="/pnpm"
