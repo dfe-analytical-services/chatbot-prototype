@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 client = QdrantClient(location=settings.qdrant_host, port=settings.qdrant_port)
 
+openai.api_key = settings.openai_api_key
+
 
 def upsert_data(records: list[dict[str, str]], batch_size: int = 100) -> None:
     ensure_collection_exists()
@@ -26,7 +28,7 @@ def upsert_data(records: list[dict[str, str]], batch_size: int = 100) -> None:
         try:
             embeds = openai.Embedding.create(input=batch_text, engine=settings.openai_embedding_model)
         except Exception as e:
-            logger.error(f"An error occured within embedding model: {e}")
+            logger.error(f"An error occurred within embedding model: {e}")
 
         formatted_embeddings = [embeds["data"][j]["embedding"] for j in range(len(embeds["data"]))]
 
