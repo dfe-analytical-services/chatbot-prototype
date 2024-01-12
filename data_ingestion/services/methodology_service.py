@@ -24,7 +24,7 @@ def fetch_methodology(slug: str) -> dict[str, str]:
         response_json = response.json()
         methodology_version_id = response_json["id"]
 
-        logger.debug(f"Processing content for methodology version: {methodology_version_id}")
+        logger.debug(f"Processing content for methodology: {slug}, methodology version id: {methodology_version_id}")
 
         return {
             "link": f"{settings.ees_url_public_ui}/methodology/{slug}",
