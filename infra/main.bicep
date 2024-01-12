@@ -25,6 +25,11 @@ param productName string
 
 @minLength(1)
 @maxLength(64)
+@description('Name of the product to be used a value for the Product tag')
+param buildNumber string
+
+@minLength(1)
+@maxLength(64)
 @description('Name of the resource group')
 param resourceGroupName string
 
@@ -185,6 +190,7 @@ module web './app/web.bicep' = {
     exists: webAppExists
     appDefinition: webAppDefinition
     apiBaseUrl: api.outputs.uri
+    buildNumber: buildNumber
   }
   scope: rg
 }

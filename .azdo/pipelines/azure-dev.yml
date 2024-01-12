@@ -57,6 +57,9 @@ jobs:
             env:
               AZURE_ENV_NAME: $(Environment.Name)
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
+          - script: |
+              echo $(Build.BuildNumber)
+            displayName: TEMP STEP to Check value of Build.BuildNumber
           - task: AzureCLI@2
             displayName: Deploy all services
             condition: ${{ parameters.deployServices }}

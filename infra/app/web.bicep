@@ -6,6 +6,7 @@ param identityName string
 param deployRoleAssignments bool = true
 param containerRegistryName string
 param serviceName string = 'web'
+param buildNumber string = 'test-value'
 param containerAppsEnvironmentName string
 param applicationInsightsName string
 param exists bool
@@ -69,6 +70,10 @@ module app '../shared/container-app-upsert.bicep' = {
       {
         name: 'CHAT_URL_API'
         value: uri(apiBaseUrl, 'api/chat')
+      }
+      {
+        name: 'BUILD_NUMBER'
+        value: buildNumber
       }
     ],
     env,
