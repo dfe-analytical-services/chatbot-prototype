@@ -44,6 +44,7 @@ jobs:
             env:
               AZURE_ENV_NAME: $(Environment.Name)
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
+              BUILD_NUMBER: $(Build.BuildNumber)
           - task: AzureCLI@2
             displayName: Provision infrastructure
             condition: ${{ parameters.provisionInfrastructure }}
@@ -57,6 +58,7 @@ jobs:
             env:
               AZURE_ENV_NAME: $(Environment.Name)
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
+              BUILD_NUMBER: $(Build.BuildNumber)
           - script: |
               echo $(Build.BuildNumber)
             displayName: TEMP STEP to Check value of Build.BuildNumber
@@ -74,7 +76,4 @@ jobs:
             env:
               AZURE_ENV_NAME: $(Environment.Name)
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
-              AZURE_LOCATION: $(AZURE_LOCATION)
-              AZURE_RESOURCE_GROUP_NAME: ${AZURE_RESOURCE_GROUP_NAME}
-              PRODUCT_NAME: ${PRODUCT_NAME}
               BUILD_NUMBER: $(Build.BuildNumber)
