@@ -68,6 +68,8 @@ jobs:
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
+                azd env set BUILD_NUMBER "$(Build.BuildNumber)"
+                azd env get-values
                 azd deploy --no-prompt --all
             env:
               AZURE_ENV_NAME: $(Environment.Name)
