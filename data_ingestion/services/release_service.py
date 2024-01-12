@@ -20,7 +20,7 @@ def fetch_release(slug: str) -> dict[str, str]:
     response_json = response.json()
     release_id = response_json["id"]
 
-    logger.debug(f"Processing content for release id: {release_id}")
+    logger.debug(f"Processing content for publication: {slug}, latest release id: {release_id}")
 
     headlines_text = get_headlines_text(res=response_json) or ""
     key_stats_text = get_key_statistics_text(release_id=release_id, res=response_json) or ""
@@ -43,18 +43,18 @@ def get_headlines_text(res: dict) -> str | None:
 def get_key_statistics_text(release_id: str, res: dict) -> str | None:
     key_statistics = res["keyStatistics"]
     if key_statistics:
-        key_statistics_content = list(
-            map(
-                lambda item: get_key_statistic_text(release_id=release_id, index_and_key_statistic=item),
-                enumerate(key_statistics),
-            )
-        )
-        return "Key statistic ".join(key_statistics_content)
+        results = []
+        for count, item in enumerate(key_statistics, start=1):
+            type = item["type"]
+            if type == "KeyStatisticDataBlock":
+                data_block_parent_id = item["dataBlockParentId"]
+                result = fetch_data_block(
+                    release_id=release_id, data_block_parent_id=data_block_parent_id, key_statistic=item
+                )
+                results.append(f"Key statistic {count}: {result}")
+            elif type == "KeyStatisticText":
+                results.append(f"Key statistic {count}: {item['title']} - {item['statistic']} - {item['trend']}.")
+            else:
+                raise ValueError(f"Unknown key statistic type: {type}")
 
-
-def get_key_statistic_text(release_id: str, index_and_key_statistic: tuple[int, dict[str, str]]) -> str:
-    index, key_statistic = index_and_key_statistic
-    data_block_id = key_statistic["dataBlockId"]
-    return fetch_data_block(
-        release_id=release_id, data_block_id=data_block_id, key_statistic=key_statistic, index=index
-    )
+        return " ".join(results)
