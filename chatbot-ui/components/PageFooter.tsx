@@ -83,12 +83,12 @@ const PageFooter = ({ wide }: Props) => (
             , except where otherwise stated
           </span>
 
-          {process.env.BUILD_NUMBER && (
+          {process.env.NEXT_PUBLIC_BUILD_NUMBER && (
             <p
               aria-hidden
               className="govuk-!-margin-top-3 govuk-!-font-size-14"
             >
-              Build: {process.env.BUILD_NUMBER}
+              Build: {process.env.NEXT_PUBLIC_BUILD_NUMBER}
             </p>
           )}
         </div>

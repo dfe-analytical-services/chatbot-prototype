@@ -20,7 +20,7 @@ describe('Page Footer', () => {
   });
 
   it('Displays the build number if one is present', () => {
-    process.env.BUILD_NUMBER = 'Testing123';
+    process.env.NEXT_PUBLIC_BUILD_NUMBER = 'Testing123';
 
     render(<PageFooter />);
 
@@ -28,7 +28,7 @@ describe('Page Footer', () => {
   });
 
   it('Hides the build number if one is absent', () => {
-    process.env.BUILD_NUMBER = undefined;
+    process.env.NEXT_PUBLIC_BUILD_NUMBER = undefined;
 
     render(<PageFooter />);
 

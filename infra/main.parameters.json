@@ -35,9 +35,6 @@
     "webAppExists": {
       "value": "${SERVICE_WEB_RESOURCE_EXISTS=false}"
     },
-    "buildNumber": {
-      "value": "${BUILD_NUMBER}"
-    },
     "apiAppDefinition": {
       "value": {
         "settings": []
@@ -62,7 +59,9 @@
       }
     },
     "webAppDefinition": {
-      "value": {}
+      "value": {
+        "settings": []
+      }
     }
   }
 }

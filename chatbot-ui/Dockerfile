@@ -1,8 +1,5 @@
 FROM node:20.10.0-alpine AS base
 
-ARG BUILD_NUMBER="This-is-a-default-build-number-defined-in-the-dockerfile"
-ENV BUILD_NUMBER=${BUILD_NUMBER}
-
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
@@ -21,6 +18,7 @@ COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml .prettierrc .prettie
 COPY chatbot-ui ./chatbot-ui/
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/chatbot-ui/node_modules ./chatbot-ui/node_modules
+ARG NEXT_PUBLIC_BUILD_NUMBER
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm --filter chatbot-ui run build
 
 FROM base AS runner

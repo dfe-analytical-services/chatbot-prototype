@@ -44,7 +44,6 @@ jobs:
             env:
               AZURE_ENV_NAME: $(Environment.Name)
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
-              BUILD_NUMBER: $(Build.BuildNumber)
           - task: AzureCLI@2
             displayName: Provision infrastructure
             condition: ${{ parameters.provisionInfrastructure }}
@@ -58,10 +57,6 @@ jobs:
             env:
               AZURE_ENV_NAME: $(Environment.Name)
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
-              BUILD_NUMBER: $(Build.BuildNumber)
-          - script: |
-              echo $(Build.BuildNumber)
-            displayName: TEMP STEP to Check value of Build.BuildNumber
           - task: AzureCLI@2
             displayName: Deploy all services
             condition: ${{ parameters.deployServices }}
@@ -70,10 +65,8 @@ jobs:
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                azd env set BUILD_NUMBER "$(Build.BuildNumber)"
-                azd env get-values
                 azd deploy --no-prompt --all
             env:
               AZURE_ENV_NAME: $(Environment.Name)
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
-              BUILD_NUMBER: $(Build.BuildNumber)
+              NEXT_PUBLIC_BUILD_NUMBER: $(Build.BuildNumber)
