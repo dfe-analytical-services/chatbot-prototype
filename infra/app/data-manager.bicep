@@ -39,7 +39,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
 }
 
-resource db 'Microsoft.App/containerApps@2023-04-01-preview' existing = {
+resource db 'Microsoft.App/containerApps@2023-05-01' existing = {
   name: dbServiceName
 }
 
