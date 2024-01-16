@@ -5,7 +5,7 @@ describe('Page Banner', () => {
   it('Renders', () => {
     render(<PageBanner />);
 
-    expect(screen.getByText(/This is a new service/)).toBeInTheDocument();
+    expect(screen.getByText(/This is a prototype/)).toBeInTheDocument();
   });
 
   it('Displays a link for providing feedback', () => {
