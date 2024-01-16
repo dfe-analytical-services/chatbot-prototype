@@ -69,7 +69,7 @@ const UserCredentialEntry = ({ onCorrectEntry, passwordRequired }: Props) => {
 
 interface Props {
   onCorrectEntry: () => void;
-  passwordRequired: string;
+  passwordRequired?: string;
 }
 
 export default UserCredentialEntry;

@@ -44,8 +44,7 @@ export const getServerSideProps = (async () => {
     props: {
       apiUrl: process.env.CHAT_URL_API ?? 'http://localhost:8010/api/chat',
       // Could put this in KeyVault, but probably sufficient for now as an urgent stop-gap just for today?
-      chatbotPassword:
-        process.env.AUTH_PASSWORD ?? 'fb1a3bb9-7b35-47e2-8a45-44db18215912',
+      chatbotPassword: process.env.AUTH_PASSWORD,
     },
   };
 }) satisfies GetServerSideProps<{ apiUrl: string }>;
