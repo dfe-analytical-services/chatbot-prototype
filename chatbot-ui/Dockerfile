@@ -18,6 +18,7 @@ COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml .prettierrc .prettie
 COPY chatbot-ui ./chatbot-ui/
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/chatbot-ui/node_modules ./chatbot-ui/node_modules
+ARG NEXT_PUBLIC_BUILD_NUMBER
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm --filter chatbot-ui run build
 
 FROM base AS runner

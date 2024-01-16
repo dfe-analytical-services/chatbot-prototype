@@ -69,3 +69,4 @@ jobs:
             env:
               AZURE_ENV_NAME: $(Environment.Name)
               DEPLOY_ROLE_ASSIGNMENTS: ${{ parameters.deployRoleAssignments }}
+              NEXT_PUBLIC_BUILD_NUMBER: $(Build.BuildNumber)

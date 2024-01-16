@@ -26,4 +26,6 @@ services:
     docker:
       path: ./Dockerfile
       context: ../
+      buildArgs:
+        - 'NEXT_PUBLIC_BUILD_NUMBER'
     language: js
