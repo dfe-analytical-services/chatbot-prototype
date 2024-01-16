@@ -24,7 +24,7 @@ describe('Page Footer', () => {
 
     render(<PageFooter />);
 
-    expect(screen.getByText('Build number: Testing123')).toBeInTheDocument();
+    expect(screen.getByText('Build: Testing123')).toBeInTheDocument();
   });
 
   it('Hides the build number if one is absent', () => {
