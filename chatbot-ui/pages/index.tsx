@@ -1,27 +1,40 @@
 import Page from '@/components/Page';
-import React from 'react';
+import React, { useState } from 'react';
 import ErrorSummary from '@/components/ErrorSummary';
 import MessageHistory from '@/components/MessageHistory';
 import useChatbot from '@/hooks/useChatbot';
 import UserInputDialog from '@/components/UserInputDialog';
 import { initChatbotService } from '@/services/chatbot-service';
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
+import UserCredentialEntry from '@/components/UserCredentialEntry';
 
 export default function Home({
   apiUrl,
+  chatbotPassword,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   initChatbotService(apiUrl);
   const { messages, sendMessage, fetching, error } = useChatbot();
+  const [hasAuth, setHasAuth] = useState<boolean>(false);
 
   return (
     <Page title="Support bot">
-      <>
-        {error && <ErrorSummary error={error} />}
+      {!hasAuth && (
+        <UserCredentialEntry
+          passwordRequired={chatbotPassword}
+          onCorrectEntry={() => {
+            setHasAuth(true);
+          }}
+        />
+      )}
+      {hasAuth && (
+        <>
+          {error && <ErrorSummary error={error} />}
 
-        <MessageHistory messages={messages} loading={fetching} />
+          <MessageHistory messages={messages} loading={fetching} />
 
-        <UserInputDialog sendMessage={sendMessage} fetching={fetching} />
-      </>
+          <UserInputDialog sendMessage={sendMessage} fetching={fetching} />
+        </>
+      )}
     </Page>
   );
 }
@@ -30,6 +43,9 @@ export const getServerSideProps = (async () => {
   return {
     props: {
       apiUrl: process.env.CHAT_URL_API ?? 'http://localhost:8010/api/chat',
+      // Could put this in KeyVault, but probably sufficient for now as an urgent stop-gap just for today?
+      chatbotPassword:
+        process.env.AUTH_PASSWORD ?? 'fb1a3bb9-7b35-47e2-8a45-44db18215912',
     },
   };
 }) satisfies GetServerSideProps<{ apiUrl: string }>;
