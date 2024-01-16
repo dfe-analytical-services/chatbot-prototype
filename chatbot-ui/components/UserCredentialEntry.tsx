@@ -33,11 +33,20 @@ const UserCredentialEntry = ({ onCorrectEntry, passwordRequired }: Props) => {
               Please enter the password
             </label>
           </h1>
+          <div id="account-number-hint" className="govuk-hint">
+            This service is still a prototype - access is restricted.
+          </div>
           {errors.password?.type === 'wrong' && (
-            <p role="alert">Password was incorrect</p>
+            <p id="passport-issued-error" className="govuk-error-message">
+              <span className="govuk-visually-hidden">Error:</span>The password
+              was incorrect
+            </p>
           )}
           {errors.password?.type === 'required' && (
-            <p role="alert">Password required</p>
+            <p id="passport-issued-error" className="govuk-error-message">
+              <span className="govuk-visually-hidden">Error:</span>A password is
+              required
+            </p>
           )}
           <input
             {...register('password', {
