@@ -10,7 +10,7 @@ import UserCredentialEntry from '@/components/UserCredentialEntry';
 
 export default function Home({
   apiUrl,
-  chatbotPassword,
+  authPassword,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   initChatbotService(apiUrl);
   const { messages, sendMessage, fetching, error } = useChatbot();
@@ -20,7 +20,7 @@ export default function Home({
     <Page title="Support bot">
       {!hasAuth && (
         <UserCredentialEntry
-          passwordRequired={chatbotPassword}
+          authPassword={authPassword}
           onCorrectEntry={() => {
             setHasAuth(true);
           }}
@@ -43,7 +43,7 @@ export const getServerSideProps = (async () => {
   return {
     props: {
       apiUrl: process.env.CHAT_URL_API ?? 'http://localhost:8010/api/chat',
-      chatbotPassword: process.env.AUTH_PASSWORD,
+      authPassword: process.env.AUTH_PASSWORD,
     },
   };
 }) satisfies GetServerSideProps<{ apiUrl: string }>;

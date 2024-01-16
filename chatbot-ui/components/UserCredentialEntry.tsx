@@ -5,7 +5,7 @@ interface AuthData {
   password: string;
 }
 
-const UserCredentialEntry = ({ onCorrectEntry, passwordRequired }: Props) => {
+const UserCredentialEntry = ({ onCorrectEntry, authPassword }: Props) => {
   const {
     register,
     formState: { errors },
@@ -14,7 +14,7 @@ const UserCredentialEntry = ({ onCorrectEntry, passwordRequired }: Props) => {
   } = useForm<AuthData>();
 
   const onSubmit: SubmitHandler<AuthData> = (data) => {
-    if (data.password === passwordRequired) {
+    if (data.password === authPassword) {
       onCorrectEntry();
     } else {
       setError('password', { message: 'Incorrect password', type: 'wrong' });
@@ -69,7 +69,7 @@ const UserCredentialEntry = ({ onCorrectEntry, passwordRequired }: Props) => {
 
 interface Props {
   onCorrectEntry: () => void;
-  passwordRequired?: string;
+  authPassword?: string;
 }
 
 export default UserCredentialEntry;
