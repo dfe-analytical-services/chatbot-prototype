@@ -60,7 +60,7 @@
     },
     "webAppDefinition": {
       "value": {
-        "settings": [{ "name": "AUTH_PASSWORD", "value": "${AUTH_PASSWORD}" }]
+        "settings": []
       }
     }
   }

@@ -5,6 +5,7 @@ param tags object = {}
 param identityName string
 param deployRoleAssignments bool = true
 param containerRegistryName string
+param keyVaultName string
 param serviceName string = 'web'
 param containerAppsEnvironmentName string
 param applicationInsightsName string
@@ -34,6 +35,10 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' existing
   name: applicationInsightsName
 }
 
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
+  name: keyVaultName
+}
+
 // Assign access to the ACR
 module containerRegistryAccess '../shared/container-registry-access.bicep' = if (deployRoleAssignments) {
   name: '${name}-container-registry-access'
@@ -42,9 +47,18 @@ module containerRegistryAccess '../shared/container-registry-access.bicep' = if 
   }
 }
 
+// Assign access to the key vault
+module keyVaultAccess '../shared/keyvault-access.bicep' = {
+  name: '${name}-keyvault-access'
+  params: {
+    keyVaultName: keyVaultName
+    principalId: webIdentity.properties.principalId
+  }
+}
+
 module app '../shared/container-app-upsert.bicep' = {
   name: '${serviceName}-container-app'
-  dependsOn: deployRoleAssignments ? [ containerRegistryAccess ] : []
+  dependsOn: deployRoleAssignments ? [ containerRegistryAccess, keyVaultAccess ] : [ keyVaultAccess ]
   params: {
     name: name
     location: location
@@ -67,6 +81,10 @@ module app '../shared/container-app-upsert.bicep' = {
         value: applicationInsights.properties.ConnectionString
       }
       {
+        name: 'AUTH_PASSWORD'
+        secretRef: 'auth-password'
+      }
+      {
         name: 'CHAT_URL_API'
         value: uri(apiBaseUrl, 'api/chat')
       }
@@ -77,6 +95,11 @@ module app '../shared/container-app-upsert.bicep' = {
       secretRef: secret.secretRef
     }))
     secrets: union([
+      {
+        name: 'auth-password'
+        keyVaultUrl: '${keyVault.properties.vaultUri}secrets/web-auth-password'
+        identity: webIdentity.id
+      }
     ],
     map(secrets, secret => {
       name: secret.name

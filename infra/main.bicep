@@ -182,6 +182,7 @@ module web './app/web.bicep' = {
     applicationInsightsName: monitoring.outputs.applicationInsightsName
     containerAppsEnvironmentName: containerAppsEnv.outputs.name
     containerRegistryName: containerRegistry.outputs.name
+    keyVaultName: keyVault.outputs.name
     exists: webAppExists
     appDefinition: webAppDefinition
     apiBaseUrl: api.outputs.uri
