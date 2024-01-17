@@ -1,18 +1,14 @@
 import Page from '@/components/Page';
 import React from 'react';
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
+import UserCredentialEntry from '@/components/UserCredentialEntry';
 
-export default function Home({}: InferGetServerSidePropsType<
-  typeof getServerSideProps
->) {
+export default function Login({
+  authPassword,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <Page title="Support bot">
-      <div>
-        Nothing to see here (I just moved chatbot stuff into its own route to
-        make the redirects from login obvious. Could move it back again or
-        leave, whatever). We should never see this since submitting the login
-        form redirects you straight to /chatbot
-      </div>
+      <UserCredentialEntry authPassword={authPassword} />
     </Page>
   );
 }

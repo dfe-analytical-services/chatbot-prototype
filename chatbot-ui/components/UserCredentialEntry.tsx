@@ -1,12 +1,15 @@
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
 interface AuthData {
   password: string;
 }
 
-const UserCredentialEntry = ({ onCorrectEntry, authPassword }: Props) => {
+const UserCredentialEntry = ({ authPassword }: Props) => {
+  const router = useRouter();
+
   const {
     register,
     formState: { errors },
@@ -21,7 +24,9 @@ const UserCredentialEntry = ({ onCorrectEntry, authPassword }: Props) => {
 
   const onSubmit: SubmitHandler<AuthData> = (data) => {
     if (data.password === authPassword) {
-      onCorrectEntry();
+      const encryptedBasicAuthHeader = btoa(`dfe:${data.password}`); // e.g. btoa('username:password')
+      // TODO: Find some way to set a header with key: 'authorization' and value: {encryptedBasicAuthHeader}
+      router.push('./chatbot');
     } else {
       setError('password', { message: 'Incorrect password', type: 'wrong' });
     }
@@ -74,7 +79,6 @@ const UserCredentialEntry = ({ onCorrectEntry, authPassword }: Props) => {
 };
 
 interface Props {
-  onCorrectEntry: () => void;
   authPassword?: string;
 }
 
