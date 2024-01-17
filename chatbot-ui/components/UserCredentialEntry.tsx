@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface AuthData {
@@ -11,7 +12,12 @@ const UserCredentialEntry = ({ onCorrectEntry, authPassword }: Props) => {
     formState: { errors },
     setError,
     handleSubmit,
+    setFocus,
   } = useForm<AuthData>();
+
+  useEffect(() => {
+    setFocus('password');
+  }, [setFocus]);
 
   const onSubmit: SubmitHandler<AuthData> = (data) => {
     if (data.password === authPassword) {
