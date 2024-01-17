@@ -4,7 +4,7 @@ import Home from '../pages/index';
 
 describe('Home Page', () => {
   it('Renders', () => {
-    render(<Home apiUrl="https://localhost" authPassword="testPassword" />);
+    render(<Home apiUrl="https://localhost" />);
 
     expect(screen.getByText('Support bot')).toBeInTheDocument();
   });

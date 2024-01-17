@@ -60,7 +60,10 @@
     },
     "webAppDefinition": {
       "value": {
-        "settings": [{ "name": "AUTH_PASSWORD", "value": "${AUTH_PASSWORD}" }]
+        "settings": [
+          { "name": "NEXT_PUBLIC_AUTH_PASSWORD", "value": "${AUTH_PASSWORD}" },
+          { "name": "NEXT_PUBLIC_AUTH_USERNAME", "value": "${AUTH_USERNAME}" }
+        ]
       }
     }
   }
