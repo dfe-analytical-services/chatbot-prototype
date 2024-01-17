@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { useEffect, useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface AuthData {
@@ -21,12 +20,6 @@ const UserCredentialEntry = ({ onCorrectEntry, authPassword }: Props) => {
       setError('password', { message: 'Incorrect password', type: 'wrong' });
     }
   };
-
-  const passwordInput = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    passwordInput?.current?.focus();
-  });
 
   return (
     <form id="user-input-form" onSubmit={handleSubmit(onSubmit)}>
@@ -59,7 +52,6 @@ const UserCredentialEntry = ({ onCorrectEntry, authPassword }: Props) => {
             {...register('password', {
               required: true,
             })}
-            ref={passwordInput}
             className="govuk-input"
             id="auth-password"
             name="password"
