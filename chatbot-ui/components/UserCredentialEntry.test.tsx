@@ -1,4 +1,4 @@
-import UserCredentialEntry from './UserCredentialEntry';
+import UserCredentialEntry from '@/components/UserCredentialEntry';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
