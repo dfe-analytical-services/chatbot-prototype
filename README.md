@@ -161,6 +161,12 @@ To update a specific publication:
     uvicorn response_automater.main:app --host 0.0.0.0 --port 8010 --reload
     ```
 
+    You can optionally skip step 1 by invoking the shell in the above command, like so:
+
+    ```bash
+    pipenv run python -m uvicorn response_automater.main:app --host 0.0.0.0 --port 8010 --reload
+    ```
+
 3. Access the response automater API docs: [http://localhost:8010/docs](http://localhost:8010/docs).
  
  ## Running the Next.js Chatbot UI frontend

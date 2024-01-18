@@ -6,7 +6,7 @@ from fastapi.responses import StreamingResponse
 
 from ..config import settings
 from ..services.message_service import send_message
-from ..utils import StreamRequest
+from ..types import StreamingRequest
 
 logger = logging.getLogger(__name__)
 
@@ -14,9 +14,7 @@ router = APIRouter(prefix="/api")
 
 
 @router.post("/chat")
-def stream(body: StreamRequest):
-    if len(body.question.split(" ")) > 1000:
-        raise HTTPException(status_code=412, detail="Question too long")
+def stream(body: StreamingRequest):
     try:
         openai.Embedding.create(input="Test input", engine=settings.openai_embedding_model)
     except openai.error.AuthenticationError:

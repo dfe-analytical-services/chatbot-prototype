@@ -1,7 +1,6 @@
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts.prompt import PromptTemplate
-from pydantic import BaseModel
 
 from .config import settings
 
@@ -20,13 +19,6 @@ def makechain(callback) -> load_qa_chain:
     chain = load_qa_chain(llm=model, chain_type="stuff", prompt=QA_PROMPT)
 
     return chain
-
-
-# pydantic validation of the request
-class StreamRequest(BaseModel):
-    """Request body for streaming."""
-
-    question: str
 
 
 def temp_method_for_proof_of_concept_tests(some_number):
