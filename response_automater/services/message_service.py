@@ -2,17 +2,14 @@ import asyncio
 import logging
 from typing import AsyncIterable, Awaitable
 
-import openai
 from langchain.callbacks.streaming_aiter import AsyncIteratorCallbackHandler
 from langchain.docstore.document import Document
 
-from ..config import settings
 from ..utils import makechain
+from .openai_client import get_embedding
 from .vector_db_client import search
 
 logger = logging.getLogger(__name__)
-
-openai.api_key = settings.openai_api_key
 
 
 async def wrap_done(fn: Awaitable, event: asyncio.Event):
@@ -24,12 +21,12 @@ async def wrap_done(fn: Awaitable, event: asyncio.Event):
 async def send_message(message: str) -> AsyncIterable[str]:
     callback = AsyncIteratorCallbackHandler()
 
-    embeds = openai.Embedding.create(input=message, engine=settings.openai_embedding_model)
+    embedding = get_embedding(message)
 
     chain = makechain(callback)
 
     # query the database
-    resp = search(query_vector=embeds["data"][0]["embedding"], limit=6)
+    resp = search(query_vector=embedding, limit=6)
 
     documents = [Document(page_content=resp[i].payload["text"]) for i in range(len(resp))]
     list_urls = list(set(resp[i].payload["url"] for i in range(len(resp))))
