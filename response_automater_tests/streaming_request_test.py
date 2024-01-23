@@ -17,7 +17,7 @@ def test_empty_string():
     assert "String should have at least 1 character" in str(object=exc_info.value)
 
 
-def test_not_over_one_thousand_words():
+def test_not_over_word_limit():
     very_long_question = "".join(["Capybara "] * 301)
 
     with raises(ValidationError) as exc_info:
