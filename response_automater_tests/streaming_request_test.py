@@ -18,9 +18,12 @@ def test_empty_string():
 
 
 def test_not_over_one_thousand_words():
-    very_long_question = "".join(["Capybara "] * 1001)
+    very_long_question = "".join(["Capybara "] * 301)
 
     with raises(ValidationError) as exc_info:
         StreamingRequest(question=very_long_question)
 
-    assert "Question exceeded 1000 words" in str(object=exc_info.value)
+    assert (
+        "Message length exceeded - whilst the service is in prototype a user message must not exceed 300 words"
+        in str(object=exc_info.value)
+    )
