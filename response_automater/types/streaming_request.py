@@ -9,18 +9,10 @@ def not_over_one_thousand_words(v: str):
     return v
 
 
-# For testing validation behaviour.
-# Does not allow the question to hold the value "dessert"
-def no_dessert_allowed(v: str):
-    assert v != "dessert", f"{v} is not allowed"
-    return v
-
-
 Question = Annotated[
     str,
     Field(min_length=1),
     AfterValidator(not_over_one_thousand_words),
-    AfterValidator(no_dessert_allowed),
 ]
 
 

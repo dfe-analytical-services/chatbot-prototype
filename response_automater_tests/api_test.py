@@ -38,7 +38,8 @@ def test_body_validation_when_question_is_empty_string():
 
 
 def test_body_validation_when_question_is_an_invalid_value():
-    response = client.post("/api/chat", json={"question": "dessert"})
+    very_long_question = "".join(["Capybara "] * 1001)
+    response = client.post("/api/chat", json={"question": very_long_question})
     assert response.status_code == 422
 
     response_details = response.json()["detail"]
@@ -47,7 +48,7 @@ def test_body_validation_when_question_is_an_invalid_value():
     response_detail = response_details[0]
 
     assert response_detail["type"] == "assertion_error"
-    assert response_detail["msg"] == "Assertion failed, dessert is not allowed"
+    assert response_detail["msg"] == "Assertion failed, Question exceeded 1000 words"
 
 
 # TODO: Add a Happy Path / successful test. This requires mocking out the openai and qdrant services
