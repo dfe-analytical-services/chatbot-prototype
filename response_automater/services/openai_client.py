@@ -1,7 +1,6 @@
 import logging
 
 import openai
-from openai import OpenAIError
 
 from ..config import settings
 
@@ -13,7 +12,7 @@ openai.api_key = settings.openai_api_key
 def get_embeddings(question: str):
     try:
         return openai.Embedding.create(input=question, engine=settings.openai_embedding_model)
-    except OpenAIError as openai_exception:
+    except openai.OpenAIError as openai_exception:
         logger.exception(openai_exception, exc_info=True)
         raise
 
