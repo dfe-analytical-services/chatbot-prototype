@@ -101,6 +101,12 @@ Access the Qdrant Docker instance dashboard: [http://localhost:6333/dashboard](h
     uvicorn data_ingestion.main:app --host 0.0.0.0 --port 8000 --reload
     ```
 
+    You can optionally skip step 1 by invoking the shell in the above command, like so:
+
+    ```bash
+    pipenv run python -m uvicorn data_ingestion.main:app --host 0.0.0.0 --port 8000 --reload
+    ```
+
 3. Access the data ingestion API docs: [http://localhost:8000/docs](http://localhost:8000/docs).
 
  ### Ingesting data
@@ -159,6 +165,12 @@ To update a specific publication:
 
     ```bash
     uvicorn response_automater.main:app --host 0.0.0.0 --port 8010 --reload
+    ```
+
+    You can optionally skip step 1 by invoking the shell in the above command, like so:
+
+    ```bash
+    pipenv run python -m uvicorn response_automater.main:app --host 0.0.0.0 --port 8010 --reload
     ```
 
 3. Access the response automater API docs: [http://localhost:8010/docs](http://localhost:8010/docs).

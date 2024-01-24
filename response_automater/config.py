@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     # i.e. CHAT-PROMPT-TEMPLATE and OPENAI-API-KEY which are the names of the secrets in Azure key vault.
     # This is different from the other environment variable names which all use snake case.
     chat_prompt_template: str = Field(default="placeholder-value", alias="chat-prompt-template")
+    chat_message_word_limit: int = 300
     openai_api_key: str = Field(default="placeholder-value", alias="openai-api-key")
     openai_model: str = "gpt-4"
     openai_embedding_model: str = "text-embedding-ada-002"

@@ -17,6 +17,7 @@ langchain = "==0.0.329"
 requests = "==2.31.0"
 qdrant-client = "==1.6.9"
 settus = "==0.0.9"
+httpx = "==0.26.0"
 
 [dev-packages]
 pytest = "==7.4.4"
