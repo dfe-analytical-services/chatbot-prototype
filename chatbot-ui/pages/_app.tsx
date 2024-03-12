@@ -6,7 +6,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Chatbot prototype</title>
+        <title>Explore Education Statistics Support Bot</title>
         <meta name="robots" content="noindex, nofollow" />
       </Head>
       <Component {...pageProps} />

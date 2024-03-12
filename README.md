@@ -1,4 +1,4 @@
-# EES chatbot prototype
+# EES Support Bot (AI Search and Support)
 
 ## Overview
 
