@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-azure-identity = "==1.15.0"
+azure-identity = "==1.16.1"
 azure-keyvault-secrets = "==4.7.0"
 beautifulsoup4 = "==4.12.2"
 openai = "==0.28.1"
