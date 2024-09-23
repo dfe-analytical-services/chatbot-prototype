@@ -70,7 +70,7 @@ param serviceType string = ''
 @description('The target port for the container')
 param targetPort int = 80
 
-resource existingApp 'Microsoft.App/containerApps@2023-05-01' existing = if (exists) {
+resource existingApp 'Microsoft.App/containerApps@2024-03-01' existing = if (exists) {
   name: name
 }
 
