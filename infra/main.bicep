@@ -57,7 +57,7 @@ var corsAcaUrl = 'https://${webContainerAppNameOrDefault}.${containerAppsEnv.out
 var abbrs = loadJsonContent('./abbreviations.json')
 
 // Organize resources in a resource group
-resource rg 'Microsoft.Resources/resourceGroups@2023-07-01' = {
+resource rg 'Microsoft.Resources/resourceGroups@2024-07-01' = {
   name: resourceGroupName
   location: location
   tags: tags
