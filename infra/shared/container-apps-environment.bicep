@@ -8,7 +8,7 @@ param logAnalyticsWorkspaceName string
 @description('Name of the Application Insights resource')
 param applicationInsightsName string
 
-resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-05-01' = {
+resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2024-03-01' = {
   name: name
   location: location
   tags: tags
