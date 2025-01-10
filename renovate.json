@@ -28,5 +28,6 @@
       "groupName": "docker dependencies",
       "matchDatasources": ["docker", "docker-version"]
     }
-  ]
+  ],
+  "enabled": false
 }
