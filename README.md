@@ -1,5 +1,8 @@
 # EES Support Bot (AI Search and Support)
 
+> [!WARNING]
+> This repository is archived and is no longer maintained. It is kept read-only for reference only.
+
 ## Overview
 
 This is a repository for a prototype of a chatbot for the Department for Education (DfE) [Explore Education Statistics](https://explore-education-statistics.service.gov.uk/) service.
